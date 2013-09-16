@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">eyeCatch</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="title_activity_eye_catch_fragment">eyeCatch</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    
+    <string name="eyecatch_select_user">Select user</string>
+    <string name="eyecatch_create_user">Create user</string>
+    <string name="eyecatch_select_video">Select video</string>
+    <string name="eyecatch_touch_training">Touch training</string>
+    
+    <string name="create_user_name">Username</string>
+    <string name="create_user_age">Age in months</string>
+    <string name="create_user_times_per_trial">Time per trial</string>
+    <string name="create_user_number_of_trials">Number of trials in tests</string>
+    <string name="create_user_mastery_criteria">Mastery criteria</string>
+    
+    <string name="dummy_zero">0</string>
+    
+    <item type="integer" name="default_time_per_trial">5</item>
+    <item type="integer" name="default_number_of_trials">10</item>
+    <item type="integer" name="default_mastery_criteria">10</item>
+
+</resources>
