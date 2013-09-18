@@ -1,5 +1,10 @@
 package no.minimon.eyecatch;
 
+import no.minimon.eyecatch.fragment.CreateUserFragment;
+import no.minimon.eyecatch.fragment.EyeCatchFragment;
+import no.minimon.eyecatch.fragment.SelectUserFragment;
+import no.minimon.eyecatch.fragment.SelectVideoFragment;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -7,14 +12,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.RemoteControlClient.MetadataEditor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
-import no.minimon.eyecatch.fragment.CreateUserFragment;
-import no.minimon.eyecatch.fragment.EyeCatchFragment;
-import no.minimon.eyecatch.fragment.SelectUserFragment;
 
 public class EyeCatchActivity extends FragmentActivity implements
 		EyeCatchFragment.Callbacks {
@@ -77,8 +85,8 @@ public class EyeCatchActivity extends FragmentActivity implements
 					fragment = new CreateUserFragment();
 					break;
 				case R.id.eyecatch_select_video:
-
-					// break;
+					fragment = new SelectVideoFragment();
+					break;
 				case R.id.eyecatch_touch_training:
 
 					// break;
