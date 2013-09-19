@@ -9,10 +9,19 @@
     tools:context=".EyeCatchFragment" >
 
     <Button
-        android:id="@+id/eyecatch_select_user"
+        android:id="@+id/eyecatch_start_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="onButtonClick"
+        android:text="@string/eyecatch_start_game" />
+
+    <Button
+        android:id="@+id/eyecatch_select_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/eyecatch_start_game"
         android:layout_centerHorizontal="true"
         android:onClick="onButtonClick"
         android:text="@string/eyecatch_select_user" />
@@ -21,27 +30,27 @@
         android:id="@+id/eyecatch_create_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onButtonClick"
         android:layout_below="@+id/eyecatch_select_user"
         android:layout_centerHorizontal="true"
+        android:onClick="onButtonClick"
         android:text="@string/eyecatch_create_user" />
 
     <Button
         android:id="@+id/eyecatch_select_video"
         android:layout_width="wrap_content"
-        android:onClick="onButtonClick"
         android:layout_height="wrap_content"
         android:layout_below="@+id/eyecatch_create_user"
         android:layout_centerHorizontal="true"
+        android:onClick="onButtonClick"
         android:text="@string/eyecatch_select_video" />
 
     <Button
         android:id="@+id/eyecatch_touch_training"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onButtonClick"
         android:layout_below="@+id/eyecatch_select_video"
         android:layout_centerHorizontal="true"
+        android:onClick="onButtonClick"
         android:text="@string/eyecatch_touch_training" />
 
 </RelativeLayout>

@@ -38,7 +38,7 @@ public class SelectUserFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 		preferences = getActivity().getSharedPreferences(
 				getActivity().getPackageName(), Context.MODE_PRIVATE);
-		String users = preferences.getString(EyeCatchActivity.EYECATCH_USERS,
+		String users = preferences.getString(EyeCatchActivity.USERS,
 				"");
 		list = new ArrayList<String>();
 		for (String user : users.split(";")) {
@@ -53,7 +53,7 @@ public class SelectUserFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		// TODO: Do something usefull here
+		// TODO: Do something useful here
 		SharedPreferences preferences = getActivity().getSharedPreferences(
 				getActivity().getPackageName(), Context.MODE_PRIVATE);
 		try {

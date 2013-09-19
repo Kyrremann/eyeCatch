@@ -2,6 +2,7 @@ package no.minimon.eyecatch;
 
 import no.minimon.eyecatch.fragment.CreateUserFragment;
 import no.minimon.eyecatch.fragment.EyeCatchFragment;
+import no.minimon.eyecatch.fragment.HomeFragment;
 import no.minimon.eyecatch.fragment.SelectUserFragment;
 import no.minimon.eyecatch.fragment.SelectVideoFragment;
 
@@ -12,22 +13,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.media.RemoteControlClient.MetadataEditor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 public class EyeCatchActivity extends FragmentActivity implements
 		EyeCatchFragment.Callbacks {
 
-	public static final String EYECATCH_USERS = "eyecatch_users";
+	public static final String USERS = "eyecatch_users";
+	public static final String CURRENT_VIDEO = "eyecatch_current_video";
 	private boolean mTwoPane;
 
 	@Override
@@ -38,7 +34,7 @@ public class EyeCatchActivity extends FragmentActivity implements
 		if (findViewById(R.id.item_detail_container) != null) {
 			mTwoPane = true;
 
-			CreateUserFragment fragment = new CreateUserFragment();
+			HomeFragment fragment = new HomeFragment();
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.item_detail_container, fragment).commit();
 		}
@@ -59,7 +55,7 @@ public class EyeCatchActivity extends FragmentActivity implements
 			Editor editor = preferences.edit();
 			editor.putString(jsonObject.getString("name"),
 					jsonObject.toString());
-			editor.putString(EYECATCH_USERS, "Bao;Lars;Kyrre;Per;Pål;Espen");
+			editor.putString(USERS, "Bao;Lars;Kyrre;Per;Pål;Espen");
 			editor.commit();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -68,7 +64,9 @@ public class EyeCatchActivity extends FragmentActivity implements
 	}
 
 	public void onButtonClick(View view) {
-		if (mTwoPane) {
+		if (view.getId() == R.id.eyecatch_start_game) {
+			startActivity(new Intent(this, EyeCatchGameActivity.class));
+		} else if (mTwoPane) {
 			if (view.getId() == R.id.create_user_create_user) {
 				// TODO: Check if everything is typed in correctly and create a
 				// new

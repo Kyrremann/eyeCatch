@@ -1,13 +1,13 @@
 package no.minimon.eyecatch.fragment;
 
-import java.util.Random;
-
+import no.minimon.eyecatch.EyeCatchActivity;
 import no.minimon.eyecatch.R;
-import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ListFragment;
@@ -41,10 +41,11 @@ public class SelectVideoFragment extends ListFragment {
 		// MediaStore.Video.VideoColumns.DATA
 		cursor = MediaStore.Video.query(getActivity().getContentResolver(),
 				external, columns);
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(),
+		SimpleCursorAdapter adapter2 = new SimpleCursorAdapter(getActivity(),
 				android.R.layout.simple_list_item_1, cursor,
 				new String[] { MediaStore.Video.Media.DURATION },
 				new int[] { android.R.id.text1 }, CursorAdapter.NO_SELECTION);
+		VideoAdapter adapter = new VideoAdapter(getActivity(), cursor, 0);
 		setListAdapter(adapter);
 		/*System.out.println("SIZE: " + cursor.getCount());
 		while (cursor.moveToNext()) {
@@ -68,33 +69,43 @@ public class SelectVideoFragment extends ListFragment {
 		cursor.moveToPosition(position);
 		Uri uri = Uri.parse(cursor.getString(0));
 		Uri external = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-		Uri complete = Uri.parse(external.toString() + "/" + uri.toString());
+		SharedPreferences sharedPreferences = getActivity()
+				.getSharedPreferences(getActivity().getPackageName(),
+						Context.MODE_PRIVATE);
+		Editor editor = sharedPreferences.edit();
+		editor.putString(EyeCatchActivity.CURRENT_VIDEO, external.toString() + "/" + uri.toString());
+		editor.commit();
+	}
+	/*cursor.moveToPosition(position);
+	Uri uri = Uri.parse(cursor.getString(0));
+	Uri external = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+	Uri complete = Uri.parse(external.toString() + "/" + uri.toString());
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		videoView = new VideoView(getActivity());
-		builder.setView(videoView);
-		videoView.setVideoURI(complete);
-		videoView.setZOrderOnTop(true);
-		dialog = builder.create();
-		dialog.show();
-		new ASync().execute(cursor.getInt(3));
+	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	videoView = new VideoView(getActivity());
+	builder.setView(videoView);
+	videoView.setVideoURI(complete);
+	videoView.setZOrderOnTop(true);
+	dialog = builder.create();
+	dialog.show();
+	new ASync().execute(cursor.getInt(3));
 	}
 
 	private class ASync extends AsyncTask<Integer, Integer, Void> {
 
-		@Override
-		protected Void doInBackground(Integer... params) {
-			Random random = new Random();
-			int seek = random.nextInt(params[0] - 5000);
-			videoView.seekTo(seek);
-			videoView.start();
-			while (videoView.getCurrentPosition() < seek + 5000) {
-			}
-			videoView.stopPlayback();
-			dialog.cancel();
-			return null;
-
+	@Override
+	protected Void doInBackground(Integer... params) {
+		Random random = new Random();
+		int seek = random.nextInt(params[0] - 5000);
+		videoView.seekTo(seek);
+		videoView.start();
+		while (videoView.getCurrentPosition() < seek + 5000) {
 		}
+		videoView.stopPlayback();
+		dialog.cancel();
+		return null;
 
 	}
+
+	}*/
 }
