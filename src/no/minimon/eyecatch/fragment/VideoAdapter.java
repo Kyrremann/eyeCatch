@@ -3,7 +3,6 @@ package no.minimon.eyecatch.fragment;
 import java.util.Locale;
 
 import no.minimon.eyecatch.R;
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;

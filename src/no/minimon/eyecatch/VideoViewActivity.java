@@ -1,6 +1,8 @@
 package no.minimon.eyecatch;
 
-import android.content.SharedPreferences;
+import java.util.Random;
+
+import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,21 +15,22 @@ public class VideoViewActivity extends FragmentActivity {
 
 	public static final String FILENAME = "filename";
 	private VideoView videoView;
+	private Random random;
 
 	@Override
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_videoview);
+		
+		random = new Random();
 		videoView = (VideoView) findViewById(R.id.videoView);
-		SharedPreferences preferences = getSharedPreferences(getPackageName(),
-				MODE_PRIVATE);
-		String uri = preferences.getString(EyeCatchActivity.CURRENT_VIDEO, "");
-		// DURATION
+		String uri = SharedPreferencesUtil.getCurrentVideoUri(this);
+		int duration = SharedPreferencesUtil.getDurationOnCurrentVideo(this);
 		videoView.setVideoURI(Uri.parse(uri));
 		videoView.setZOrderOnTop(true);
 		// videoView.start();
 
-		new ASync().execute();
+		new ASync().execute(duration);
 		videoView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().hide();
@@ -38,9 +41,10 @@ public class VideoViewActivity extends FragmentActivity {
 
 		@Override
 		protected Void doInBackground(Integer... params) {
-			// Random random = new Random();
-			// int seek = random.nextInt(params[0] - 5000);
-			// videoView.seekTo(seek);
+			if (params.length == 1 && params[0] != -1) {
+				int seek = random.nextInt(params[0] - 5000);
+				videoView.seekTo(seek);
+			}
 			videoView.start();
 			while (videoView.getCurrentPosition() < 5000) {
 			}

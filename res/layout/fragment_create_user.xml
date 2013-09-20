@@ -17,7 +17,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/edit_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -30,7 +30,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/edit_age"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -51,7 +51,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dip"
-            android:text="@integer/default_time_per_trial"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <SeekBar
@@ -77,8 +76,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dip"
-            android:text="@integer/default_number_of_trials"
-            
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <SeekBar
@@ -105,7 +102,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dip"
-            android:text="@integer/default_mastery_criteria"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <SeekBar
@@ -121,7 +117,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:onClick="onButtonClick"
         android:text="@string/eyecatch_create_user" />
 
 </LinearLayout>

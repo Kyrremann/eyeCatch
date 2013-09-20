@@ -16,14 +16,15 @@
     <string name="create_user_times_per_trial">Time per trial</string>
     <string name="create_user_number_of_trials">Number of trials in tests</string>
     <string name="create_user_mastery_criteria">Mastery criteria</string>
+    <string name="error_missing_name_or_age">Name or age is not filled</string>
+    <string name="error_short_video_duration">Sorry, but the video you selexted is to short to be used</string>
+    <string name="info_user_created">User is created</string>
     <string name="dummy_zero">0</string>
 
-    <item name="default_time_per_trial" type="integer">5</item>
+    <item name="default_time_per_trial" type="integer">05</item>
     <item name="default_number_of_trials" type="integer">10</item>
     <item name="default_mastery_criteria" type="integer">10</item>
 
     <string name="title_activity_eye_catch_game_fragment">EyeCatchGameFragment</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>

@@ -42,7 +42,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		loadImagesIntoFaces();
 		random = new Random();
 
-		setContentView(R.layout.activity_eyecatch_game_v2);
+		setContentView(R.layout.activity_eyecatch_game);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().hide();
 		}

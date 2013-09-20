@@ -1,23 +1,17 @@
 package no.minimon.eyecatch.fragment;
 
-import no.minimon.eyecatch.EyeCatchActivity;
 import no.minimon.eyecatch.R;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ListFragment;
-import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.VideoView;
+import android.widget.Toast;
 
 public class SelectVideoFragment extends ListFragment {
 
@@ -38,74 +32,28 @@ public class SelectVideoFragment extends ListFragment {
 		String[] columns = new String[] { MediaStore.Video.Media._ID,
 				MediaStore.Video.Media.TITLE, MediaStore.Video.Media.ARTIST,
 				MediaStore.Video.Media.DURATION };
-		// MediaStore.Video.VideoColumns.DATA
 		cursor = MediaStore.Video.query(getActivity().getContentResolver(),
 				external, columns);
-		SimpleCursorAdapter adapter2 = new SimpleCursorAdapter(getActivity(),
-				android.R.layout.simple_list_item_1, cursor,
-				new String[] { MediaStore.Video.Media.DURATION },
-				new int[] { android.R.id.text1 }, CursorAdapter.NO_SELECTION);
 		VideoAdapter adapter = new VideoAdapter(getActivity(), cursor, 0);
 		setListAdapter(adapter);
-		/*System.out.println("SIZE: " + cursor.getCount());
-		while (cursor.moveToNext()) {
-			System.out.printf("ID: %s - TITLE: %s - ARTIST: %s\n",
-					cursor.getString(0), cursor.getString(1),
-					cursor.getString(2));
-		}
-		cursor.moveToFirst();
-		ImageView imageView = (ImageView) findViewById(R.id.imageView1);
-		Bitmap bm = MediaStore.Video.Thumbnails.getThumbnail(
-				getContentResolver(), cursor.getLong(0),
-				MediaStore.Video.Thumbnails.MICRO_KIND, null);
-		imageView.setImageBitmap(bm);*/
 	}
-
-	VideoView videoView;
-	Dialog dialog;
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		cursor.moveToPosition(position);
-		Uri uri = Uri.parse(cursor.getString(0));
-		Uri external = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-		SharedPreferences sharedPreferences = getActivity()
-				.getSharedPreferences(getActivity().getPackageName(),
-						Context.MODE_PRIVATE);
-		Editor editor = sharedPreferences.edit();
-		editor.putString(EyeCatchActivity.CURRENT_VIDEO, external.toString() + "/" + uri.toString());
-		editor.commit();
-	}
-	/*cursor.moveToPosition(position);
-	Uri uri = Uri.parse(cursor.getString(0));
-	Uri external = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-	Uri complete = Uri.parse(external.toString() + "/" + uri.toString());
-
-	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	videoView = new VideoView(getActivity());
-	builder.setView(videoView);
-	videoView.setVideoURI(complete);
-	videoView.setZOrderOnTop(true);
-	dialog = builder.create();
-	dialog.show();
-	new ASync().execute(cursor.getInt(3));
-	}
-
-	private class ASync extends AsyncTask<Integer, Integer, Void> {
-
-	@Override
-	protected Void doInBackground(Integer... params) {
-		Random random = new Random();
-		int seek = random.nextInt(params[0] - 5000);
-		videoView.seekTo(seek);
-		videoView.start();
-		while (videoView.getCurrentPosition() < seek + 5000) {
+		if (cursor.getInt(3) > 5000) {
+			Uri uri = Uri.parse(cursor.getString(0));
+			Uri external = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+			SharedPreferencesUtil.setCurrentVideoUri(getActivity(),
+					external.toString() + "/" + uri.toString());
+			SharedPreferencesUtil.setCurrentVideoName(getActivity(),
+					cursor.getString(1));
+			SharedPreferencesUtil.updateActioBarTitle(getActivity(),
+					getActivity().getActionBar());
+		} else {
+			Toast.makeText(getActivity(),
+					getString(R.string.error_short_video_duration),
+					Toast.LENGTH_SHORT).show();
 		}
-		videoView.stopPlayback();
-		dialog.cancel();
-		return null;
-
 	}
-
-	}*/
 }
