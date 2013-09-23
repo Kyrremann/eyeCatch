@@ -20,10 +20,11 @@ public class SharedPreferencesUtil {
 	public static final String CURRENT_VIDEO_NAME = "eyecatch_current_video_name";
 	public static final String CURRENT_USER = "eyecatch_curret_user";
 	public static final String CURRENT_VIDEO_DURATION = "eyecatch_current_video_duration";
+	public static final String CURRENT_SEEK = "eyecatch_current_video_seek";
 	public static final int MODE_PRIVATE = 0;
 	public static final String NAME = "name";
 	public static final String AGE = "age";
-	public static final String TIMES_PER_TRIAL = "times_per_trial";
+	public static final String DURATION_PER_TRIAL = "times_per_trial";
 	public static final String NUMBER_OF_TRIALS = "number_of_trials";
 	public static final String MASTERY_CRITERIA = "mastery_criteria";
 
@@ -34,7 +35,7 @@ public class SharedPreferencesUtil {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put(NAME, name);
 			jsonObject.put(AGE, age);
-			jsonObject.put(TIMES_PER_TRIAL, timesPerTrial);
+			jsonObject.put(DURATION_PER_TRIAL, timesPerTrial);
 			jsonObject.put(NUMBER_OF_TRIALS, numberOfTrials);
 			jsonObject.put(MASTERY_CRITERIA, masteryCriteria);
 			addUser(context, jsonObject);
@@ -91,6 +92,20 @@ public class SharedPreferencesUtil {
 		editor.putInt(CURRENT_VIDEO_DURATION, duration);
 		editor.commit();
 	}
+	
+	public static int getLastSeekOnCurrentVideo(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(
+				context.getPackageName(), MODE_PRIVATE);
+		return preferences.getInt(CURRENT_SEEK, 0);
+	}
+
+	public static void setLastSeekOnCurrentVideo(Context context, int seek) {
+		SharedPreferences preferences = context.getSharedPreferences(
+				context.getPackageName(), MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		editor.putInt(CURRENT_SEEK, seek);
+		editor.commit();
+	}
 
 	public static List<String> getUsersAsList(Context context) {
 		SharedPreferences preferences = context.getSharedPreferences(
@@ -125,15 +140,19 @@ public class SharedPreferencesUtil {
 		editor.commit();
 	}
 
-	public static String getCurrentUser(Context context) {
+	public static String getCurrentUsersName(Context context) {
 		SharedPreferences preferences = context.getSharedPreferences(
 				context.getPackageName(), MODE_PRIVATE);
 		return preferences.getString(CURRENT_USER, "");
 	}
+	
+	public static JSONObject getCurrentUser(Context context) {
+		return getUser(context, getCurrentUsersName(context));
+	}
 
 	public static void updateActioBarTitle(Context context, ActionBar actionBar) {
 		String title = context.getString(R.string.app_name);
-		String user = getCurrentUser(context);
+		String user = getCurrentUsersName(context);
 		if (!user.isEmpty()) {
 			title += " - Selected user: " + user;
 		}
@@ -156,5 +175,26 @@ public class SharedPreferencesUtil {
 		SharedPreferences preferences = context.getSharedPreferences(
 				context.getPackageName(), MODE_PRIVATE);
 		return preferences.getString(CURRENT_VIDEO_NAME, "");
+	}
+
+	public static int getNumberOfTrials(Context context) {
+		JSONObject jsonObject = getCurrentUser(context);
+		try {
+			return jsonObject.getInt(NUMBER_OF_TRIALS);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return 10;
+	}
+	
+	public static int getDurationPerTrial(Context context) {
+		JSONObject jsonObject = getCurrentUser(context);
+		try {
+			return jsonObject.getInt(DURATION_PER_TRIAL);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 5;
 	}
 }

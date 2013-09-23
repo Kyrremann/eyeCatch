@@ -6,10 +6,6 @@ import no.minimon.eyecatch.fragment.HomeFragment;
 import no.minimon.eyecatch.fragment.SelectUserFragment;
 import no.minimon.eyecatch.fragment.SelectVideoFragment;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,18 +31,18 @@ public class EyeCatchActivity extends FragmentActivity implements
 					.replace(R.id.item_detail_container, fragment).commit();
 		}
 
-		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("name", "Bao");
-			jsonObject.put("age", "12");
-			jsonObject.put("timer_per_trial", "5");
-			jsonObject.put("number_of_trials", "10");
-			jsonObject.put("mastery_criteria", "10");
-
-			SharedPreferencesUtil.addUser(this, jsonObject);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// JSONObject jsonObject = new JSONObject();
+		// jsonObject.put("name", "Bao");
+		// jsonObject.put("age", "12");
+		// jsonObject.put("timer_per_trial", "5");
+		// jsonObject.put("number_of_trials", "10");
+		// jsonObject.put("mastery_criteria", "10");
+		//
+		// SharedPreferencesUtil.addUser(this, jsonObject);
+		// } catch (JSONException e) {
+		// e.printStackTrace();
+		// }
 		SharedPreferencesUtil.updateActioBarTitle(this, getActionBar());
 	}
 

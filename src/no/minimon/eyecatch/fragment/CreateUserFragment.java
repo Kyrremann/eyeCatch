@@ -18,7 +18,7 @@ import android.widget.Toast;
 public class CreateUserFragment extends Fragment {
 
 	private View rootView;
-	private TextView timesPerTrail, numberOfTrials, masteryCriteria;
+	private TextView durationPerTrail, numberOfTrials, masteryCriteria;
 	private Button createUser;
 	private EditText editName, editAge;
 
@@ -43,9 +43,13 @@ public class CreateUserFragment extends Fragment {
 				} else {
 					String name = editName.getText().toString();
 					String age = editAge.getText().toString();
-
-					SharedPreferencesUtil.createAndAddUser(getActivity(), name,
-							age, 5, 10, 10);
+					SharedPreferencesUtil.createAndAddUser(
+							getActivity(),
+							name,
+							age,
+							Integer.valueOf(durationPerTrail.getText().toString()),
+							Integer.valueOf(numberOfTrials.getText().toString()),
+							Integer.valueOf(masteryCriteria.getText().toString()));
 					SharedPreferencesUtil.updateActioBarTitle(getActivity(),
 							getActivity().getActionBar());
 					Toast.makeText(getActivity(),
@@ -68,9 +72,9 @@ public class CreateUserFragment extends Fragment {
 		seekBar.setOnSeekBarChangeListener(createOnSeekBarListener());
 		seekBar.setProgress(getResources().getInteger(
 				R.integer.default_time_per_trial));
-		timesPerTrail = (TextView) root
+		durationPerTrail = (TextView) root
 				.findViewById(R.id.textView_times_per_trail);
-		timesPerTrail.setText(String.format("%02d",
+		durationPerTrail.setText(String.format("%02d",
 				getResources().getInteger(R.integer.default_time_per_trial)));
 
 		seekBar = (SeekBar) root.findViewById(R.id.seekBar_number_of_trails);
@@ -109,7 +113,7 @@ public class CreateUserFragment extends Fragment {
 				if (fromUser) {
 					switch (seekBar.getId()) {
 					case R.id.seekBar_times_per_trail:
-						timesPerTrail.setText(String.format("%02d", progress));
+						durationPerTrail.setText(String.format("%02d", progress));
 						break;
 					case R.id.seekBar_number_of_trails:
 						numberOfTrials.setText(String.format("%02d", progress));

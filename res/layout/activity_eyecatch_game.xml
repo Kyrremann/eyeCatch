@@ -15,7 +15,7 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/image_face"
         android:onClick="onImageClicked"
-        android:src="@drawable/star" />
+        android:src="@drawable/box" />
 
     <ImageView
         android:id="@+id/image_east"
@@ -25,7 +25,7 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/image_face"
         android:onClick="onImageClicked"
-        android:src="@drawable/star" />
+        android:src="@drawable/box" />
 
     <ImageView
         android:id="@+id/image_north"
@@ -34,7 +34,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:onClick="onImageClicked"
-        android:src="@drawable/star" />
+        android:src="@drawable/box" />
 
     <ImageView
         android:id="@+id/image_south"
@@ -43,7 +43,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="onImageClicked"
-        android:src="@drawable/star" />
+        android:src="@drawable/box" />
 
     <ImageView
         android:id="@+id/image_north_west"
@@ -53,7 +53,7 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/image_face"
         android:onClick="onImageClicked"
-        android:src="@drawable/star" />
+        android:src="@drawable/box" />
 
     <ImageView
         android:id="@+id/image_north_east"
@@ -63,7 +63,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/image_face"
         android:onClick="onImageClicked"
-        android:src="@drawable/star" />
+        android:src="@drawable/box" />
 
     <ImageView
         android:id="@+id/image_south_west"
@@ -73,7 +73,7 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/image_face"
         android:onClick="onImageClicked"
-        android:src="@drawable/star" />
+        android:src="@drawable/box" />
 
     <ImageView
         android:id="@+id/image_south_east"
@@ -83,12 +83,12 @@
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/image_face"
         android:onClick="onImageClicked"
-        android:src="@drawable/star" />
+        android:src="@drawable/box" />
 
     <ImageView
         android:id="@+id/image_face"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:onClick="onImageClicked"

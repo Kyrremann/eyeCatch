@@ -21,7 +21,7 @@ public class VideoViewActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_videoview);
-		
+
 		random = new Random();
 		videoView = (VideoView) findViewById(R.id.videoView);
 		String uri = SharedPreferencesUtil.getCurrentVideoUri(this);
@@ -29,8 +29,9 @@ public class VideoViewActivity extends FragmentActivity {
 		videoView.setVideoURI(Uri.parse(uri));
 		videoView.setZOrderOnTop(true);
 		// videoView.start();
+		int lastSeek = SharedPreferencesUtil.getLastSeekOnCurrentVideo(this);
 
-		new ASync().execute(duration);
+		new ASync().execute(duration, lastSeek);
 		videoView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().hide();
@@ -41,13 +42,20 @@ public class VideoViewActivity extends FragmentActivity {
 
 		@Override
 		protected Void doInBackground(Integer... params) {
-			if (params.length == 1 && params[0] != -1) {
-				int seek = random.nextInt(params[0] - 5000);
-				videoView.seekTo(seek);
-			}
+			int seek = 0;
 			videoView.start();
-			while (videoView.getCurrentPosition() < 5000) {
+			if (params.length >= 1 && params[0] != -1) {
+				seek = random.nextInt(params[0] - 5000);
 			}
+			if (params.length == 2) {
+				seek += params[1];
+			}
+			videoView.seekTo(seek);
+			while (videoView.getCurrentPosition() < seek + 5000) {
+				// What to do when video is done/loops
+			}
+			SharedPreferencesUtil.setLastSeekOnCurrentVideo(
+					getApplicationContext(), videoView.getCurrentPosition());
 			videoView.stopPlayback();
 			setResult(EyeCatchGameActivity.RESULT_VIDEOVIEW);
 			finish();
