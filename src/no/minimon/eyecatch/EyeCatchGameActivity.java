@@ -6,6 +6,9 @@ import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -35,6 +38,8 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private int TRAINING_LEVEL = 0;
 	private int face_range = 0;
 	private boolean testingLevel = true;
+	private Uri notification;
+	private Ringtone ringtoneNotification;
 
 	public static final int RESULT_VIDEOVIEW = 256;
 	public static final int WEST = 0;
@@ -58,6 +63,10 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		LEVEL_ITERATION = SharedPreferencesUtil.getNumberOfTrials(this);
 		LEVEL_DURATION = SharedPreferencesUtil.getDurationPerTrial(this);
 		SharedPreferencesUtil.setLastSeekOnCurrentVideo(this, 0);
+		notification = RingtoneManager
+				.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		ringtoneNotification = RingtoneManager.getRingtone(
+				getApplicationContext(), notification);
 
 		faces = new SparseArray<Drawable>(8);
 		loadImagesIntoFaces();
@@ -96,7 +105,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				if (TRAINING_LEVEL == 0 || TRAINING_LEVEL == 1) {
 					// Kun de to første traingin level som bruker image_face
 					// I den første levelen er det kun tiden som kan gå ut
-					startVideoViewActivity();
+					correctActionVideoOrChime();
 				}
 				break;
 			case R.id.image_west:
@@ -136,16 +145,29 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private void checkForCorrectDirection(int direction) {
 		// TODO: if correct then video else buzz
 		if (CURRENT_FACE == direction) {
-			startVideoViewActivity();
+			correctActionVideoOrChime();
 		} else {
 			// Wrong, buzz and new face
 			Toast.makeText(this, "Sorry, wrong box", Toast.LENGTH_SHORT).show();
 		}
 	}
 
+	private void correctActionVideoOrChime() {
+		if (!testingLevel) {
+			startVideoViewActivity();
+		} else {
+			try {
+				ringtoneNotification.play();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			continueOrNext();
+		}
+	}
+
 	public void startVideoViewActivity() {
-		 startActivityForResult(new Intent(this, VideoViewActivity.class),
-		 RESULT_VIDEOVIEW);
+		startActivityForResult(new Intent(this, VideoViewActivity.class),
+				RESULT_VIDEOVIEW);
 		// Toast.makeText(this, "Showing video", Toast.LENGTH_SHORT).show();
 		// onActivityResult(0, RESULT_VIDEOVIEW, new Intent());
 	}
@@ -154,30 +176,35 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		if (resultCode == RESULT_VIDEOVIEW) {
-			correctAction();
+			continueOrNext();
 		} else {
 			super.onActivityResult(requestCode, requestCode, intent);
 		}
 		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 	}
 
-	private void correctAction() {
+	private void continueOrNext() {
 		if (CURRENT_ITERATION == LEVEL_ITERATION) {
-			doneWithLastRoundOfCurrentTraining();
+			doneWithLastRound();
 		} else {
-			continueWithCurrentTraining();
+			continueWithCurrent();
 		}
 	}
 
-	private void continueWithCurrentTraining() {
+	private void continueWithCurrent() {
 		CURRENT_ITERATION++;
 		loadTrainingOrTesting();
 	}
 
-	private void doneWithLastRoundOfCurrentTraining() {
-		TRAINING_LEVEL++;
+	private void doneWithLastRound() {
+		if (!testingLevel) {
+			TRAINING_LEVEL++;
+		} else {
+			TESTING_LEVEL++;
+		}
 		CURRENT_ITERATION = 1;
 		GAME_MODE = PAUSE;
+		testingLevel = !testingLevel;
 		setBoxesVisibility(INVISIBLE);
 		imageFace.setImageDrawable(getResources().getDrawable(R.drawable.star));
 	}
@@ -193,17 +220,17 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	private void loadTrainingOrTesting() {
-		if (testingLevel) {
+		if (!testingLevel) {
 			switch (TRAINING_LEVEL) {
-			case 0: // Trainging level A
+			case 0: // Training level A
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_center_brighted));
 				break;
-			case 1: // Trainging level B
+			case 1: // Training level B
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_center));
 				break;
-			case 2: // Trainging level C
+			case 2: // Training level C
 				face_range = 2;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -213,14 +240,14 @@ public class EyeCatchGameActivity extends FragmentActivity {
 					imageEast.setVisibility(VISIBLE);
 				}
 				break;
-			case 3: // Trainging level D
+			case 3: // Training level D
 				face_range = 2;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
 				imageWest.setVisibility(VISIBLE);
 				imageEast.setVisibility(VISIBLE);
 				break;
-			case 4: // Trainging level E
+			case 4: // Training level E
 				face_range = 3;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -236,7 +263,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				imageEast.setVisibility(VISIBLE);
 				imageNorth.setVisibility(VISIBLE);
 				imageSouth.setVisibility(VISIBLE);
-			case 6: // Trainging level G
+			case 6: // Training level G
 				face_range = 6;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -259,14 +286,65 @@ public class EyeCatchGameActivity extends FragmentActivity {
 			}
 		} else {
 			switch (TESTING_LEVEL) {
-			case 0:
-
+			// TODO: Add recording of the testing
+			case 0: // Testing pre-level A
+				imageFace.setImageDrawable(getResources().getDrawable(
+						R.drawable.mariama_center_brighted));
 				break;
-			case 1:
+			case 1: // Testing pre-level B
+				imageFace.setImageDrawable(getResources().getDrawable(
+						R.drawable.mariama_center));
 				break;
-			case 2:
+			case 2: // Testing pre-level C
+				face_range = 2;
+				updateFaceWithNewImage();
+				setBoxesVisibility(INVISIBLE);
+				if (CURRENT_FACE == WEST) {
+					imageWest.setVisibility(VISIBLE);
+				} else if (CURRENT_FACE == EAST) {
+					imageEast.setVisibility(VISIBLE);
+				}
 				break;
-			case 3:
+			case 3: // Testing pre-level D
+				face_range = 2;
+				updateFaceWithNewImage();
+				setBoxesVisibility(INVISIBLE);
+				imageWest.setVisibility(VISIBLE);
+				imageEast.setVisibility(VISIBLE);
+				break;
+			case 4: // Testing pre-level E
+				face_range = 3;
+				updateFaceWithNewImage();
+				setBoxesVisibility(INVISIBLE);
+				imageWest.setVisibility(VISIBLE);
+				imageEast.setVisibility(VISIBLE);
+				imageNorth.setVisibility(VISIBLE);
+				break;
+			case 5: // Testing pre-level F
+				face_range = 4;
+				updateFaceWithNewImage();
+				setBoxesVisibility(INVISIBLE);
+				imageWest.setVisibility(VISIBLE);
+				imageEast.setVisibility(VISIBLE);
+				imageNorth.setVisibility(VISIBLE);
+				imageSouth.setVisibility(VISIBLE);
+			case 6: // Testing pre-level G
+				face_range = 6;
+				updateFaceWithNewImage();
+				setBoxesVisibility(INVISIBLE);
+				imageWest.setVisibility(VISIBLE);
+				imageEast.setVisibility(VISIBLE);
+				imageNorth.setVisibility(VISIBLE);
+				imageSouth.setVisibility(VISIBLE);
+				imageNorthEast.setVisibility(VISIBLE);
+				imageNorthWest.setVisibility(VISIBLE);
+				break;
+			case 7: // Testing pre-level H
+				face_range = 8;
+				updateFaceWithNewImage();
+				setBoxesVisibility(VISIBLE);
+			case 8:
+				finish();
 				break;
 			default:
 				break;
