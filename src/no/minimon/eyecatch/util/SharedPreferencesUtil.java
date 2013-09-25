@@ -197,4 +197,14 @@ public class SharedPreferencesUtil {
 		}
 		return 5;
 	}
+
+	public static int getMasteryCriteria(Context context) {
+		JSONObject jsonObject = getCurrentUser(context);
+		try {
+			return jsonObject.getInt(MASTERY_CRITERIA);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return 10;
+	}
 }

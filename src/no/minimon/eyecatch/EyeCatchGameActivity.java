@@ -6,9 +6,6 @@ import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -16,7 +13,6 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class EyeCatchGameActivity extends FragmentActivity {
@@ -28,7 +24,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private static final int BEFORE_GAME = 0;
 	private View contentView;
 	private int CURRENT_FACE, GAME_MODE, LEVEL_ITERATION, LEVEL_DURATION,
-			CURRENT_ITERATION;
+			CURRENT_ITERATION, MASTERY_CRITERIA;
 	private SparseArray<Drawable> faces;
 	private ImageView imageFace, imageNorth, imageNorthEast, imageEast,
 			imageSouthEast, imageSouth, imageSouthWest, imageWest,
@@ -38,8 +34,6 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private int TRAINING_LEVEL = 0;
 	private int face_range = 0;
 	private boolean testingLevel = true;
-	private Uri notification;
-	private Ringtone ringtoneNotification;
 
 	public static final int RESULT_VIDEOVIEW = 256;
 	public static final int WEST = 0;
@@ -58,15 +52,12 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		// TRAINING_LEVEL = 2; // uncomment to start direct with boxes
 
 		CURRENT_FACE = -1;
-		CURRENT_ITERATION = 1;
+		CURRENT_ITERATION = 0;
 		GAME_MODE = BEFORE_GAME;
 		LEVEL_ITERATION = SharedPreferencesUtil.getNumberOfTrials(this);
 		LEVEL_DURATION = SharedPreferencesUtil.getDurationPerTrial(this);
 		SharedPreferencesUtil.setLastSeekOnCurrentVideo(this, 0);
-		notification = RingtoneManager
-				.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-		ringtoneNotification = RingtoneManager.getRingtone(
-				getApplicationContext(), notification);
+		MASTERY_CRITERIA = SharedPreferencesUtil.getMasteryCriteria(this);
 
 		faces = new SparseArray<Drawable>(8);
 		loadImagesIntoFaces();
@@ -80,7 +71,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		contentView = findViewById(R.id.fullscreen_content);
 		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		imageFace = (ImageView) findViewById(R.id.image_face);
-		imageFace.setImageDrawable(getResources().getDrawable(R.drawable.star));
+		// imageFace.setImageDrawable(getResources().getDrawable(R.drawable.star));
 
 		initBoxes();
 		setBoxesVisibility(INVISIBLE);
@@ -102,10 +93,13 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		case GAME_ON:
 			switch (id) {
 			case R.id.image_face:
-				if (TRAINING_LEVEL == 0 || TRAINING_LEVEL == 1) {
+				if (testingLevel) {
+					wrongAction();
+				} else if (TRAINING_LEVEL == 0 || TRAINING_LEVEL == 1) {
 					// Kun de to første traingin level som bruker image_face
 					// I den første levelen er det kun tiden som kan gå ut
-					correctActionVideoOrChime();
+					CURRENT_ITERATION++;
+					correctActionVideoOrNext();
 				}
 				break;
 			case R.id.image_west:
@@ -142,32 +136,40 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 	}
 
-	private void checkForCorrectDirection(int direction) {
-		// TODO: if correct then video else buzz
-		if (CURRENT_FACE == direction) {
-			correctActionVideoOrChime();
+	private void wrongAction() {
+		if (!testingLevel) {
+			CURRENT_ITERATION = 0;
+			continueOrNext();
 		} else {
-			// Wrong, buzz and new face
-			Toast.makeText(this, "Sorry, wrong box", Toast.LENGTH_SHORT).show();
+			CURRENT_ITERATION++;
+			continueOrNext();
 		}
 	}
 
-	private void correctActionVideoOrChime() {
+	private void checkForCorrectDirection(int direction) {
+		// TODO: if correct then video else buzz
+		if (CURRENT_FACE == direction) {
+			CURRENT_ITERATION++;
+			correctActionVideoOrNext();
+		} else {
+			// Wrong, buzz and new face
+			// Toast.makeText(this, "Sorry, wrong box",
+			// Toast.LENGTH_SHORT).show();
+			wrongAction();
+		}
+	}
+
+	private void correctActionVideoOrNext() {
 		if (!testingLevel) {
 			startVideoViewActivity();
 		} else {
-			try {
-				ringtoneNotification.play();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 			continueOrNext();
 		}
 	}
 
 	public void startVideoViewActivity() {
 		startActivityForResult(new Intent(this, VideoViewActivity.class),
-				RESULT_VIDEOVIEW);
+		 RESULT_VIDEOVIEW);
 		// Toast.makeText(this, "Showing video", Toast.LENGTH_SHORT).show();
 		// onActivityResult(0, RESULT_VIDEOVIEW, new Intent());
 	}
@@ -192,8 +194,9 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	private void continueWithCurrent() {
-		CURRENT_ITERATION++;
-		loadTrainingOrTesting();
+		// loadTrainingOrTesting();
+		GAME_MODE = PAUSE;
+		changeFaceToCenter();
 	}
 
 	private void doneWithLastRound() {
@@ -202,11 +205,16 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		} else {
 			TESTING_LEVEL++;
 		}
-		CURRENT_ITERATION = 1;
+		CURRENT_ITERATION = 0;
 		GAME_MODE = PAUSE;
 		testingLevel = !testingLevel;
 		setBoxesVisibility(INVISIBLE);
-		imageFace.setImageDrawable(getResources().getDrawable(R.drawable.star));
+		changeFaceToCenter();
+	}
+
+	public void changeFaceToCenter() {
+		imageFace.setImageDrawable(getResources().getDrawable(
+				R.drawable.mariama_center));
 	}
 
 	private void initGame() {
@@ -227,8 +235,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 						R.drawable.mariama_center_brighted));
 				break;
 			case 1: // Training level B
-				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_center));
+				changeFaceToCenter();
 				break;
 			case 2: // Training level C
 				face_range = 2;
@@ -278,6 +285,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				face_range = 8;
 				updateFaceWithNewImage();
 				setBoxesVisibility(VISIBLE);
+				break;
 			case 8:
 				finish();
 				break;
@@ -285,69 +293,12 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				break;
 			}
 		} else {
-			switch (TESTING_LEVEL) {
-			// TODO: Add recording of the testing
-			case 0: // Testing pre-level A
-				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_center_brighted));
-				break;
-			case 1: // Testing pre-level B
-				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_center));
-				break;
-			case 2: // Testing pre-level C
-				face_range = 2;
-				updateFaceWithNewImage();
-				setBoxesVisibility(INVISIBLE);
-				if (CURRENT_FACE == WEST) {
-					imageWest.setVisibility(VISIBLE);
-				} else if (CURRENT_FACE == EAST) {
-					imageEast.setVisibility(VISIBLE);
-				}
-				break;
-			case 3: // Testing pre-level D
-				face_range = 2;
-				updateFaceWithNewImage();
-				setBoxesVisibility(INVISIBLE);
-				imageWest.setVisibility(VISIBLE);
-				imageEast.setVisibility(VISIBLE);
-				break;
-			case 4: // Testing pre-level E
-				face_range = 3;
-				updateFaceWithNewImage();
-				setBoxesVisibility(INVISIBLE);
-				imageWest.setVisibility(VISIBLE);
-				imageEast.setVisibility(VISIBLE);
-				imageNorth.setVisibility(VISIBLE);
-				break;
-			case 5: // Testing pre-level F
-				face_range = 4;
-				updateFaceWithNewImage();
-				setBoxesVisibility(INVISIBLE);
-				imageWest.setVisibility(VISIBLE);
-				imageEast.setVisibility(VISIBLE);
-				imageNorth.setVisibility(VISIBLE);
-				imageSouth.setVisibility(VISIBLE);
-			case 6: // Testing pre-level G
-				face_range = 6;
-				updateFaceWithNewImage();
-				setBoxesVisibility(INVISIBLE);
-				imageWest.setVisibility(VISIBLE);
-				imageEast.setVisibility(VISIBLE);
-				imageNorth.setVisibility(VISIBLE);
-				imageSouth.setVisibility(VISIBLE);
-				imageNorthEast.setVisibility(VISIBLE);
-				imageNorthWest.setVisibility(VISIBLE);
-				break;
-			case 7: // Testing pre-level H
+			if (TESTING_LEVEL < 8) {
 				face_range = 8;
 				updateFaceWithNewImage();
 				setBoxesVisibility(VISIBLE);
-			case 8:
+			} else if (TESTING_LEVEL == 8) {
 				finish();
-				break;
-			default:
-				break;
 			}
 		}
 	}
@@ -380,7 +331,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 
 	private Drawable getRandomFace() {
 		CURRENT_FACE = random.nextInt(face_range);
-		System.out.printf("Range: %d - Got: %d", face_range, CURRENT_FACE);
+		// System.out.printf("Range: %d - Got: %d", face_range, CURRENT_FACE);
 		return faces.get(CURRENT_FACE);
 	}
 
@@ -408,6 +359,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		// System.out
 		// .printf("X: %f - Y: %f", pointerCoords.x, pointerCoords.y);
 		// }
+		wrongAction();
 		return super.onTouchEvent(event);
 	}
 }

@@ -56,7 +56,9 @@ public class VideoViewActivity extends FragmentActivity {
 			videoView.seekTo(seek);
 			while (videoView.getCurrentPosition() < seek + 5000) {
 				if (!videoView.isPlaying()) {
-					System.out.println("Video not playing");
+					seek = 0;
+					videoView.seekTo(0);
+					videoView.start();
 				}
 				// What to do when video is done/loops
 			}
@@ -68,7 +70,7 @@ public class VideoViewActivity extends FragmentActivity {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO: Start of the code to listen to child-lock
@@ -82,10 +84,10 @@ public class VideoViewActivity extends FragmentActivity {
 		// System.out
 		// .printf("X: %f - Y: %f", pointerCoords.x, pointerCoords.y);
 		// }
-		if (event.getPointerCount() == 3) {
+		/*if (event.getPointerCount() == 3) {
 			videoView.stopPlayback();
 			super.onBackPressed();
-		}
+		}*/
 		return super.onTouchEvent(event);
 	}
 
