@@ -46,13 +46,14 @@ public class VideoViewActivity extends FragmentActivity {
 		@Override
 		protected Void doInBackground(Integer... params) {
 			int seek = 0;
-			videoView.start();
 			if (params.length >= 1 && params[0] != -1) {
 				seek = random.nextInt(params[0] - 5000);
 			}
-			if (params.length == 2) {
+			if (params.length >= 2) {
 				seek += params[1];
 			}
+			
+			videoView.start();
 			videoView.seekTo(seek);
 			while (videoView.getCurrentPosition() < seek + 5000) {
 				if (!videoView.isPlaying()) {
@@ -60,10 +61,10 @@ public class VideoViewActivity extends FragmentActivity {
 					videoView.seekTo(0);
 					videoView.start();
 				}
-				// What to do when video is done/loops
 			}
+			seek = videoView.getCurrentPosition();
 			SharedPreferencesUtil.setLastSeekOnCurrentVideo(
-					getApplicationContext(), videoView.getCurrentPosition());
+					getApplicationContext(), seek);
 			videoView.stopPlayback();
 			setResult(EyeCatchGameActivity.RESULT_VIDEOVIEW);
 			finish();
