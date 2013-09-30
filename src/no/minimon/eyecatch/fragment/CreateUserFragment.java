@@ -18,7 +18,7 @@ import android.widget.Toast;
 public class CreateUserFragment extends Fragment {
 
 	private View rootView;
-	private TextView durationPerTrail, numberOfTrials, masteryCriteria;
+	private TextView durationPerTrail, numberOfTrials, masteryCriteria, videoDuration;
 	private Button createUser;
 	private EditText editName, editAge;
 
@@ -49,7 +49,8 @@ public class CreateUserFragment extends Fragment {
 							age,
 							Integer.valueOf(durationPerTrail.getText().toString()),
 							Integer.valueOf(numberOfTrials.getText().toString()),
-							Integer.valueOf(masteryCriteria.getText().toString()));
+							Integer.valueOf(masteryCriteria.getText().toString()),
+							Integer.valueOf(videoDuration.getText().toString()));
 					SharedPreferencesUtil.updateActioBarTitle(getActivity(),
 							getActivity().getActionBar());
 					Toast.makeText(getActivity(),
@@ -94,6 +95,15 @@ public class CreateUserFragment extends Fragment {
 				.findViewById(R.id.textView_mastery_criteria);
 		masteryCriteria.setText(String.format("%02d", getResources()
 				.getInteger(R.integer.default_mastery_criteria)));
+		
+		seekBar = (SeekBar) root.findViewById(R.id.seekBar_video_duration);
+		seekBar.setOnSeekBarChangeListener(createOnSeekBarListener());
+		seekBar.setProgress(getResources().getInteger(
+				R.integer.default_video_duration));
+		videoDuration = (TextView) root
+				.findViewById(R.id.textView_video_duration);
+		videoDuration.setText(String.format("%02d", getResources()
+				.getInteger(R.integer.default_video_duration)));
 	}
 
 	private OnSeekBarChangeListener createOnSeekBarListener() {
@@ -121,6 +131,9 @@ public class CreateUserFragment extends Fragment {
 					case R.id.seekBar_mastery_criteria:
 						masteryCriteria
 								.setText(String.format("%02d", progress));
+						break;
+					case R.id.seekBar_video_duration:
+						videoDuration.setText(String.format("%02d", progress));
 						break;
 					default:
 						break;

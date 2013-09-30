@@ -30,19 +30,7 @@ public class EyeCatchActivity extends FragmentActivity implements
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.item_detail_container, fragment).commit();
 		}
-
-		// try {
-		// JSONObject jsonObject = new JSONObject();
-		// jsonObject.put("name", "Bao");
-		// jsonObject.put("age", "12");
-		// jsonObject.put("timer_per_trial", "5");
-		// jsonObject.put("number_of_trials", "10");
-		// jsonObject.put("mastery_criteria", "10");
-		//
-		// SharedPreferencesUtil.addUser(this, jsonObject);
-		// } catch (JSONException e) {
-		// e.printStackTrace();
-		// }
+		
 		SharedPreferencesUtil.updateActioBarTitle(this, getActionBar());
 	}
 

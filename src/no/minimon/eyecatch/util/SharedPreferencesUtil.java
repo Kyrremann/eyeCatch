@@ -19,6 +19,7 @@ public class SharedPreferencesUtil {
 	public static final String CURRENT_VIDEO_URI = "eyecatch_current_video_uri";
 	public static final String CURRENT_VIDEO_NAME = "eyecatch_current_video_name";
 	public static final String CURRENT_USER = "eyecatch_curret_user";
+	public static final String CURRENT_ITERATION = "eyecatch_curret_iteration";
 	public static final String CURRENT_VIDEO_DURATION = "eyecatch_current_video_duration";
 	public static final String CURRENT_SEEK = "eyecatch_current_video_seek";
 	public static final int MODE_PRIVATE = 0;
@@ -27,10 +28,11 @@ public class SharedPreferencesUtil {
 	public static final String DURATION_PER_TRIAL = "times_per_trial";
 	public static final String NUMBER_OF_TRIALS = "number_of_trials";
 	public static final String MASTERY_CRITERIA = "mastery_criteria";
+	public static final String VIDEO_DURATION = "video_duration";
 
 	public static JSONObject createAndAddUser(Context context, String name,
 			String age, int timesPerTrial, int numberOfTrials,
-			int masteryCriteria) {
+			int masteryCriteria, int videoDuration) {
 		try {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put(NAME, name);
@@ -38,6 +40,7 @@ public class SharedPreferencesUtil {
 			jsonObject.put(DURATION_PER_TRIAL, timesPerTrial);
 			jsonObject.put(NUMBER_OF_TRIALS, numberOfTrials);
 			jsonObject.put(MASTERY_CRITERIA, masteryCriteria);
+			jsonObject.put(VIDEO_DURATION, videoDuration);
 			addUser(context, jsonObject);
 			return jsonObject;
 		} catch (JSONException e) {
@@ -206,5 +209,30 @@ public class SharedPreferencesUtil {
 			e.printStackTrace();
 		}
 		return 10;
+	}
+	
+	public static int getAllowedVideoDuration(Context context) {
+		JSONObject jsonObject = getCurrentUser(context);
+		try {
+			return jsonObject.getInt(VIDEO_DURATION);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return 10;
+	}
+
+	public static void setCurrentIteration(
+			Context context, int iteration) {
+		SharedPreferences preferences = context.getSharedPreferences(
+				context.getPackageName(), MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		editor.putInt(CURRENT_ITERATION, iteration);
+		editor.commit();	
+	}
+	
+	public static int getCurrentIteration(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(
+				context.getPackageName(), MODE_PRIVATE);
+		return preferences.getInt(CURRENT_ITERATION, 0);
 	}
 }
