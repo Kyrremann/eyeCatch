@@ -47,10 +47,10 @@ public class CreateUserFragment extends Fragment {
 							getActivity(),
 							name,
 							age,
-							Integer.valueOf(durationPerTrail.getText().toString()),
+							Integer.valueOf(durationPerTrail.getText().toString()) * 1000,
 							Integer.valueOf(numberOfTrials.getText().toString()),
 							Integer.valueOf(masteryCriteria.getText().toString()),
-							Integer.valueOf(videoDuration.getText().toString()));
+							Integer.valueOf(videoDuration.getText().toString()) * 1000);
 					SharedPreferencesUtil.updateActioBarTitle(getActivity(),
 							getActivity().getActionBar());
 					Toast.makeText(getActivity(),
