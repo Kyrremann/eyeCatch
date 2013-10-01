@@ -2,6 +2,9 @@ package no.minimon.eyecatch.fragment;
 
 import no.minimon.eyecatch.R;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
+import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,7 +21,8 @@ import android.widget.Toast;
 public class CreateUserFragment extends Fragment {
 
 	private View rootView;
-	private TextView durationPerTrail, numberOfTrials, masteryCriteria, videoDuration;
+	private TextView durationPerTrail, numberOfTrials, masteryCriteria,
+			videoDuration;
 	private Button createUser;
 	private EditText editName, editAge;
 
@@ -37,7 +41,7 @@ public class CreateUserFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				if (!isNameAndAgeSet()) {
-					Toast.makeText(getActivity(),
+					Toast.makeText(getActivity().getApplicationContext(),
 							getString(R.string.error_missing_name_or_age),
 							Toast.LENGTH_SHORT).show();
 				} else {
@@ -47,15 +51,26 @@ public class CreateUserFragment extends Fragment {
 							getActivity(),
 							name,
 							age,
-							Integer.valueOf(durationPerTrail.getText().toString()),
+							Integer.valueOf(durationPerTrail.getText()
+									.toString()) * 1000,
 							Integer.valueOf(numberOfTrials.getText().toString()),
-							Integer.valueOf(masteryCriteria.getText().toString()),
+							Integer.valueOf(masteryCriteria.getText()
+									.toString()),
 							Integer.valueOf(videoDuration.getText().toString()) * 1000);
 					SharedPreferencesUtil.updateActioBarTitle(getActivity(),
 							getActivity().getActionBar());
-					Toast.makeText(getActivity(),
+					Toast.makeText(getActivity().getApplicationContext(),
 							getString(R.string.info_user_created),
 							Toast.LENGTH_SHORT).show();
+
+					if (getActivity().findViewById(R.id.item_detail_container) != null) {
+
+						HomeFragment fragment = new HomeFragment();
+						getFragmentManager().beginTransaction()
+								.replace(R.id.item_detail_container, fragment)
+								.commit();
+					}
+
 				}
 			}
 		});
@@ -75,8 +90,8 @@ public class CreateUserFragment extends Fragment {
 				R.integer.default_time_per_trial));
 		durationPerTrail = (TextView) root
 				.findViewById(R.id.textView_times_per_trail);
-		durationPerTrail.setText(String.format("%02d",
-				getResources().getInteger(R.integer.default_time_per_trial)));
+		durationPerTrail.setText(String.format("%02d", getResources()
+				.getInteger(R.integer.default_time_per_trial)));
 
 		seekBar = (SeekBar) root.findViewById(R.id.seekBar_number_of_trails);
 		seekBar.setOnSeekBarChangeListener(createOnSeekBarListener());
@@ -95,15 +110,15 @@ public class CreateUserFragment extends Fragment {
 				.findViewById(R.id.textView_mastery_criteria);
 		masteryCriteria.setText(String.format("%02d", getResources()
 				.getInteger(R.integer.default_mastery_criteria)));
-		
+
 		seekBar = (SeekBar) root.findViewById(R.id.seekBar_video_duration);
 		seekBar.setOnSeekBarChangeListener(createOnSeekBarListener());
 		seekBar.setProgress(getResources().getInteger(
 				R.integer.default_video_duration));
 		videoDuration = (TextView) root
 				.findViewById(R.id.textView_video_duration);
-		videoDuration.setText(String.format("%02d", getResources()
-				.getInteger(R.integer.default_video_duration)));
+		videoDuration.setText(String.format("%02d",
+				getResources().getInteger(R.integer.default_video_duration)));
 	}
 
 	private OnSeekBarChangeListener createOnSeekBarListener() {
@@ -123,7 +138,8 @@ public class CreateUserFragment extends Fragment {
 				if (fromUser) {
 					switch (seekBar.getId()) {
 					case R.id.seekBar_times_per_trail:
-						durationPerTrail.setText(String.format("%02d", progress));
+						durationPerTrail.setText(String
+								.format("%02d", progress));
 						break;
 					case R.id.seekBar_number_of_trails:
 						numberOfTrials.setText(String.format("%02d", progress));

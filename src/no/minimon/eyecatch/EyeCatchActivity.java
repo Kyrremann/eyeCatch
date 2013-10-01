@@ -30,13 +30,19 @@ public class EyeCatchActivity extends FragmentActivity implements
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.item_detail_container, fragment).commit();
 		}
-		
+
 		SharedPreferencesUtil.updateActioBarTitle(this, getActionBar());
 	}
 
 	public void onButtonClick(View view) {
 		if (view.getId() == R.id.eyecatch_start_game) {
-			startActivity(new Intent(this, EyeCatchGameActivity.class));
+			if (isThereASelectedUserAndVideo()) {
+				startActivity(new Intent(this, EyeCatchGameActivity.class));
+			} else {
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.error_missing_user_or_video),
+						Toast.LENGTH_SHORT).show();
+			}
 		} else if (mTwoPane) {
 			Fragment fragment = null;
 			switch (view.getId()) {
@@ -52,7 +58,7 @@ public class EyeCatchActivity extends FragmentActivity implements
 			case R.id.eyecatch_touch_training:
 				// break;
 			default:
-				Toast.makeText(this, "Fragment not implemented yet!",
+				Toast.makeText(getApplicationContext(), "Fragment not implemented yet!",
 						Toast.LENGTH_SHORT).show();
 				return;
 			}
@@ -69,16 +75,22 @@ public class EyeCatchActivity extends FragmentActivity implements
 				intent = new Intent(this, CreateUserActivity.class);
 				break;
 			case R.id.eyecatch_select_video:
-				// break;
+				intent = new Intent(this, SelectVideoActivity.class);
+				break;
 			case R.id.eyecatch_touch_training:
 				// break;
 			default:
-				Toast.makeText(this, "Activity not implemented yet!",
+				Toast.makeText(getApplicationContext(), "Activity not implemented yet!",
 						Toast.LENGTH_SHORT).show();
 				return;
 			}
 			startActivity(intent);
 		}
+	}
+
+	private boolean isThereASelectedUserAndVideo() {
+		return !SharedPreferencesUtil.getCurrentVideoName(this).isEmpty()
+				&& !SharedPreferencesUtil.getCurrentUsersName(this).isEmpty();
 	}
 
 	@Override

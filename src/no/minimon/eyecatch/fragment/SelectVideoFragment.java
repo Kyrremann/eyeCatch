@@ -41,17 +41,26 @@ public class SelectVideoFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		cursor.moveToPosition(position);
-		if (cursor.getInt(3) > 5000) {
+		if (cursor.getInt(3) > 1000) {
 			Uri uri = Uri.parse(cursor.getString(0));
 			Uri external = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
 			SharedPreferencesUtil.setCurrentVideoUri(getActivity(),
 					external.toString() + "/" + uri.toString());
 			SharedPreferencesUtil.setCurrentVideoName(getActivity(),
 					cursor.getString(1));
+			SharedPreferencesUtil.setCurrentVideoDuration(getActivity(),
+					cursor.getInt(3));
 			SharedPreferencesUtil.updateActioBarTitle(getActivity(),
 					getActivity().getActionBar());
+
+			if (getActivity().findViewById(R.id.item_detail_container) != null) {
+
+				HomeFragment fragment = new HomeFragment();
+				getFragmentManager().beginTransaction()
+						.replace(R.id.item_detail_container, fragment).commit();
+			}
 		} else {
-			Toast.makeText(getActivity(),
+			Toast.makeText(getActivity().getApplicationContext(),
 					getString(R.string.error_short_video_duration),
 					Toast.LENGTH_SHORT).show();
 		}

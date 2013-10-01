@@ -8,26 +8,6 @@
     tools:context=".EyeCatchGameActivity" >
 
     <ImageView
-        android:id="@+id/image_west"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/image_face"
-        android:onClick="onImageClicked"
-        android:src="@drawable/box" />
-
-    <ImageView
-        android:id="@+id/image_east"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/image_face"
-        android:onClick="onImageClicked"
-        android:src="@drawable/box" />
-
-    <ImageView
         android:id="@+id/image_north"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,8 +29,7 @@
         android:id="@+id/image_north_west"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/image_face"
         android:layout_toLeftOf="@+id/image_face"
         android:onClick="onImageClicked"
         android:src="@drawable/box" />
@@ -59,8 +38,7 @@
         android:id="@+id/image_north_east"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/image_face"
         android:layout_toRightOf="@+id/image_face"
         android:onClick="onImageClicked"
         android:src="@drawable/box" />
@@ -69,8 +47,7 @@
         android:id="@+id/image_south_west"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/image_face"
         android:layout_toLeftOf="@+id/image_face"
         android:onClick="onImageClicked"
         android:src="@drawable/box" />
@@ -79,8 +56,7 @@
         android:id="@+id/image_south_east"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_below="@+id/image_face"
         android:layout_toRightOf="@+id/image_face"
         android:onClick="onImageClicked"
         android:src="@drawable/box" />
@@ -93,5 +69,32 @@
         android:layout_centerVertical="true"
         android:onClick="onImageClicked"
         android:src="@drawable/mariama_center" />
+
+    <ImageView
+        android:id="@+id/image_west"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/image_east"
+        android:layout_toLeftOf="@+id/image_north_west"
+        android:onClick="onImageClicked"
+        android:src="@drawable/box" />
+
+    <ImageView
+        android:id="@+id/image_east"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/image_south_east"
+        android:onClick="onImageClicked"
+        android:src="@drawable/box" />
+
+    <TextView
+        android:id="@+id/watermark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#33333333" />
 
 </RelativeLayout>

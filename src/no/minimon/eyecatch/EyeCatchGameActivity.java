@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -53,6 +54,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 			imageSouthEast, imageSouth, imageSouthWest, imageWest,
 			imageNorthWest;
 	private CountDownTimer countDownLevelDuration, countDownTestingBegin;
+	private TextView watermark;
 
 	private SparseArray<Drawable> faces;
 	private Random random;
@@ -68,6 +70,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		NUMBER_OF_TRIALS = SharedPreferencesUtil.getNumberOfTrials(this);
 		LEVEL_DURATION = SharedPreferencesUtil.getDurationPerTrial(this);
 		MASTERY_CRITERIA = SharedPreferencesUtil.getMasteryCriteria(this);
+		Log.d("LOG", NUMBER_OF_TRIALS + "-" + LEVEL_DURATION + "-" + MASTERY_CRITERIA);
 		
 		SharedPreferencesUtil.setLastSeekOnCurrentVideo(this, 0);
 
@@ -83,6 +86,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		contentView = findViewById(R.id.fullscreen_content);
 		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		imageFace = (ImageView) findViewById(R.id.image_face);
+		watermark = (TextView) findViewById(R.id.watermark);
 
 		initDurations();
 		initBoxes();
@@ -106,7 +110,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 			}
 		};
 
-		countDownLevelDuration = new CountDownTimer(LEVEL_DURATION * 1000, 1000) {
+		countDownLevelDuration = new CountDownTimer(LEVEL_DURATION, 1000) {
 
 			@Override
 			public void onTick(long millisUntilFinished) {
@@ -115,8 +119,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 
 			@Override
 			public void onFinish() {
-				// wrongAction();
-
+				wrongAction();
 			}
 		};
 	}
@@ -295,6 +298,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 
 	private void loadTrainingOrTesting() {
 		if (!testingLevel) {
+			watermark.setText(R.string.training);
 			switch (TRAINING_LEVEL) {
 			case 0: // Training level A
 				imageFace.setImageDrawable(getResources().getDrawable(
@@ -362,6 +366,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				break;
 			}
 		} else {
+			watermark.setText(R.string.testing);
 			if (TESTING_LEVEL < 8) {
 				FACE_RANGE = 8;
 				updateFaceWithNewImage();

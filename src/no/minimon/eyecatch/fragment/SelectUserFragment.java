@@ -52,5 +52,13 @@ public class SelectUserFragment extends ListFragment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		if (getActivity().findViewById(R.id.item_detail_container) != null) {
+
+			HomeFragment fragment = new HomeFragment();
+			getFragmentManager().beginTransaction()
+					.replace(R.id.item_detail_container, fragment)
+					.commit();
+		}
 	}
 }

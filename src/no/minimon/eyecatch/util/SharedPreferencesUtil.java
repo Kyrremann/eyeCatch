@@ -12,6 +12,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 public class SharedPreferencesUtil {
 
@@ -29,6 +30,7 @@ public class SharedPreferencesUtil {
 	public static final String NUMBER_OF_TRIALS = "number_of_trials";
 	public static final String MASTERY_CRITERIA = "mastery_criteria";
 	public static final String VIDEO_DURATION = "video_duration";
+	private static final String LOG_SPU = "SPU";
 
 	public static JSONObject createAndAddUser(Context context, String name,
 			String age, int timesPerTrial, int numberOfTrials,
@@ -88,7 +90,7 @@ public class SharedPreferencesUtil {
 		return preferences.getInt(CURRENT_VIDEO_DURATION, -1);
 	}
 
-	public static void setDurationOnCurrentVideo(Context context, int duration) {
+	public static void setCurrentVideoDuration(Context context, int duration) {
 		SharedPreferences preferences = context.getSharedPreferences(
 				context.getPackageName(), MODE_PRIVATE);
 		Editor editor = preferences.edit();
@@ -187,6 +189,7 @@ public class SharedPreferencesUtil {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		Log.d(LOG_SPU, "Didn't not find number of trails. Returning default");
 		return 10;
 	}
 	
@@ -198,7 +201,8 @@ public class SharedPreferencesUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return 5;
+		Log.d(LOG_SPU, "Didn't not find duration per trial. Returning default");
+		return 5000;
 	}
 
 	public static int getMasteryCriteria(Context context) {
@@ -208,6 +212,7 @@ public class SharedPreferencesUtil {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		Log.d(LOG_SPU, "Didn't not find mastery criteria. Returning default");
 		return 10;
 	}
 	

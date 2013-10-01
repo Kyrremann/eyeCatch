@@ -28,12 +28,17 @@
             android:name="no.minimon.eyecatch.EyeCatchGameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName="no.minimon.eyecatch.EyeCatchActivity"
-            android:theme="@style/FullscreenTheme" android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@style/FullscreenTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="no.minimon.eyecatch.EyeCatchActivity" />
         </activity>
-        <activity android:name="VideoViewActivity" android:screenOrientation="landscape" android:theme="@style/FullscreenBlackBackground"></activity>
+        <activity
+            android:name="VideoViewActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/FullscreenBlackBackground" >
+        </activity>
     </application>
 
 </manifest>
