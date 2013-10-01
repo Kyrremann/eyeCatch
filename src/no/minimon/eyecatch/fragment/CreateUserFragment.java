@@ -47,7 +47,7 @@ public class CreateUserFragment extends Fragment {
 							getActivity(),
 							name,
 							age,
-							Integer.valueOf(durationPerTrail.getText().toString()) * 1000,
+							Integer.valueOf(durationPerTrail.getText().toString()),
 							Integer.valueOf(numberOfTrials.getText().toString()),
 							Integer.valueOf(masteryCriteria.getText().toString()),
 							Integer.valueOf(videoDuration.getText().toString()) * 1000);
