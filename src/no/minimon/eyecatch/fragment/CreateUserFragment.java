@@ -2,9 +2,6 @@ package no.minimon.eyecatch.fragment;
 
 import no.minimon.eyecatch.R;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
-import android.graphics.Color;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

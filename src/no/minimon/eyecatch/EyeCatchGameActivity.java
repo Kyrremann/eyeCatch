@@ -18,7 +18,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class EyeCatchGameActivity extends FragmentActivity {
@@ -63,6 +62,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_eyecatch_game);
 
 		// TRAINING_LEVEL = 2; // uncomment to start direct with boxes
 
@@ -78,7 +78,6 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		loadImagesIntoFaces();
 		random = new Random();
 
-		setContentView(R.layout.activity_eyecatch_game);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().hide();
 		}

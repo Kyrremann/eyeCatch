@@ -43,6 +43,8 @@ public class EyeCatchActivity extends FragmentActivity implements
 						getString(R.string.error_missing_user_or_video),
 						Toast.LENGTH_SHORT).show();
 			}
+		} else if (view.getId() == R.id.eyecatch_touch_training) {
+			startActivity(new Intent(this, TouchTrainingActivity.class));
 		} else if (mTwoPane) {
 			Fragment fragment = null;
 			switch (view.getId()) {
@@ -55,11 +57,10 @@ public class EyeCatchActivity extends FragmentActivity implements
 			case R.id.eyecatch_select_video:
 				fragment = new SelectVideoFragment();
 				break;
-			case R.id.eyecatch_touch_training:
-				// break;
 			default:
-				Toast.makeText(getApplicationContext(), "Fragment not implemented yet!",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(),
+						"Fragment not implemented yet!", Toast.LENGTH_SHORT)
+						.show();
 				return;
 			}
 			getSupportFragmentManager().beginTransaction()
@@ -80,8 +81,9 @@ public class EyeCatchActivity extends FragmentActivity implements
 			case R.id.eyecatch_touch_training:
 				// break;
 			default:
-				Toast.makeText(getApplicationContext(), "Activity not implemented yet!",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(),
+						"Activity not implemented yet!", Toast.LENGTH_SHORT)
+						.show();
 				return;
 			}
 			startActivity(intent);
