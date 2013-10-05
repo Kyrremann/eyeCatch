@@ -64,7 +64,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_eyecatch_game);
 
-		// TRAINING_LEVEL = 2; // uncomment to start direct with boxes
+		// TRAINING_LEVEL = 7; TESTING_LEVEL = 7;// uncomment to start direct with boxes
 
 		GAME_MODE = BEFORE_GAME;
 		NUMBER_OF_TRIALS = SharedPreferencesUtil.getNumberOfTrials(this);
@@ -141,7 +141,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 			switch (id) {
 			case R.id.image_face:
 				if (testingLevel) {
-					wrongAction();
+					// wrongAction();
 				} else if (TRAINING_LEVEL == 0 || TRAINING_LEVEL == 1) {
 					CURRENT_ITERATION++;
 					correctActionVideoOrNext();
@@ -247,6 +247,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 			setBoxesVisibility(INVISIBLE);
 		} else {
 			countDownTestingBegin.start();
+			return;
 		}
 
 		addHocSolutionForTrainingAB();
@@ -296,10 +297,12 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	private void loadTrainingOrTesting() {
+		String waterText = "";
 		if (!testingLevel) {
-			watermark.setText(R.string.training);
+			waterText = getString(R.string.training);
 			switch (TRAINING_LEVEL) {
 			case 0: // Training level A
+				waterText += " A";
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_center_brighted));
 				Animation animation = new AlphaAnimation(0f, 1f);
@@ -307,9 +310,11 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				imageFace.startAnimation(animation);
 				break;
 			case 1: // Training level B
+				waterText += " B";
 				changeFaceToCenter();
 				break;
 			case 2: // Training level C
+				waterText += " C";
 				FACE_RANGE = 2;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -320,6 +325,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				}
 				break;
 			case 3: // Training level D
+				waterText += " D";
 				FACE_RANGE = 2;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -327,6 +333,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				imageEast.setVisibility(VISIBLE);
 				break;
 			case 4: // Training level E
+				waterText += " E";
 				FACE_RANGE = 3;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -335,6 +342,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				imageNorth.setVisibility(VISIBLE);
 				break;
 			case 5: // Training level F
+				waterText += " F";
 				FACE_RANGE = 4;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -342,7 +350,9 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				imageEast.setVisibility(VISIBLE);
 				imageNorth.setVisibility(VISIBLE);
 				imageSouth.setVisibility(VISIBLE);
+				break;
 			case 6: // Training level G
+				waterText += " G";
 				FACE_RANGE = 6;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -354,26 +364,33 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				imageNorthWest.setVisibility(VISIBLE);
 				break;
 			case 7: // Training level H
+				waterText += " H";
 				FACE_RANGE = 8;
 				updateFaceWithNewImage();
 				setBoxesVisibility(VISIBLE);
 				break;
 			case 8:
-				endGameActivity();
+				// endGameActivity();
+				testingLevel = true;
+				loadTrainingOrTesting();
 				break;
 			default:
 				break;
 			}
 		} else {
-			watermark.setText(R.string.testing);
-			if (TESTING_LEVEL < 8) {
+			// waterText = getString(R.string.testing);
+			if (TESTING_LEVEL < 9) {
+				waterText = getString(R.string.testing) + " " + TESTING_LEVEL;
 				FACE_RANGE = 8;
 				updateFaceWithNewImage();
 				setBoxesVisibility(VISIBLE);
-			} else if (TESTING_LEVEL == 8) {
+			} else if (TESTING_LEVEL == 9) {
 				endGameActivity();
 			}
 		}
+
+		watermark.setText(waterText);
+		// TODO: Do you always start?
 		countDownLevelDuration.start();
 	}
 

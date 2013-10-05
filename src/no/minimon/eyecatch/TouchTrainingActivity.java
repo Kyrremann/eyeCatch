@@ -2,7 +2,8 @@ package no.minimon.eyecatch;
 
 import java.util.Random;
 
-import no.minimon.eyecatch.R;
+import static no.minimon.eyecatch.EyeCatchGameActivity.*;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
@@ -18,15 +19,7 @@ public class TouchTrainingActivity extends FragmentActivity {
 	private static final int VISIBLE = View.VISIBLE;
 	private static final int INVISIBLE = View.INVISIBLE;
 
-	public static final int WEST = 0;
-	public static final int EAST = 1;
-	public static final int NORTH = 2;
-	public static final int SOUTH = 3;
-	public static final int NORTH_WEST = 4;
-	public static final int NORTH_EAST = 5;
-	public static final int SOUTH_WEST = 6;
-	public static final int SOUTH_EAST = 7;
-	public static final int RESULT_VIDEOVIEW = 256;
+	public static final String TRAINING = "training";
 
 	private ImageView imageNorth, imageNorthEast, imageEast, imageSouthEast,
 			imageSouth, imageSouthWest, imageWest, imageNorthWest;
@@ -37,14 +30,13 @@ public class TouchTrainingActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_eyecatch_game);
-		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 
 		random = new Random();
 		contentView = findViewById(R.id.fullscreen_content);
+		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 
 		initBoxes();
 		setBoxesVisibility(INVISIBLE);
-		
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().hide();
@@ -109,10 +101,10 @@ public class TouchTrainingActivity extends FragmentActivity {
 
 	private void showVideo() {
 		// TODO: Show video with bundle
-		// startActivityForResult(new Intent(getActivity(),
-		// VideoViewActivity.class),
-		// RESULT_VIDEOVIEW);
-		onActivityResult(0, RESULT_VIDEOVIEW, new Intent());
+		Intent intent = new Intent(this, VideoViewActivity.class);
+		// intent.putExtra(TRAINING, true);
+		startActivityForResult(intent, RESULT_VIDEOVIEW);
+		// onActivityResult(0, RESULT_VIDEOVIEW, new Intent());
 	}
 
 	@Override

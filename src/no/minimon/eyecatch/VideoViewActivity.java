@@ -8,11 +8,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -31,14 +29,15 @@ public class VideoViewActivity extends FragmentActivity {
 		random = new Random();
 		videoView = (VideoView) findViewById(R.id.videoView);
 
+		// boolean training =
+		// savedInstance.getBoolean(TouchTrainingActivity.TRAINING, false);
+
 		String uri = SharedPreferencesUtil.getCurrentVideoUri(this);
 		int duration_of_video = SharedPreferencesUtil
 				.getDurationOnCurrentVideo(this);
 		int threshold = SharedPreferencesUtil.getAllowedVideoDuration(this);
 		int lastSeek = SharedPreferencesUtil.getLastSeekOnCurrentVideo(this);
-		Log.d(LOG_VV, "Duration: " + duration_of_video + "\nThreshold: "
-				+ threshold + "\nLast seek: " + lastSeek);
-		
+
 		threshold = lastSeek + threshold;
 		if (threshold > duration_of_video) {
 			threshold = duration_of_video;
@@ -64,9 +63,6 @@ public class VideoViewActivity extends FragmentActivity {
 			int lastSeek = params[1];
 			int threshold = params[2];
 
-			Log.d(LOG_VV, "Threshold: " + threshold + "\nLast seek: "
-					+ lastSeek);
-
 			videoView.start();
 			videoView.seekTo(lastSeek);
 
@@ -82,7 +78,7 @@ public class VideoViewActivity extends FragmentActivity {
 			SharedPreferencesUtil.setLastSeekOnCurrentVideo(getApplication(),
 					lastSeek);
 			Log.d(LOG_VV, "Video stopped at " + lastSeek);
-
+			setResult(EyeCatchGameActivity.RESULT_VIDEOVIEW);
 			finish();
 
 			return null;

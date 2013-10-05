@@ -44,7 +44,13 @@ public class EyeCatchActivity extends FragmentActivity implements
 						Toast.LENGTH_SHORT).show();
 			}
 		} else if (view.getId() == R.id.eyecatch_touch_training) {
-			startActivity(new Intent(this, TouchTrainingActivity.class));
+			if (isThereAselectedVideo()) {
+				startActivity(new Intent(this, TouchTrainingActivity.class));
+			} else {
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.error_missing_video),
+						Toast.LENGTH_SHORT).show();
+			}
 		} else if (mTwoPane) {
 			Fragment fragment = null;
 			switch (view.getId()) {
@@ -78,8 +84,6 @@ public class EyeCatchActivity extends FragmentActivity implements
 			case R.id.eyecatch_select_video:
 				intent = new Intent(this, SelectVideoActivity.class);
 				break;
-			case R.id.eyecatch_touch_training:
-				// break;
 			default:
 				Toast.makeText(getApplicationContext(),
 						"Activity not implemented yet!", Toast.LENGTH_SHORT)
@@ -91,8 +95,12 @@ public class EyeCatchActivity extends FragmentActivity implements
 	}
 
 	private boolean isThereASelectedUserAndVideo() {
-		return !SharedPreferencesUtil.getCurrentVideoName(this).isEmpty()
+		return isThereAselectedVideo()
 				&& !SharedPreferencesUtil.getCurrentUsersName(this).isEmpty();
+	}
+
+	public boolean isThereAselectedVideo() {
+		return !SharedPreferencesUtil.getCurrentVideoName(this).isEmpty();
 	}
 
 	@Override
