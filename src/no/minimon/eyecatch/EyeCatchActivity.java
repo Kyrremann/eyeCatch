@@ -3,6 +3,7 @@ package no.minimon.eyecatch;
 import no.minimon.eyecatch.fragment.CreateUserFragment;
 import no.minimon.eyecatch.fragment.EyeCatchFragment;
 import no.minimon.eyecatch.fragment.HomeFragment;
+import no.minimon.eyecatch.fragment.SelectStatisticsFragment;
 import no.minimon.eyecatch.fragment.SelectUserFragment;
 import no.minimon.eyecatch.fragment.SelectVideoFragment;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
@@ -62,6 +63,9 @@ public class EyeCatchActivity extends FragmentActivity implements
 				break;
 			case R.id.eyecatch_select_video:
 				fragment = new SelectVideoFragment();
+				break;
+			case R.id.eyecatch_select_statistic:
+				fragment = new SelectStatisticsFragment();
 				break;
 			default:
 				Toast.makeText(getApplicationContext(),

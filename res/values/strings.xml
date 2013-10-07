@@ -11,6 +11,7 @@
     <string name="eyecatch_create_user">Create user</string>
     <string name="eyecatch_select_video">Select video</string>
     <string name="eyecatch_touch_training">Touch training</string>
+    <string name="eyecatch_select_statistic">Statistic</string>
     <string name="create_user_name">Username</string>
     <string name="create_user_age">Age in months</string>
     <string name="create_user_times_per_trial">Time per trial</string>
@@ -19,6 +20,30 @@
     <string name="create_user_video_duration">Video duration</string>
     <string name="info_user_created">User is created</string>
     <string name="dummy_zero">0</string>
+    
+    <string name="statistic_name">Name:</string>
+    <string name="statistic_age">Age:</string>
+    <string name="statistic_training">Training - Mastery Criteria:</string>    
+    <string name="statistic_testing">Testing - Number of tests:</string>
+    
+    <string name="A">A</string>
+    <string name="B">B</string>
+    <string name="C">C</string>
+    <string name="D">D</string>
+    <string name="E">E</string>
+    <string name="F">F</string>
+    <string name="G">G</string>
+    <string name="H">H</string>
+    
+    <string name="pre_A">pre-A</string>
+    <string name="pre_B">pre-B</string>
+    <string name="pre_C">pre-C</string>
+    <string name="pre_D">pre-D</string>
+    <string name="pre_E">pre-E</string>
+    <string name="pre_F">pre-F</string>
+    <string name="pre_G">pre-G</string>
+    <string name="pre_H">pre-H</string>
+    <string name="post_H">post-H</string>
     
     <string name="error_missing_name_or_age">Name or age is not filled</string>
     <string name="error_short_video_duration">Sorry, but the video you selexted is to short to be used</string>

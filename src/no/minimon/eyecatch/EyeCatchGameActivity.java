@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
@@ -64,13 +63,11 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_eyecatch_game);
 
-		// TRAINING_LEVEL = 7; TESTING_LEVEL = 7;// uncomment to start direct with boxes
+		// TRAINING_LEVEL = 7; TESTING_LEVEL = 7;
 
-		GAME_MODE = BEFORE_GAME;
 		NUMBER_OF_TRIALS = SharedPreferencesUtil.getNumberOfTrials(this);
 		LEVEL_DURATION = SharedPreferencesUtil.getDurationPerTrial(this);
 		MASTERY_CRITERIA = SharedPreferencesUtil.getMasteryCriteria(this);
-		Log.d("LOG", NUMBER_OF_TRIALS + "-" + LEVEL_DURATION + "-" + MASTERY_CRITERIA);
 		
 		SharedPreferencesUtil.setLastSeekOnCurrentVideo(this, 0);
 
@@ -90,6 +87,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		initDurations();
 		initBoxes();
 		setBoxesVisibility(VISIBLE);
+		GAME_MODE = PAUSE;
 	}
 
 	private void initDurations() {
@@ -128,11 +126,13 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		switch (GAME_MODE) {
 		case BEFORE_GAME:
 			if (view.getId() == R.id.image_face) {
+				// Not really needed
 				initGame();
 			}
 		case PAUSE:
 			if (id == R.id.image_face) {
 				countDownTestingBegin.cancel();
+				countDownLevelDuration.cancel();
 				loadTrainingOrTesting();
 				GAME_MODE = GAME_ON;
 			}
@@ -141,7 +141,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 			switch (id) {
 			case R.id.image_face:
 				if (testingLevel) {
-					// wrongAction();
+					// wrongAction(); // Not anymore
 				} else if (TRAINING_LEVEL == 0 || TRAINING_LEVEL == 1) {
 					CURRENT_ITERATION++;
 					correctActionVideoOrNext();
@@ -297,7 +297,9 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	private void loadTrainingOrTesting() {
+		// TODO watermark needs to be set before next training (kinda)
 		String waterText = "";
+		Animation animation;
 		if (!testingLevel) {
 			waterText = getString(R.string.training);
 			switch (TRAINING_LEVEL) {
@@ -305,13 +307,16 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				waterText += " A";
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_center_brighted));
-				Animation animation = new AlphaAnimation(0f, 1f);
+				animation = new AlphaAnimation(0f, 1f);
 				animation.setDuration(1200);
 				imageFace.startAnimation(animation);
 				break;
 			case 1: // Training level B
 				waterText += " B";
 				changeFaceToCenter();
+				animation = new AlphaAnimation(0f, 1f);
+				animation.setDuration(1200);
+				imageFace.startAnimation(animation);
 				break;
 			case 2: // Training level C
 				waterText += " C";
@@ -428,7 +433,6 @@ public class EyeCatchGameActivity extends FragmentActivity {
 
 	private Drawable getRandomFace() {
 		CURRENT_FACE = random.nextInt(FACE_RANGE);
-		// System.out.printf("Range: %d - Got: %d", face_range, CURRENT_FACE);
 		return faces.get(CURRENT_FACE);
 	}
 
