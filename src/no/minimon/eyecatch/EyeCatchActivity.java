@@ -1,5 +1,8 @@
 package no.minimon.eyecatch;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import no.minimon.eyecatch.fragment.CreateUserFragment;
 import no.minimon.eyecatch.fragment.EyeCatchFragment;
 import no.minimon.eyecatch.fragment.HomeFragment;
@@ -33,6 +36,16 @@ public class EyeCatchActivity extends FragmentActivity implements
 		}
 
 		SharedPreferencesUtil.updateActioBarTitle(this, getActionBar());
+		
+//		SharedPreferencesUtil.createNewStatisticOnCurrentUser(this);
+		// JSONObject jsonObject = SharedPreferencesUtil.getCurrentUser(this);
+		// try {
+		// // System.out.println(jsonObject.toString(4));
+		// jsonObject.getJSONObject(SharedPreferencesUtil.STATISTIC).remove("1381425403492");
+		// SharedPreferencesUtil.updateUserInfo(this, jsonObject);
+		// } catch (JSONException e) {
+		// e.printStackTrace();
+		// }
 	}
 
 	public void onButtonClick(View view) {

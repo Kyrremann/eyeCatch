@@ -62,4 +62,6 @@
 
     <string name="title_activity_eye_catch_game_fragment">EyeCatchGameFragment</string>
 
+    <string name="statistic_delete">DELETE</string>
+
 </resources>

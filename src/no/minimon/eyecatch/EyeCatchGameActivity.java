@@ -3,6 +3,10 @@ package no.minimon.eyecatch;
 import java.util.Random;
 
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -10,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,7 +28,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 
 	private static final int VISIBLE = View.VISIBLE;
 	private static final int INVISIBLE = View.INVISIBLE;
-	private static final int PAUSE = 2;
+	private static final int GAME_PAUSE = 2;
 	private static final int GAME_ON = 1;
 	private static final int BEFORE_GAME = 0;
 
@@ -41,6 +46,8 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private int GAME_MODE;
 	private int NUMBER_OF_TRIALS;
 	private int CURRENT_ITERATION = 0;
+	private int CURRENT_ITERATION_CORRECT = 0;
+	private int CURRENT_ITERATION_FAIL = 0;
 	private int MASTERY_CRITERIA;
 	private long LEVEL_DURATION;
 	private int TESTING_LEVEL = 0;
@@ -57,6 +64,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private SparseArray<Drawable> faces;
 	private Random random;
 	private boolean testingLevel = true;
+	private JSONObject statistic;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +76,9 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		NUMBER_OF_TRIALS = SharedPreferencesUtil.getNumberOfTrials(this);
 		LEVEL_DURATION = SharedPreferencesUtil.getDurationPerTrial(this);
 		MASTERY_CRITERIA = SharedPreferencesUtil.getMasteryCriteria(this);
-		
+
 		SharedPreferencesUtil.setLastSeekOnCurrentVideo(this, 0);
+		statistic = SharedPreferencesUtil.createNewStatisticOnCurrentUser(this);
 
 		faces = new SparseArray<Drawable>(8);
 		loadImagesIntoFaces();
@@ -86,8 +95,27 @@ public class EyeCatchGameActivity extends FragmentActivity {
 
 		initDurations();
 		initBoxes();
-		setBoxesVisibility(VISIBLE);
-		GAME_MODE = PAUSE;
+		setBoxesVisibility(INVISIBLE);
+		GAME_MODE = GAME_PAUSE;
+		changeFaceToStar();
+		setWatermark();
+	}
+
+	private void setWatermark() {
+		String text = "";
+		if (!testingLevel) {
+			text += getString(R.string.training);
+			text += " " + (char) (65 + TRAINING_LEVEL);
+		} else {
+			text += getString(R.string.testing);
+			if (TESTING_LEVEL < 8) {
+				text += " pre-" + (char) (65 + TESTING_LEVEL);
+			} else {
+				text += " post-H";
+			}
+
+		}
+		watermark.setText(text);
 	}
 
 	private void initDurations() {
@@ -129,12 +157,18 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				// Not really needed
 				initGame();
 			}
-		case PAUSE:
+		case GAME_PAUSE:
 			if (id == R.id.image_face) {
-				countDownTestingBegin.cancel();
-				countDownLevelDuration.cancel();
-				loadTrainingOrTesting();
-				GAME_MODE = GAME_ON;
+				if (testingLevel) {
+					setBoxesVisibility(VISIBLE);
+					changeFaceToCenter();
+					countDownTestingBegin.start();
+				} else {
+					countDownTestingBegin.cancel();
+					countDownLevelDuration.cancel();
+					loadTrainingOrTesting();
+					GAME_MODE = GAME_ON;
+				}
 			}
 			break;
 		case GAME_ON:
@@ -143,7 +177,6 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				if (testingLevel) {
 					// wrongAction(); // Not anymore
 				} else if (TRAINING_LEVEL == 0 || TRAINING_LEVEL == 1) {
-					CURRENT_ITERATION++;
 					correctActionVideoOrNext();
 				}
 				break;
@@ -182,11 +215,13 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	private void wrongAction() {
+		CURRENT_ITERATION++;
+		CURRENT_ITERATION_FAIL++;
+		Log.d("WRONG", "CI: " + CURRENT_ITERATION + " - CIC: " + CURRENT_ITERATION_CORRECT + " - CIF: " + CURRENT_ITERATION_FAIL);
 		if (!testingLevel) {
-			CURRENT_ITERATION = 0;
+			CURRENT_ITERATION_CORRECT = 0;
 			continueOrNext();
 		} else {
-			CURRENT_ITERATION++;
 			continueOrNext();
 		}
 	}
@@ -194,7 +229,6 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private void checkForCorrectDirection(int direction) {
 		countDownLevelDuration.cancel();
 		if (CURRENT_FACE == direction) {
-			CURRENT_ITERATION++;
 			correctActionVideoOrNext();
 		} else {
 			wrongAction();
@@ -203,6 +237,9 @@ public class EyeCatchGameActivity extends FragmentActivity {
 
 	private void correctActionVideoOrNext() {
 		countDownLevelDuration.cancel();
+		CURRENT_ITERATION++;
+		CURRENT_ITERATION_CORRECT++;
+		Log.d("RIGHT", "CI: " + CURRENT_ITERATION + " - CIC: " + CURRENT_ITERATION_CORRECT + " - CIF: " + CURRENT_ITERATION_FAIL);
 		if (!testingLevel) {
 			startVideoViewActivity();
 		} else {
@@ -231,7 +268,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private void continueOrNext() {
 		if (testingLevel && CURRENT_ITERATION >= NUMBER_OF_TRIALS) {
 			doneWithLastRound();
-		} else if (!testingLevel && CURRENT_ITERATION >= MASTERY_CRITERIA) {
+		} else if (!testingLevel && CURRENT_ITERATION_CORRECT >= MASTERY_CRITERIA) {
 			doneWithLastRound();
 		} else {
 			continueWithCurrent();
@@ -239,45 +276,52 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	private void continueWithCurrent() {
-		// loadTrainingOrTesting();
-		GAME_MODE = PAUSE;
-		changeFaceToCenter();
+		GAME_MODE = GAME_PAUSE;
 
-		if (!testingLevel && TRAINING_LEVEL == 2) {
+		if (!testingLevel) {
 			setBoxesVisibility(INVISIBLE);
+			loadTrainingOrTesting();
+			GAME_MODE = GAME_ON;
 		} else {
+			changeFaceToCenter();
 			countDownTestingBegin.start();
-			return;
 		}
 
-		addHocSolutionForTrainingAB();
+		setWatermark();
 	}
 
 	private void doneWithLastRound() {
+		addStatesticToJson();
 		if (!testingLevel) {
 			TRAINING_LEVEL++;
 		} else {
 			TESTING_LEVEL++;
 		}
-		CURRENT_ITERATION = 0;
-		GAME_MODE = PAUSE;
-		testingLevel = !testingLevel;
-		if (testingLevel) {
-			setBoxesVisibility(VISIBLE);
-		} else {
-			setBoxesVisibility(INVISIBLE);
-		}
-		changeFaceToCenter();
 
-		addHocSolutionForTrainingAB();
+		CURRENT_ITERATION = 0;
+		CURRENT_ITERATION_CORRECT = 0;
+		CURRENT_ITERATION_FAIL = 0;
+		GAME_MODE = GAME_PAUSE;
+		testingLevel = !testingLevel;
+
+		setBoxesVisibility(INVISIBLE);
+		// changeFaceToCenter();
+		changeFaceToStar();
+
+		setWatermark();
 	}
 
-	public void addHocSolutionForTrainingAB() {
-		if (!testingLevel) {
-			if (TRAINING_LEVEL == 0 || TRAINING_LEVEL == 1) {
-				loadTrainingOrTesting();
-				GAME_MODE = GAME_ON;
+	private void addStatesticToJson() {
+		try {
+			if (testingLevel) {
+				statistic.accumulate(SharedPreferencesUtil.STATISTIC_TESTING,
+						CURRENT_ITERATION_CORRECT);
+			} else {
+				statistic.accumulate(SharedPreferencesUtil.STATISTIC_TRAINING,
+						CURRENT_ITERATION + CURRENT_ITERATION_CORRECT);
 			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -286,40 +330,32 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				R.drawable.mariama_center));
 	}
 
+	public void changeFaceToStar() {
+		imageFace.setImageDrawable(getResources().getDrawable(R.drawable.star));
+	}
+
 	private void initGame() {
-		/* TODO: Start game
-		- Pick/load level
-		- Load video
-		- Start game
-		- Check if video exist */
 		loadTrainingOrTesting();
 		GAME_MODE = GAME_ON;
 	}
 
 	private void loadTrainingOrTesting() {
-		// TODO watermark needs to be set before next training (kinda)
-		String waterText = "";
-		Animation animation;
 		if (!testingLevel) {
-			waterText = getString(R.string.training);
+
+			Animation animation = new AlphaAnimation(0f, 1f);
+			animation.setDuration(1200);
+
 			switch (TRAINING_LEVEL) {
 			case 0: // Training level A
-				waterText += " A";
+				FACE_RANGE = 0;
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_center_brighted));
-				animation = new AlphaAnimation(0f, 1f);
-				animation.setDuration(1200);
-				imageFace.startAnimation(animation);
 				break;
 			case 1: // Training level B
-				waterText += " B";
+				FACE_RANGE = 0;
 				changeFaceToCenter();
-				animation = new AlphaAnimation(0f, 1f);
-				animation.setDuration(1200);
-				imageFace.startAnimation(animation);
 				break;
 			case 2: // Training level C
-				waterText += " C";
 				FACE_RANGE = 2;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -330,7 +366,6 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				}
 				break;
 			case 3: // Training level D
-				waterText += " D";
 				FACE_RANGE = 2;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -338,7 +373,6 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				imageEast.setVisibility(VISIBLE);
 				break;
 			case 4: // Training level E
-				waterText += " E";
 				FACE_RANGE = 3;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -347,7 +381,6 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				imageNorth.setVisibility(VISIBLE);
 				break;
 			case 5: // Training level F
-				waterText += " F";
 				FACE_RANGE = 4;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -357,7 +390,6 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				imageSouth.setVisibility(VISIBLE);
 				break;
 			case 6: // Training level G
-				waterText += " G";
 				FACE_RANGE = 6;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -369,7 +401,6 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				imageNorthWest.setVisibility(VISIBLE);
 				break;
 			case 7: // Training level H
-				waterText += " H";
 				FACE_RANGE = 8;
 				updateFaceWithNewImage();
 				setBoxesVisibility(VISIBLE);
@@ -382,10 +413,9 @@ public class EyeCatchGameActivity extends FragmentActivity {
 			default:
 				break;
 			}
+			imageFace.startAnimation(animation);
 		} else {
-			// waterText = getString(R.string.testing);
 			if (TESTING_LEVEL < 9) {
-				waterText = getString(R.string.testing) + " " + TESTING_LEVEL;
 				FACE_RANGE = 8;
 				updateFaceWithNewImage();
 				setBoxesVisibility(VISIBLE);
@@ -394,8 +424,6 @@ public class EyeCatchGameActivity extends FragmentActivity {
 			}
 		}
 
-		watermark.setText(waterText);
-		// TODO: Do you always start?
 		countDownLevelDuration.start();
 	}
 
@@ -448,21 +476,26 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		// TODO: Start of the code to listen to child-lock
-		// System.out.println(event.getPointerCount());
-		// PointerCoords pointerCoords = new PointerCoords();
-		// event.getPointerCoords(0, pointerCoords);
-		// System.out.printf("X: %f - Y: %f", pointerCoords.x, pointerCoords.y);
-		// pointerCoords = new PointerCoords();
-		// if (event.getPointerCount() > 1) {
-		// event.getPointerCoords(1, pointerCoords);
-		// System.out
-		// .printf("X: %f - Y: %f", pointerCoords.x, pointerCoords.y);
-		// }
-		if (GAME_MODE == GAME_ON) {
+	public boolean onTouchEvent(MotionEvent event) {		
+		if (GAME_MODE == GAME_ON && event.getAction() == MotionEvent.ACTION_DOWN) {
+			GAME_MODE = GAME_PAUSE;
 			wrongAction();
 		}
 		return super.onTouchEvent(event);
+	}
+	
+
+	@Override
+	protected void onDestroy() {
+		Log.d("JSON",
+				"Saving statistics: "
+						+ SharedPreferencesUtil
+								.addOrUpdateStatisticOnUser(this,
+										SharedPreferencesUtil
+												.getCurrentUsersName(this),
+										statistic));
+		countDownLevelDuration.cancel();
+		countDownTestingBegin.cancel();
+		super.onDestroy();
 	}
 }

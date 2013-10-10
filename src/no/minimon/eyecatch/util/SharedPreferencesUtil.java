@@ -5,9 +5,11 @@ import java.util.List;
 
 import no.minimon.eyecatch.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,6 +25,10 @@ public class SharedPreferencesUtil {
 	public static final String CURRENT_ITERATION = "eyecatch_curret_iteration";
 	public static final String CURRENT_VIDEO_DURATION = "eyecatch_current_video_duration";
 	public static final String CURRENT_SEEK = "eyecatch_current_video_seek";
+	public static final String STATISTIC = "eyecatch_statistic";
+	public static final String STATISTIC_DATE = "eyecatch_statistic_date";
+	public static final String STATISTIC_TRAINING = "eyecatch_statistic_training";
+	public static final String STATISTIC_TESTING = "eyecatch_statistic_testing";
 	public static final int MODE_PRIVATE = 0;
 	public static final String NAME = "name";
 	public static final String AGE = "age";
@@ -53,68 +59,57 @@ public class SharedPreferencesUtil {
 
 	public static void addUser(Context context, JSONObject jsonObject)
 			throws JSONException {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
-		Editor editor = preferences.edit();
+		Editor editor = getEditor(context);
 		String name = jsonObject.getString("name");
 		editor.putString(name, jsonObject.toString());
-		addUserToUserlist(preferences, editor, name);
+		addUserToUserlist(context, editor, name);
 		setCurrentUser(context, name);
 		editor.commit();
 	}
 
-	private static void addUserToUserlist(SharedPreferences preferences,
-			Editor editor, String name) {
+	private static void addUserToUserlist(Context context, Editor editor,
+			String name) {
+		SharedPreferences preferences = getSharedPreference(context);
 		String list = preferences.getString(USERS, "");
 		editor.putString(SharedPreferencesUtil.USERS,
 				list.concat(";".concat(name)));
 	}
 
 	public static String getCurrentVideoUri(Context context) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
+		SharedPreferences preferences = getSharedPreference(context);
 		return preferences.getString(CURRENT_VIDEO_URI, "");
 	}
 
 	public static void setCurrentVideoUri(Context context, String uri) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
-		Editor editor = preferences.edit();
+		Editor editor = getEditor(context);
 		editor.putString(CURRENT_VIDEO_URI, uri);
 		editor.commit();
 	}
 
 	public static int getDurationOnCurrentVideo(Context context) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
+		SharedPreferences preferences = getSharedPreference(context);
 		return preferences.getInt(CURRENT_VIDEO_DURATION, -1);
 	}
 
 	public static void setCurrentVideoDuration(Context context, int duration) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
-		Editor editor = preferences.edit();
+		Editor editor = getEditor(context);
 		editor.putInt(CURRENT_VIDEO_DURATION, duration);
 		editor.commit();
 	}
-	
+
 	public static int getLastSeekOnCurrentVideo(Context context) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
+		SharedPreferences preferences = getSharedPreference(context);
 		return preferences.getInt(CURRENT_SEEK, 0);
 	}
 
 	public static void setLastSeekOnCurrentVideo(Context context, int seek) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
-		Editor editor = preferences.edit();
+		Editor editor = getEditor(context);
 		editor.putInt(CURRENT_SEEK, seek);
 		editor.commit();
 	}
 
 	public static List<String> getUsersAsList(Context context) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
+		SharedPreferences preferences = getSharedPreference(context);
 		String users = preferences.getString(USERS, "");
 		List<String> list = new ArrayList<String>();
 		for (String user : users.split(";")) {
@@ -138,19 +133,16 @@ public class SharedPreferencesUtil {
 	}
 
 	public static void setCurrentUser(Context context, String user) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
-		Editor editor = preferences.edit();
+		Editor editor = getEditor(context);
 		editor.putString(CURRENT_USER, user);
 		editor.commit();
 	}
 
 	public static String getCurrentUsersName(Context context) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
+		SharedPreferences preferences = getSharedPreference(context);
 		return preferences.getString(CURRENT_USER, "");
 	}
-	
+
 	public static JSONObject getCurrentUser(Context context) {
 		return getUser(context, getCurrentUsersName(context));
 	}
@@ -169,16 +161,13 @@ public class SharedPreferencesUtil {
 	}
 
 	public static void setCurrentVideoName(Context context, String name) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
-		Editor editor = preferences.edit();
+		Editor editor = getEditor(context);
 		editor.putString(CURRENT_VIDEO_NAME, name);
 		editor.commit();
 	}
 
 	public static String getCurrentVideoName(Context context) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
+		SharedPreferences preferences = getSharedPreference(context);
 		return preferences.getString(CURRENT_VIDEO_NAME, "");
 	}
 
@@ -192,7 +181,7 @@ public class SharedPreferencesUtil {
 		Log.d(LOG_SPU, "Didn't not find number of trails. Returning default");
 		return 10;
 	}
-	
+
 	public static int getDurationPerTrial(Context context) {
 		JSONObject jsonObject = getCurrentUser(context);
 		try {
@@ -215,7 +204,7 @@ public class SharedPreferencesUtil {
 		Log.d(LOG_SPU, "Didn't not find mastery criteria. Returning default");
 		return 10;
 	}
-	
+
 	public static int getAllowedVideoDuration(Context context) {
 		JSONObject jsonObject = getCurrentUser(context);
 		try {
@@ -226,18 +215,100 @@ public class SharedPreferencesUtil {
 		return 10;
 	}
 
-	public static void setCurrentIteration(
-			Context context, int iteration) {
-		SharedPreferences preferences = context.getSharedPreferences(
-				context.getPackageName(), MODE_PRIVATE);
-		Editor editor = preferences.edit();
+	public static void setCurrentIteration(Context context, int iteration) {
+		Editor editor = getEditor(context);
 		editor.putInt(CURRENT_ITERATION, iteration);
-		editor.commit();	
+		editor.commit();
 	}
-	
-	public static int getCurrentIteration(Context context) {
+
+	@SuppressLint("CommitPrefEdits")
+	private static Editor getEditor(Context context) {
+		SharedPreferences preferences = getSharedPreference(context);
+		Editor editor = preferences.edit();
+		return editor;
+	}
+
+	private static SharedPreferences getSharedPreference(Context context) {
 		SharedPreferences preferences = context.getSharedPreferences(
 				context.getPackageName(), MODE_PRIVATE);
+		return preferences;
+	}
+
+	public static int getCurrentIteration(Context context) {
+		SharedPreferences preferences = getSharedPreference(context);
 		return preferences.getInt(CURRENT_ITERATION, 0);
+	}
+
+	public static boolean addOrUpdateStatisticOnUser(Context context,
+			String userName, JSONObject statistic) {
+		JSONObject user = getUser(context, userName);
+
+		if (user.has(STATISTIC)) {
+			try {
+				((JSONObject) user.get(STATISTIC)).put(
+						statistic.getString(STATISTIC_DATE), statistic);
+				return updateUserInfo(context, user);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				user.put(STATISTIC, new JSONObject());
+				// user.put(statistic.getString(STATISTIC_DATE), new
+				// JSONObject());
+				updateUserInfo(context, user);
+				return addOrUpdateStatisticOnUser(context, userName, statistic);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean updateUserInfo(Context context, JSONObject user) {
+		Editor editor = getEditor(context);
+		try {
+			editor.putString(user.getString(NAME), user.toString());
+			editor.commit();
+			return true;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public static JSONObject createNewStatisticOnCurrentUser(Context context) {
+		JSONObject statistic = new JSONObject();
+		try {
+			statistic.put(STATISTIC_DATE, System.currentTimeMillis());
+			statistic.put(STATISTIC_TESTING, new JSONArray());
+			statistic.put(STATISTIC_TRAINING, new JSONArray());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		Log.d("JSON",
+				"Adding new statistic: "
+						+ addOrUpdateStatisticOnUser(context,
+								getCurrentUsersName(context), statistic));
+
+		return statistic;
+	}
+
+	public static boolean removeStatestic(Context context, String username,
+			String key) {
+		JSONObject user = getUser(context, username);
+		try {
+			JSONObject stats = user.getJSONObject(STATISTIC);
+			stats.remove(key);
+			user.put(STATISTIC, stats);
+			return updateUserInfo(context, user);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
