@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class EyeCatchActivity extends FragmentActivity implements
@@ -36,20 +37,20 @@ public class EyeCatchActivity extends FragmentActivity implements
 		}
 
 		SharedPreferencesUtil.updateActioBarTitle(this, getActionBar());
-		
-//		SharedPreferencesUtil.createNewStatisticOnCurrentUser(this);
-		// JSONObject jsonObject = SharedPreferencesUtil.getCurrentUser(this);
-		// try {
-		// // System.out.println(jsonObject.toString(4));
-		// jsonObject.getJSONObject(SharedPreferencesUtil.STATISTIC).remove("1381425403492");
-		// SharedPreferencesUtil.updateUserInfo(this, jsonObject);
-		// } catch (JSONException e) {
-		// e.printStackTrace();
-		// }
 	}
 
 	public void onButtonClick(View view) {
-		if (view.getId() == R.id.eyecatch_start_game) {
+		if (view.getId() == R.id.eyecatch_continue_game) {
+			if (isThereAselectedVideo()) {
+				Intent intent = new Intent(this, EyeCatchGameActivity.class);
+				intent.putExtra(SharedPreferencesUtil.CONTINUE, true);
+				startActivity(intent);
+			} else {
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.error_missing_video),
+						Toast.LENGTH_SHORT).show();
+			}
+		} else if (view.getId() == R.id.eyecatch_start_game) {
 			if (isThereASelectedUserAndVideo()) {
 				startActivity(new Intent(this, EyeCatchGameActivity.class));
 			} else {
@@ -135,5 +136,22 @@ public class EyeCatchActivity extends FragmentActivity implements
 			detailIntent.putExtra(ItemDetailFragment.ARG_ITEM_ID, id);
 			startActivity(detailIntent);
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		JSONObject jsonObject = SharedPreferencesUtil.getContinueJson(this);
+		if (jsonObject != null) {
+			Button button = (Button) findViewById(R.id.eyecatch_continue_game);
+			button.setEnabled(true);
+			try {
+				button.setText("Continue with "
+						+ jsonObject.getString(SharedPreferencesUtil.NAME));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		super.onResume();
 	}
 }

@@ -8,6 +8,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -22,6 +26,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class EyeCatchGameActivity extends FragmentActivity {
@@ -71,32 +76,59 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_eyecatch_game);
 
-		// TRAINING_LEVEL = 7; TESTING_LEVEL = 7;
+		GAME_MODE = GAME_PAUSE;
+
+		if (getIntent().getBooleanExtra(SharedPreferencesUtil.CONTINUE, false)) {
+			JSONObject continueInformation = SharedPreferencesUtil
+					.getContinueJson(this);
+			try {
+				long date = continueInformation
+						.getLong(SharedPreferencesUtil.CONTINUE_DATE);
+				TESTING_LEVEL = continueInformation
+						.getInt(SharedPreferencesUtil.CONTINUE_TESTING);
+				TRAINING_LEVEL = continueInformation
+						.getInt(SharedPreferencesUtil.CONTINUE_TRAINING);
+				testingLevel = continueInformation
+						.getBoolean(SharedPreferencesUtil.CONTINUE_TESTING_OR_TRAINING);
+				SharedPreferencesUtil.setCurrentUser(this, continueInformation
+						.getString(SharedPreferencesUtil.NAME));
+				statistic = SharedPreferencesUtil.getStatesticFromCurrentUser(
+						this, date);
+				if (statistic != null) {
+					// TODO remove the last stats from both training and testing
+					// and add them to the current iteration, fail, and correct
+				} else {
+					statistic = SharedPreferencesUtil.createNewStatistic(this);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+		} else {
+			statistic = SharedPreferencesUtil.createNewStatistic(this);
+		}
 
 		NUMBER_OF_TRIALS = SharedPreferencesUtil.getNumberOfTrials(this);
 		LEVEL_DURATION = SharedPreferencesUtil.getDurationPerTrial(this);
 		MASTERY_CRITERIA = SharedPreferencesUtil.getMasteryCriteria(this);
-
 		SharedPreferencesUtil.setLastSeekOnCurrentVideo(this, 0);
-		statistic = SharedPreferencesUtil.createNewStatisticOnCurrentUser(this);
-
-		faces = new SparseArray<Drawable>(8);
-		loadImagesIntoFaces();
-		random = new Random();
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().hide();
 		}
+
+		faces = new SparseArray<Drawable>(8);
+		random = new Random();
 
 		contentView = findViewById(R.id.fullscreen_content);
 		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		imageFace = (ImageView) findViewById(R.id.image_face);
 		watermark = (TextView) findViewById(R.id.watermark);
 
+		loadImagesIntoFaces();
 		initDurations();
 		initBoxes();
 		setBoxesVisibility(INVISIBLE);
-		GAME_MODE = GAME_PAUSE;
 		changeFaceToStar();
 		setWatermark();
 	}
@@ -104,8 +136,12 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private void setWatermark() {
 		String text = "";
 		if (!testingLevel) {
-			text += getString(R.string.training);
-			text += " " + (char) (65 + TRAINING_LEVEL);
+			if (TRAINING_LEVEL > 8) {
+				text = "The End";
+			} else {
+				text += getString(R.string.training);
+				text += " " + (char) (65 + TRAINING_LEVEL);
+			}
 		} else {
 			text += getString(R.string.testing);
 			if (TESTING_LEVEL < 8) {
@@ -217,7 +253,9 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private void wrongAction() {
 		CURRENT_ITERATION++;
 		CURRENT_ITERATION_FAIL++;
-		Log.d("WRONG", "CI: " + CURRENT_ITERATION + " - CIC: " + CURRENT_ITERATION_CORRECT + " - CIF: " + CURRENT_ITERATION_FAIL);
+		Log.d("WRONG", "CI: " + CURRENT_ITERATION + " - CIC: "
+				+ CURRENT_ITERATION_CORRECT + " - CIF: "
+				+ CURRENT_ITERATION_FAIL);
 		if (!testingLevel) {
 			CURRENT_ITERATION_CORRECT = 0;
 			continueOrNext();
@@ -239,7 +277,9 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		countDownLevelDuration.cancel();
 		CURRENT_ITERATION++;
 		CURRENT_ITERATION_CORRECT++;
-		Log.d("RIGHT", "CI: " + CURRENT_ITERATION + " - CIC: " + CURRENT_ITERATION_CORRECT + " - CIF: " + CURRENT_ITERATION_FAIL);
+		Log.d("RIGHT", "CI: " + CURRENT_ITERATION + " - CIC: "
+				+ CURRENT_ITERATION_CORRECT + " - CIF: "
+				+ CURRENT_ITERATION_FAIL);
 		if (!testingLevel) {
 			startVideoViewActivity();
 		} else {
@@ -248,10 +288,10 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	public void startVideoViewActivity() {
-		startActivityForResult(new Intent(this, VideoViewActivity.class),
-				RESULT_VIDEOVIEW);
-		// Toast.makeText(this, "Showing video", Toast.LENGTH_SHORT).show();
-		// onActivityResult(0, RESULT_VIDEOVIEW, new Intent());
+		// startActivityForResult(new Intent(this, VideoViewActivity.class),
+		// RESULT_VIDEOVIEW);
+		Toast.makeText(this, "Showing video", Toast.LENGTH_SHORT).show();
+		onActivityResult(0, RESULT_VIDEOVIEW, new Intent());
 	}
 
 	@Override
@@ -268,7 +308,8 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private void continueOrNext() {
 		if (testingLevel && CURRENT_ITERATION >= NUMBER_OF_TRIALS) {
 			doneWithLastRound();
-		} else if (!testingLevel && CURRENT_ITERATION_CORRECT >= MASTERY_CRITERIA) {
+		} else if (!testingLevel
+				&& CURRENT_ITERATION_CORRECT >= MASTERY_CRITERIA) {
 			doneWithLastRound();
 		} else {
 			continueWithCurrent();
@@ -318,7 +359,8 @@ public class EyeCatchGameActivity extends FragmentActivity {
 						CURRENT_ITERATION_CORRECT);
 			} else {
 				statistic.accumulate(SharedPreferencesUtil.STATISTIC_TRAINING,
-						CURRENT_ITERATION + CURRENT_ITERATION_CORRECT);
+						CURRENT_ITERATION_FAIL + "/"
+								+ CURRENT_ITERATION_CORRECT);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -428,9 +470,26 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	public void endGameActivity() {
+		saveStatestic();
 		countDownLevelDuration.cancel();
 		countDownTestingBegin.cancel();
 		finish();
+	}
+
+	private void saveStatestic() {
+		try {
+			statistic.put(SharedPreferencesUtil.STATISTIC_DATE_END,
+					System.currentTimeMillis());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		Log.d("JSON",
+				"Saving statistics: "
+						+ SharedPreferencesUtil.addOrUpdateStatisticOnUser(
+								getApplicationContext(),
+								SharedPreferencesUtil
+										.getCurrentUsersName(getApplicationContext()),
+								statistic));
 	}
 
 	private void initBoxes() {
@@ -476,26 +535,62 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {		
-		if (GAME_MODE == GAME_ON && event.getAction() == MotionEvent.ACTION_DOWN) {
+	public boolean onTouchEvent(MotionEvent event) {
+		if (GAME_MODE == GAME_ON
+				&& event.getAction() == MotionEvent.ACTION_DOWN) {
 			GAME_MODE = GAME_PAUSE;
 			wrongAction();
 		}
 		return super.onTouchEvent(event);
 	}
-	
 
 	@Override
-	protected void onDestroy() {
-		Log.d("JSON",
-				"Saving statistics: "
-						+ SharedPreferencesUtil
-								.addOrUpdateStatisticOnUser(this,
-										SharedPreferencesUtil
-												.getCurrentUsersName(this),
-										statistic));
-		countDownLevelDuration.cancel();
-		countDownTestingBegin.cancel();
-		super.onDestroy();
+	public void onBackPressed() {
+		// TODO: Countdowns does not pause
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setTitle(R.string.game_pause_title);
+		builder.setMessage(R.string.game_pause_message);
+		builder.setPositiveButton(R.string.save_quit, new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				saveStatestic();
+				try {
+					SharedPreferencesUtil.saveContinueInformation(
+							getApplicationContext(),
+							SharedPreferencesUtil
+									.getCurrentUsersName(getApplicationContext()),
+							statistic
+									.getLong(SharedPreferencesUtil.STATISTIC_DATE),
+							TRAINING_LEVEL, TESTING_LEVEL, testingLevel);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				countDownLevelDuration.cancel();
+				countDownTestingBegin.cancel();
+				dialog.cancel();
+				finish();
+			}
+		});
+		builder.setNeutralButton(android.R.string.cancel,
+				new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+		builder.setNegativeButton(R.string.quit, new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+				finish();
+			}
+		});
+		builder.setCancelable(false);
+		AlertDialog dialog = builder.create();
+		dialog.show();
+
 	}
 }

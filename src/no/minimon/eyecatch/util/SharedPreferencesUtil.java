@@ -27,6 +27,7 @@ public class SharedPreferencesUtil {
 	public static final String CURRENT_SEEK = "eyecatch_current_video_seek";
 	public static final String STATISTIC = "eyecatch_statistic";
 	public static final String STATISTIC_DATE = "eyecatch_statistic_date";
+	public static final String STATISTIC_DATE_END = "eyecatch_statistic_date_end";
 	public static final String STATISTIC_TRAINING = "eyecatch_statistic_training";
 	public static final String STATISTIC_TESTING = "eyecatch_statistic_testing";
 	public static final int MODE_PRIVATE = 0;
@@ -36,6 +37,12 @@ public class SharedPreferencesUtil {
 	public static final String NUMBER_OF_TRIALS = "number_of_trials";
 	public static final String MASTERY_CRITERIA = "mastery_criteria";
 	public static final String VIDEO_DURATION = "video_duration";
+	public static final String CONTINUE = "eyecatch_continue";
+	public static final String CONTINUE_DATE = "eyecatch_continue_date";
+	public static final String CONTINUE_TRAINING = "eye_catch_training";
+	public static final String CONTINUE_TESTING = "eyecatch_testing";
+	public static final String CONTINUE_TESTING_OR_TRAINING = "eyecatch_testing_or_training";
+
 	private static final String LOG_SPU = "SPU";
 
 	public static JSONObject createAndAddUser(Context context, String name,
@@ -187,7 +194,6 @@ public class SharedPreferencesUtil {
 		try {
 			return jsonObject.getInt(DURATION_PER_TRIAL);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Log.d(LOG_SPU, "Didn't not find duration per trial. Returning default");
@@ -249,18 +255,14 @@ public class SharedPreferencesUtil {
 						statistic.getString(STATISTIC_DATE), statistic);
 				return updateUserInfo(context, user);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
 			try {
 				user.put(STATISTIC, new JSONObject());
-				// user.put(statistic.getString(STATISTIC_DATE), new
-				// JSONObject());
 				updateUserInfo(context, user);
 				return addOrUpdateStatisticOnUser(context, userName, statistic);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -275,13 +277,12 @@ public class SharedPreferencesUtil {
 			editor.commit();
 			return true;
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
 	}
 
-	public static JSONObject createNewStatisticOnCurrentUser(Context context) {
+	public static JSONObject createNewStatistic(Context context) {
 		JSONObject statistic = new JSONObject();
 		try {
 			statistic.put(STATISTIC_DATE, System.currentTimeMillis());
@@ -290,10 +291,10 @@ public class SharedPreferencesUtil {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.d("JSON",
-				"Adding new statistic: "
-						+ addOrUpdateStatisticOnUser(context,
-								getCurrentUsersName(context), statistic));
+		// Log.d("JSON",
+		// "Adding new statistic: "
+		// + addOrUpdateStatisticOnUser(context,
+		// getCurrentUsersName(context), statistic));
 
 		return statistic;
 	}
@@ -310,5 +311,48 @@ public class SharedPreferencesUtil {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public static void saveContinueInformation(Context context, String name,
+			long date, int training_level, int testing_level, boolean testingLevel) {
+		Editor editor = getEditor(context);
+		try {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put(NAME, name);
+			jsonObject.put(CONTINUE_DATE, date);
+			jsonObject.put(CONTINUE_TESTING, testing_level);
+			jsonObject.put(CONTINUE_TRAINING, training_level);
+			jsonObject.put(CONTINUE_TESTING_OR_TRAINING, testingLevel);
+			editor.putString(CONTINUE, jsonObject.toString());
+			editor.commit();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static JSONObject getContinueJson(Context context) {
+		SharedPreferences preferences = getSharedPreference(context);
+		String jsonString = preferences.getString(CONTINUE, "");
+		if (!jsonString.isEmpty()) {
+			try {
+				return new JSONObject(jsonString);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return null;
+	}
+
+	public static JSONObject getStatesticFromCurrentUser(Context context,
+			long date) {
+		JSONObject user = getCurrentUser(context);
+		try {
+			JSONObject stats = user.getJSONObject(STATISTIC);
+			return stats.getJSONObject(String.valueOf(date));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

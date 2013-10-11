@@ -7,6 +7,7 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="eyecatch_start_game">Start game</string>
+    <string name="eyecatch_continue_game">Continue game</string>
     <string name="eyecatch_select_user">Select user</string>
     <string name="eyecatch_create_user">Create user</string>
     <string name="eyecatch_select_video">Select video</string>
@@ -21,6 +22,11 @@
     <string name="info_user_created">User is created</string>
     <string name="dummy_zero">0</string>
     
+    <string name="game_pause_title">Game paused</string>
+    <string name="game_pause_message">Are you sure you want to exit the game?</string>
+    <string name="save_quit">Save and quit</string>
+    <string name="quit">Quit</string>
+        
     <string name="statistic_name">Name:</string>
     <string name="statistic_age">Age:</string>
     <string name="statistic_training">Training - Mastery Criteria:</string>    

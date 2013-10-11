@@ -28,9 +28,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.ScaleAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -62,13 +60,6 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 		parent = (LinearLayout) rootView.findViewById(R.id.statistic_parent);
 
 		jsonUser = SharedPreferencesUtil.getUser(getActivity(), name);
-		// try {
-		// Toast.makeText(getActivity(), jsonUser.toString(4),
-		// Toast.LENGTH_SHORT).show();
-		// System.out.println(jsonUser.toString(4));
-		// } catch (JSONException e) {
-		// e.printStackTrace();
-		// }
 
 		try {
 			populateUserData();
@@ -130,7 +121,7 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 		while (keys.hasNext()) {
 			sortedKeys.add(keys.next());
 		}
-		Collections.sort(sortedKeys);
+		Collections.sort(sortedKeys, Collections.reverseOrder());
 
 		for (String key : sortedKeys) {
 			JSONObject stat = statistics.getJSONObject(key);
@@ -206,21 +197,14 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 	public void onClick(View view) {
 		if (view.getId() == R.id.statistic_delete) {
 			view = (View) view.getParent().getParent();
-			// Animation animation = new ScaleAnimation(1f, 0f, 1f, 0f,
-			// Animation.RELATIVE_TO_PARENT, 0f,
-			// Animation.RELATIVE_TO_PARENT, 0f);
 			Animation animation = new AlphaAnimation(1f, 0f);
-			// Animation animation = new TranslateAnimation();
 			animation.setDuration(1200);
 			animation.setAnimationListener(this);
-			// view.setAnimation(animation)
-			// animation.start();;
 			view.startAnimation(animation);
 
 			String key = (String) view.getTag();
 			SharedPreferencesUtil.removeStatestic(getActivity(), name, key);
 			viewToBeDeleted = view;
-			// parent.removeView(view);
 		}
 	}
 
