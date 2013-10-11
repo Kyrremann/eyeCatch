@@ -4,6 +4,7 @@ import java.util.Random;
 
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -94,9 +95,42 @@ public class EyeCatchGameActivity extends FragmentActivity {
 						.getString(SharedPreferencesUtil.NAME));
 				statistic = SharedPreferencesUtil.getStatesticFromCurrentUser(
 						this, date);
+				
 				if (statistic != null) {
-					// TODO remove the last stats from both training and testing
-					// and add them to the current iteration, fail, and correct
+					if (testingLevel) {
+						JSONArray array = statistic
+								.getJSONArray(SharedPreferencesUtil.STATISTIC_TESTING);
+						int length = array.length();
+						if (length > 0) {
+							String testing = array.getString(length - 1);
+							JSONArray shorterArray = new JSONArray();
+							for (int i = 0; i < length - 1; i++) {
+								shorterArray.put(array.get(i));
+							}
+							statistic.put(
+									SharedPreferencesUtil.STATISTIC_TESTING,
+									shorterArray);
+							CURRENT_ITERATION_CORRECT = Integer.valueOf(testing);
+						}
+					} else {
+						JSONArray array = statistic
+								.getJSONArray(SharedPreferencesUtil.STATISTIC_TRAINING);
+						int length = array.length();
+						if (length > 0) {
+							String training = array.getString(length - 1);
+							JSONArray shorterArray = new JSONArray();
+							for (int i = 0; i < length - 1; i++) {
+								shorterArray.put(array.get(i));
+							}
+							statistic.put(
+									SharedPreferencesUtil.STATISTIC_TRAINING,
+									shorterArray);
+							String[] split = training.split("/");
+							CURRENT_ITERATION_FAIL = Integer.valueOf(split[0]);
+							CURRENT_ITERATION_CORRECT = Integer.valueOf(split[1]);
+							CURRENT_ITERATION = 0;
+						}
+					}
 				} else {
 					statistic = SharedPreferencesUtil.createNewStatistic(this);
 				}
@@ -543,6 +577,13 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		}
 		return super.onTouchEvent(event);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		countDownLevelDuration.cancel();
+		countDownTestingBegin.cancel();
+		super.onDestroy();
+	}
 
 	@Override
 	public void onBackPressed() {
@@ -554,8 +595,9 @@ public class EyeCatchGameActivity extends FragmentActivity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				saveStatestic();
 				try {
+					addStatesticToJson();
+					saveStatestic();
 					SharedPreferencesUtil.saveContinueInformation(
 							getApplicationContext(),
 							SharedPreferencesUtil
