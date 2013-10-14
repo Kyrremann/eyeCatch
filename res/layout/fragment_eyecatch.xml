@@ -44,6 +44,14 @@
         android:layout_margin="5dp"
         android:onClick="onButtonClick"
         android:text="@string/eyecatch_create_user" />
+    
+    <Button
+        android:id="@+id/eyecatch_select_statistic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:onClick="onButtonClick"
+        android:text="@string/eyecatch_select_statistic" />
 
     <Button
         android:id="@+id/eyecatch_select_video"
@@ -62,11 +70,11 @@
         android:text="@string/eyecatch_touch_training" />
     
     <Button
-        android:id="@+id/eyecatch_select_statistic"
+        android:id="@+id/eyecatch_daily_training"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:onClick="onButtonClick"
-        android:text="@string/eyecatch_select_statistic" />
+        android:text="@string/eyecatch_daily_training" />
 
 </LinearLayout>

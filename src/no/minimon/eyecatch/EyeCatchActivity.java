@@ -1,15 +1,15 @@
 package no.minimon.eyecatch;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import no.minimon.eyecatch.fragment.CreateUserFragment;
-import no.minimon.eyecatch.fragment.EyeCatchFragment;
 import no.minimon.eyecatch.fragment.HomeFragment;
 import no.minimon.eyecatch.fragment.SelectStatisticsFragment;
 import no.minimon.eyecatch.fragment.SelectUserFragment;
 import no.minimon.eyecatch.fragment.SelectVideoFragment;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,8 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class EyeCatchActivity extends FragmentActivity implements
-		EyeCatchFragment.Callbacks {
+public class EyeCatchActivity extends FragmentActivity {
 
 	private boolean mTwoPane;
 
@@ -119,23 +118,6 @@ public class EyeCatchActivity extends FragmentActivity implements
 
 	public boolean isThereAselectedVideo() {
 		return !SharedPreferencesUtil.getCurrentVideoName(this).isEmpty();
-	}
-
-	@Override
-	public void onItemSelected(String id) {
-		if (mTwoPane) {
-			Bundle arguments = new Bundle();
-			arguments.putString(ItemDetailFragment.ARG_ITEM_ID, id);
-			ItemDetailFragment fragment = new ItemDetailFragment();
-			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.item_detail_container, fragment).commit();
-
-		} else {
-			Intent detailIntent = new Intent(this, CreateUserActivity.class);
-			detailIntent.putExtra(ItemDetailFragment.ARG_ITEM_ID, id);
-			startActivity(detailIntent);
-		}
 	}
 
 	@Override
