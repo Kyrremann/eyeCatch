@@ -10,12 +10,15 @@ import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class EyeCatchActivity extends FragmentActivity {
@@ -65,6 +68,14 @@ public class EyeCatchActivity extends FragmentActivity {
 						getString(R.string.error_missing_video),
 						Toast.LENGTH_SHORT).show();
 			}
+		} else if (view.getId() == R.id.eyecatch_daily_training) {
+			if (isThereAselectedVideo()) {
+				createAndShowDailyTrainingDialog();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.error_missing_video),
+						Toast.LENGTH_SHORT).show();
+			}
 		} else if (mTwoPane) {
 			Fragment fragment = null;
 			switch (view.getId()) {
@@ -109,6 +120,37 @@ public class EyeCatchActivity extends FragmentActivity {
 			}
 			startActivity(intent);
 		}
+	}
+
+	private void createAndShowDailyTrainingDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle(R.string.dialog_daily_training_title);
+		alert.setMessage(R.string.dialog_daily_training_message);
+
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String name = input.getText().toString();
+				if (name.isEmpty())
+					return;
+
+				Intent intent = new Intent(getApplicationContext(),
+						DailyTrainingActivity.class);
+				intent.putExtra(SharedPreferencesUtil.NAME, name);
+				startActivity(intent);
+			}
+		});
+
+		alert.setNegativeButton(android.R.string.cancel,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						dialog.cancel();
+					}
+				});
+
+		alert.show();
 	}
 
 	private boolean isThereASelectedUserAndVideo() {
