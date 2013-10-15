@@ -49,6 +49,7 @@
             android:screenOrientation="landscape"
             android:theme="@style/FullscreenBlackBackground" >
         </activity>
+        <activity android:name="StatisticTestingActivity"></activity>
     </application>
 
 </manifest>

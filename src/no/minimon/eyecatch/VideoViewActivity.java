@@ -29,9 +29,6 @@ public class VideoViewActivity extends FragmentActivity {
 		random = new Random();
 		videoView = (VideoView) findViewById(R.id.videoView);
 
-		// boolean training =
-		// savedInstance.getBoolean(TouchTrainingActivity.TRAINING, false);
-
 		String uri = SharedPreferencesUtil.getCurrentVideoUri(this);
 		int duration_of_video = SharedPreferencesUtil
 				.getDurationOnCurrentVideo(this);

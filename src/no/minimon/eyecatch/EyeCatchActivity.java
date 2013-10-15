@@ -68,9 +68,9 @@ public class EyeCatchActivity extends FragmentActivity {
 						getString(R.string.error_missing_video),
 						Toast.LENGTH_SHORT).show();
 			}
-		} else if (view.getId() == R.id.eyecatch_daily_training) {
+		} else if (view.getId() == R.id.eyecatch_statistic_testing) {
 			if (isThereAselectedVideo()) {
-				createAndShowDailyTrainingDialog();
+				createAndShowStatisticTestingDialog();
 			} else {
 				Toast.makeText(getApplicationContext(),
 						getString(R.string.error_missing_video),
@@ -122,10 +122,10 @@ public class EyeCatchActivity extends FragmentActivity {
 		}
 	}
 
-	private void createAndShowDailyTrainingDialog() {
+	private void createAndShowStatisticTestingDialog() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle(R.string.dialog_daily_training_title);
-		alert.setMessage(R.string.dialog_daily_training_message);
+		alert.setTitle(R.string.dialog_statistic_testing_title);
+		alert.setMessage(R.string.dialog_statistic_testing_message);
 
 		final EditText input = new EditText(this);
 		alert.setView(input);
@@ -137,7 +137,7 @@ public class EyeCatchActivity extends FragmentActivity {
 					return;
 
 				Intent intent = new Intent(getApplicationContext(),
-						DailyTrainingActivity.class);
+						StatisticTestingActivity.class);
 				intent.putExtra(SharedPreferencesUtil.NAME, name);
 				startActivity(intent);
 			}

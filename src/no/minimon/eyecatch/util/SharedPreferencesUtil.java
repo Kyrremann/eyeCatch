@@ -42,6 +42,9 @@ public class SharedPreferencesUtil {
 	public static final String CONTINUE_TRAINING = "eye_catch_training";
 	public static final String CONTINUE_TESTING = "eyecatch_testing";
 	public static final String CONTINUE_TESTING_OR_TRAINING = "eyecatch_testing_or_training";
+	public static final String CORRECT = "correct";
+	public static final String FAIL = "fail";
+	public static final String STATISTIC_TESTING_USERS = "statistic_testing_users";
 
 	private static final String LOG_SPU = "SPU";
 
@@ -131,12 +134,18 @@ public class SharedPreferencesUtil {
 		SharedPreferences preferences = context.getSharedPreferences(
 				context.getPackageName(), Context.MODE_PRIVATE);
 		try {
-			return new JSONObject(preferences.getString(name, ""));
+			return new JSONObject(preferences.getString(name, new JSONObject().toString()));
 
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return new JSONObject();
+	}
+
+	public static boolean hasUser(Context context, String name) {
+		SharedPreferences preferences = context.getSharedPreferences(
+				context.getPackageName(), Context.MODE_PRIVATE);
+		return !preferences.getString(name, "").isEmpty();
 	}
 
 	public static void setCurrentUser(Context context, String user) {
@@ -218,7 +227,7 @@ public class SharedPreferencesUtil {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return 10;
+		return 10000;
 	}
 
 	public static void setCurrentIteration(Context context, int iteration) {
@@ -291,10 +300,6 @@ public class SharedPreferencesUtil {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		// Log.d("JSON",
-		// "Adding new statistic: "
-		// + addOrUpdateStatisticOnUser(context,
-		// getCurrentUsersName(context), statistic));
 
 		return statistic;
 	}
@@ -314,7 +319,8 @@ public class SharedPreferencesUtil {
 	}
 
 	public static void saveContinueInformation(Context context, String name,
-			long date, int training_level, int testing_level, boolean testingLevel) {
+			long date, int training_level, int testing_level,
+			boolean testingLevel) {
 		Editor editor = getEditor(context);
 		try {
 			JSONObject jsonObject = new JSONObject();
@@ -354,5 +360,75 @@ public class SharedPreferencesUtil {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static boolean createAndAddStatisticTestingUser(Context context,
+			String name) {
+		if (hasUser(context, name)) {
+			return true;
+		} else {
+			JSONObject jsonObject = new JSONObject();
+			try {
+				jsonObject.put(NAME, name);
+				jsonObject.put(STATISTIC, new JSONObject());
+				Editor editor = getEditor(context);
+				editor.putString(name, jsonObject.toString());
+				editor.commit();
+				return addToStatisticTestingUserList(context, name);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+
+	private static boolean addToStatisticTestingUserList(Context context,
+			String name) {
+		SharedPreferences preferences = getSharedPreference(context);
+		String list = preferences.getString(STATISTIC_TESTING_USERS, "");
+		Editor editor = getEditor(context);
+		editor.putString(STATISTIC_TESTING_USERS, list.concat(";".concat(name)));
+		editor.commit();
+		return true;
+	}
+
+	public static boolean addStatisticToStatisticTestingUser(Context context,
+			String name, int correct, int fail) {
+		JSONObject stat = new JSONObject();
+		try {
+			stat.put(STATISTIC_DATE, System.currentTimeMillis());
+			stat.put(CORRECT, correct);
+			stat.put(FAIL, fail);
+			return addOrUpdateStatisticOnUser(context, name, stat);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		JSONObject user = getUser(context, name);
+//		try {
+//			JSONObject stats = user.getJSONObject(STATISTIC);
+//			JSONObject stat = new JSONObject();
+//			stat.put(CORRECT, correct);
+//			stat.put(FAIL, fail);
+//			stats.accumulate(String.valueOf(System.currentTimeMillis()), stat);
+//			user.put(STATISTIC, stats);
+//			return updateUserInfo(context, user);
+//		} catch (JSONException e) {
+//			e.printStackTrace();
+//		}
+
+		return false;
+	}
+
+	public static List<String> getStatisticTestingUsersAsList(Context context) {
+		SharedPreferences preferences = getSharedPreference(context);
+		String users = preferences.getString(STATISTIC_TESTING_USERS, "");
+		List<String> list = new ArrayList<String>();
+		for (String user : users.split(";")) {
+			if (!user.isEmpty()) {
+				list.add(user);
+			}
+		}
+		return list;
 	}
 }

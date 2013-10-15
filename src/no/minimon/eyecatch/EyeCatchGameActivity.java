@@ -69,7 +69,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 
 	private SparseArray<Drawable> faces;
 	private Random random;
-	private boolean testingLevel = true;
+	private boolean testingLevel = true, keepFace;
 	private JSONObject statistic;
 
 	@Override
@@ -285,6 +285,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	private void wrongAction() {
+		keepFace = true;
 		CURRENT_ITERATION++;
 		CURRENT_ITERATION_FAIL++;
 		Log.d("WRONG", "CI: " + CURRENT_ITERATION + " - CIC: "
@@ -553,6 +554,11 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	private Drawable getRandomFace() {
+		if (keepFace) {
+			keepFace = false;
+			return faces.get(CURRENT_FACE);
+		}
+		
 		CURRENT_FACE = random.nextInt(FACE_RANGE);
 		return faces.get(CURRENT_FACE);
 	}

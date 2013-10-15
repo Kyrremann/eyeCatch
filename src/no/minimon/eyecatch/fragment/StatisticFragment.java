@@ -1,6 +1,8 @@
 package no.minimon.eyecatch.fragment;
 
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.AGE;
+import static no.minimon.eyecatch.util.SharedPreferencesUtil.CORRECT;
+import static no.minimon.eyecatch.util.SharedPreferencesUtil.FAIL;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.MASTERY_CRITERIA;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.NAME;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.NUMBER_OF_TRIALS;
@@ -59,11 +61,17 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 				false);
 		parent = (LinearLayout) rootView.findViewById(R.id.statistic_parent);
 
+		// TODO: Detect what kind of user it is
 		jsonUser = SharedPreferencesUtil.getUser(getActivity(), name);
 
 		try {
-			populateUserData();
-			populateData();
+			if (regularUser()) {
+				populateUserData();
+				populateStatistics();
+			} else {
+				populateUserData();
+				generateStatistics();
+			}
 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -72,13 +80,47 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 		return rootView;
 	}
 
+	private boolean regularUser() {
+		return jsonUser.has(AGE);
+	}
+
+	private void generateStatistics() throws JSONException {
+		JSONObject statistics = jsonUser.getJSONObject(STATISTIC);
+		Iterator<String> keys = statistics.keys();
+		ArrayList<String> sortedKeys = new ArrayList<String>();
+		while (keys.hasNext()) {
+			sortedKeys.add(keys.next());
+		}
+		Collections.sort(sortedKeys, Collections.reverseOrder());
+
+		for (String key : sortedKeys) {
+			JSONObject stat = statistics.getJSONObject(key);
+
+			View view = inflater.inflate(R.layout.view_stats_testing,
+					container, false);
+			view.setTag(key);
+			((TextView) view.findViewById(R.id.text_date)).setText(new Date(
+					Long.valueOf(key)).toString());
+			((TextView) view.findViewById(R.id.text_correct)).setText(stat
+					.getString(CORRECT));
+			((TextView) view.findViewById(R.id.text_wrong)).setText(stat
+					.getString(FAIL));
+
+			parent.addView(view);
+		}
+	}
+
 	public void populateUserData() throws JSONException {
 		TextView textView = (TextView) rootView
 				.findViewById(R.id.statistic_name);
 		textView.setText(jsonUser.getString(NAME));
 
-		textView = (TextView) rootView.findViewById(R.id.statistic_age);
-		textView.setText(jsonUser.getString(AGE));
+		if (regularUser()) {
+			textView = (TextView) rootView.findViewById(R.id.statistic_age);
+			textView.setText(jsonUser.getString(AGE));
+		} else {
+			rootView.findViewById(R.id.statistic_age_text).setVisibility(View.GONE);
+		}
 	}
 
 	private void initTrainingCells(View rootView) {
@@ -114,7 +156,7 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 	}
 
 	@SuppressWarnings("unchecked")
-	private void populateData() throws JSONException {
+	private void populateStatistics() throws JSONException {
 		JSONObject statistics = jsonUser.getJSONObject(STATISTIC);
 		Iterator<String> keys = statistics.keys();
 		ArrayList<String> sortedKeys = new ArrayList<String>();

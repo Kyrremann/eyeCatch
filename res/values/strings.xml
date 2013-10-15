@@ -13,7 +13,7 @@
     <string name="eyecatch_select_video">Select video</string>
     <string name="eyecatch_touch_training">Touch training</string>
     <string name="eyecatch_select_statistic">Statistic</string>
-    <string name="eyecatch_daily_training">Daily training</string>
+    <string name="eyecatch_statistic_testing">Statistic testing</string>
     <string name="create_user_name">Username</string>
     <string name="create_user_age">Age in months</string>
     <string name="create_user_times_per_trial">Time per trial</string>
@@ -23,8 +23,8 @@
     <string name="info_user_created">User is created</string>
     <string name="dummy_zero">0</string>
     
-    <string name="dialog_daily_training_title">Name</string>
-    <string name="dialog_daily_training_message">Please enter the users name</string>
+    <string name="dialog_statistic_testing_title">Name</string>
+    <string name="dialog_statistic_testing_message">Please enter the users name</string>
     
     <string name="game_pause_title">Game paused</string>
     <string name="game_pause_message">Are you sure you want to exit the game?</string>
@@ -35,6 +35,8 @@
     <string name="statistic_age">Age:</string>
     <string name="statistic_training">Training - Mastery Criteria:</string>    
     <string name="statistic_testing">Testing - Number of tests:</string>
+    <string name="statistic_correct">Correct:</string>
+    <string name="statistic_wrong">Wrong:</string>
     
     <string name="A">A</string>
     <string name="B">B</string>

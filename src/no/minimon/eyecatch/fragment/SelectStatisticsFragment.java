@@ -20,7 +20,7 @@ import android.widget.ListView;
 
 public class SelectStatisticsFragment extends ListFragment {
 
-	private List<String> list;
+	private List<String> usersList, statisticTestingUsersList;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,18 +32,20 @@ public class SelectStatisticsFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		list = SharedPreferencesUtil.getUsersAsList(getActivity());
-		Collections.sort(list);
+		usersList = SharedPreferencesUtil.getUsersAsList(getActivity());
+		statisticTestingUsersList = SharedPreferencesUtil.getStatisticTestingUsersAsList(getActivity());
+		usersList.addAll(statisticTestingUsersList);
+		Collections.sort(usersList);
 		setListAdapter(new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, list));
+				android.R.id.text1, usersList));
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		JSONObject jsonObject = SharedPreferencesUtil.getUser(getActivity(),
-				list.get(position));
+				usersList.get(position));
 
 		if (getActivity().findViewById(R.id.item_detail_container) != null) {
 

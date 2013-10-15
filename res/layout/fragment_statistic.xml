@@ -35,7 +35,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-            <TextView
+            <TextView                
+                android:id="@+id/statistic_age_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingRight="10dp"

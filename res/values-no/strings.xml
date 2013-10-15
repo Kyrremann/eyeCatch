@@ -10,7 +10,7 @@
     <string name="eyecatch_select_video">Velg video</string>
     <string name="eyecatch_touch_training">Trykk trening</string>
     <string name="eyecatch_select_statistic">Statistikk</string>
-    <string name="eyecatch_daily_training">Daglig trening</string>
+    <string name="eyecatch_statistic_testing">Statistikk testing</string>
     <string name="create_user_name">Navn</string>
     <string name="create_user_age">Alder (i måneder)</string>
     <string name="create_user_times_per_trial">Tid per øvelse</string>
