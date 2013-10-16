@@ -25,12 +25,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-public class EyeCatchGameActivity extends FragmentActivity {
+public class EyeCatchGameActivity extends FragmentActivity implements
+		AnimationListener {
 
 	private static final int VISIBLE = View.VISIBLE;
 	private static final int INVISIBLE = View.INVISIBLE;
@@ -65,7 +67,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 			imageSouthEast, imageSouth, imageSouthWest, imageWest,
 			imageNorthWest;
 	private CountDownTimer countDownLevelDuration, countDownTestingBegin;
-	private TextView watermark;
+	private TextView watermark, watermarkData;
 
 	private SparseArray<Drawable> faces;
 	private Random random;
@@ -95,7 +97,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 						.getString(SharedPreferencesUtil.NAME));
 				statistic = SharedPreferencesUtil.getStatesticFromCurrentUser(
 						this, date);
-				
+
 				if (statistic != null) {
 					if (testingLevel) {
 						JSONArray array = statistic
@@ -110,7 +112,8 @@ public class EyeCatchGameActivity extends FragmentActivity {
 							statistic.put(
 									SharedPreferencesUtil.STATISTIC_TESTING,
 									shorterArray);
-							CURRENT_ITERATION_CORRECT = Integer.valueOf(testing);
+							CURRENT_ITERATION_CORRECT = Integer
+									.valueOf(testing);
 						}
 					} else {
 						JSONArray array = statistic
@@ -127,7 +130,8 @@ public class EyeCatchGameActivity extends FragmentActivity {
 									shorterArray);
 							String[] split = training.split("/");
 							CURRENT_ITERATION_FAIL = Integer.valueOf(split[0]);
-							CURRENT_ITERATION_CORRECT = Integer.valueOf(split[1]);
+							CURRENT_ITERATION_CORRECT = Integer
+									.valueOf(split[1]);
 							CURRENT_ITERATION = 0;
 						}
 					}
@@ -158,6 +162,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		imageFace = (ImageView) findViewById(R.id.image_face);
 		watermark = (TextView) findViewById(R.id.watermark);
+		watermarkData = (TextView) findViewById(R.id.watermarkData);
 
 		loadImagesIntoFaces();
 		initDurations();
@@ -170,8 +175,8 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private void setWatermark() {
 		String text = "";
 		if (!testingLevel) {
-			if (TRAINING_LEVEL > 8) {
-				text = "The End";
+			if (TRAINING_LEVEL >= 8) {
+				text = "Done";
 			} else {
 				text += getString(R.string.training);
 				text += " " + (char) (65 + TRAINING_LEVEL);
@@ -186,6 +191,18 @@ public class EyeCatchGameActivity extends FragmentActivity {
 
 		}
 		watermark.setText(text);
+		if (!testingLevel) {
+		watermarkData
+				.setText("MC: " + CURRENT_ITERATION + " C: "
+						+ CURRENT_ITERATION_CORRECT + " F: "
+						+ CURRENT_ITERATION_FAIL);
+		} else {
+			watermarkData
+			.setText("T: " + CURRENT_ITERATION + " C: "
+					+ (CURRENT_ITERATION - CURRENT_ITERATION_FAIL)  + " F: "
+					+ CURRENT_ITERATION_FAIL);
+			
+		}
 	}
 
 	private void initDurations() {
@@ -285,14 +302,17 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	private void wrongAction() {
-		keepFace = true;
+		if (!testingLevel) {
+			keepFace = true;
+		}
+
 		CURRENT_ITERATION++;
 		CURRENT_ITERATION_FAIL++;
 		Log.d("WRONG", "CI: " + CURRENT_ITERATION + " - CIC: "
 				+ CURRENT_ITERATION_CORRECT + " - CIF: "
 				+ CURRENT_ITERATION_FAIL);
 		if (!testingLevel) {
-			CURRENT_ITERATION_CORRECT = 0;
+			CURRENT_ITERATION = 0;
 			continueOrNext();
 		} else {
 			continueOrNext();
@@ -323,10 +343,10 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	}
 
 	public void startVideoViewActivity() {
-		// startActivityForResult(new Intent(this, VideoViewActivity.class),
-		// RESULT_VIDEOVIEW);
-		Toast.makeText(this, "Showing video", Toast.LENGTH_SHORT).show();
-		onActivityResult(0, RESULT_VIDEOVIEW, new Intent());
+		startActivityForResult(new Intent(this, VideoViewActivity.class),
+				RESULT_VIDEOVIEW);
+		// Toast.makeText(this, "Showing video", Toast.LENGTH_SHORT).show();
+		// onActivityResult(0, RESULT_VIDEOVIEW, new Intent());
 	}
 
 	@Override
@@ -343,8 +363,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 	private void continueOrNext() {
 		if (testingLevel && CURRENT_ITERATION >= NUMBER_OF_TRIALS) {
 			doneWithLastRound();
-		} else if (!testingLevel
-				&& CURRENT_ITERATION_CORRECT >= MASTERY_CRITERIA) {
+		} else if (!testingLevel && CURRENT_ITERATION >= MASTERY_CRITERIA) {
 			doneWithLastRound();
 		} else {
 			continueWithCurrent();
@@ -379,6 +398,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		CURRENT_ITERATION_FAIL = 0;
 		GAME_MODE = GAME_PAUSE;
 		testingLevel = !testingLevel;
+		keepFace = false;
 
 		setBoxesVisibility(INVISIBLE);
 		// changeFaceToCenter();
@@ -421,6 +441,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 
 			Animation animation = new AlphaAnimation(0f, 1f);
 			animation.setDuration(1200);
+			animation.setAnimationListener(this);
 
 			switch (TRAINING_LEVEL) {
 			case 0: // Training level A
@@ -436,51 +457,31 @@ public class EyeCatchGameActivity extends FragmentActivity {
 				FACE_RANGE = 2;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
-				if (CURRENT_FACE == WEST) {
-					imageWest.setVisibility(VISIBLE);
-				} else if (CURRENT_FACE == EAST) {
-					imageEast.setVisibility(VISIBLE);
-				}
 				break;
 			case 3: // Training level D
 				FACE_RANGE = 2;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
-				imageWest.setVisibility(VISIBLE);
-				imageEast.setVisibility(VISIBLE);
 				break;
 			case 4: // Training level E
 				FACE_RANGE = 3;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
-				imageWest.setVisibility(VISIBLE);
-				imageEast.setVisibility(VISIBLE);
-				imageNorth.setVisibility(VISIBLE);
 				break;
 			case 5: // Training level F
 				FACE_RANGE = 4;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
-				imageWest.setVisibility(VISIBLE);
-				imageEast.setVisibility(VISIBLE);
-				imageNorth.setVisibility(VISIBLE);
-				imageSouth.setVisibility(VISIBLE);
 				break;
 			case 6: // Training level G
 				FACE_RANGE = 6;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
-				imageWest.setVisibility(VISIBLE);
-				imageEast.setVisibility(VISIBLE);
-				imageNorth.setVisibility(VISIBLE);
-				imageSouth.setVisibility(VISIBLE);
-				imageNorthEast.setVisibility(VISIBLE);
-				imageNorthWest.setVisibility(VISIBLE);
 				break;
 			case 7: // Training level H
 				FACE_RANGE = 8;
 				updateFaceWithNewImage();
-				setBoxesVisibility(VISIBLE);
+				setBoxesVisibility(INVISIBLE);
 				break;
 			case 8:
 				// endGameActivity();
@@ -499,9 +500,9 @@ public class EyeCatchGameActivity extends FragmentActivity {
 			} else if (TESTING_LEVEL == 9) {
 				endGameActivity();
 			}
-		}
 
-		countDownLevelDuration.start();
+			countDownLevelDuration.start();
+		}
 	}
 
 	public void endGameActivity() {
@@ -558,7 +559,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 			keepFace = false;
 			return faces.get(CURRENT_FACE);
 		}
-		
+
 		CURRENT_FACE = random.nextInt(FACE_RANGE);
 		return faces.get(CURRENT_FACE);
 	}
@@ -583,7 +584,7 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		}
 		return super.onTouchEvent(event);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		countDownLevelDuration.cancel();
@@ -640,5 +641,55 @@ public class EyeCatchGameActivity extends FragmentActivity {
 		AlertDialog dialog = builder.create();
 		dialog.show();
 
+	}
+
+	@Override
+	public void onAnimationEnd(Animation animation) {
+		switch (TRAINING_LEVEL) {
+		case 2: // Training level C
+			if (CURRENT_FACE == WEST) {
+				imageWest.setVisibility(VISIBLE);
+			} else if (CURRENT_FACE == EAST) {
+				imageEast.setVisibility(VISIBLE);
+			}
+			break;
+		case 3: // Training level D
+			imageWest.setVisibility(VISIBLE);
+			imageEast.setVisibility(VISIBLE);
+			break;
+		case 4: // Training level E
+			imageWest.setVisibility(VISIBLE);
+			imageEast.setVisibility(VISIBLE);
+			imageNorth.setVisibility(VISIBLE);
+			break;
+		case 5: // Training level F
+			imageWest.setVisibility(VISIBLE);
+			imageEast.setVisibility(VISIBLE);
+			imageNorth.setVisibility(VISIBLE);
+			imageSouth.setVisibility(VISIBLE);
+			break;
+		case 6: // Training level G
+			imageWest.setVisibility(VISIBLE);
+			imageEast.setVisibility(VISIBLE);
+			imageNorth.setVisibility(VISIBLE);
+			imageSouth.setVisibility(VISIBLE);
+			imageNorthEast.setVisibility(VISIBLE);
+			imageNorthWest.setVisibility(VISIBLE);
+			break;
+		case 7: // Training level H
+			setBoxesVisibility(VISIBLE);
+			break;
+		default:
+			break;
+		}
+		countDownLevelDuration.start();
+	}
+
+	@Override
+	public void onAnimationRepeat(Animation animation) {
+	}
+
+	@Override
+	public void onAnimationStart(Animation animation) {
 	}
 }

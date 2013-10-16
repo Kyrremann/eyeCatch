@@ -27,7 +27,7 @@
         
     <string name="statistic_name">Navn:</string>
     <string name="statistic_age">Alder:</string>
-    <string name="statistic_training">Trening - Mestrings kriterie:</string>    
+    <string name="statistic_training">Trening (feil/riktig) - Mestrings kriterie:</string>    
     <string name="statistic_testing">Testing - Antall øvelser:</string>
     
     <string name="A">A</string>

@@ -96,5 +96,15 @@
         android:layout_alignParentRight="true"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#33333333" />
+    
+    
+    <TextView
+        android:id="@+id/watermarkData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/watermark"
+        android:layout_alignParentRight="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#33333333" />
 
 </RelativeLayout>

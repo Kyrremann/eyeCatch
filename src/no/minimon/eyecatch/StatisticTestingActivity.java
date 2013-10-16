@@ -28,11 +28,12 @@ import android.widget.ImageView;
 public class StatisticTestingActivity extends FragmentActivity {
 
 	private static final int VISIBLE = View.VISIBLE;
-	private static final int INVISIBLE = View.INVISIBLE;
 
 	public static final String TRAINING = "training";
 
 	private int CURRENT_FACE = -1;
+	private int NUMBER_OF_TRIALS = 5;
+	private int CURRENT_ITERATION;
 	private int CLICKS_CORRECT = 0, CLICKS_FAIL = 0;
 
 	private ImageView imageFace, imageNorth, imageNorthEast, imageEast,
@@ -48,7 +49,8 @@ public class StatisticTestingActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_eyecatch_game);
 
-		name = getIntent().getStringExtra(SharedPreferencesUtil.NAME);
+		name = SharedPreferencesUtil.getCurrentUsersName(this);
+		NUMBER_OF_TRIALS = SharedPreferencesUtil.getNumberOfTrials(this);
 
 		random = new Random();
 		faces = new SparseArray<Drawable>(8);
@@ -73,16 +75,20 @@ public class StatisticTestingActivity extends FragmentActivity {
 
 			@Override
 			public void onFinish() {
-				newGameRound(false);
+				newGameRound();
 			}
 		}.start();
 	}
 
-	private void newGameRound(boolean keepFace) {
-		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-		if (!keepFace) {
-			CURRENT_FACE = getRandomBox();
+	private void newGameRound() {
+		if (CURRENT_ITERATION >= NUMBER_OF_TRIALS) {
+			finish();
+		} else {
+			CURRENT_ITERATION++;
 		}
+		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+
+		CURRENT_FACE = getRandomBox();
 		imageFace.setImageDrawable(faces.get(CURRENT_FACE));
 		imageFace.setVisibility(VISIBLE);
 		setBoxesVisibility(VISIBLE);
@@ -91,7 +97,6 @@ public class StatisticTestingActivity extends FragmentActivity {
 	public void onImageClicked(View view) {
 		switch (view.getId()) {
 		case R.id.image_face:
-			CLICKS_FAIL++;
 			break;
 		case R.id.image_west:
 			checkForCorrectDirection(WEST);
@@ -125,11 +130,10 @@ public class StatisticTestingActivity extends FragmentActivity {
 	private void checkForCorrectDirection(int direction) {
 		if (CURRENT_FACE == direction) {
 			CLICKS_CORRECT++;
-			newGameRound(false);
 		} else {
 			CLICKS_FAIL++;
-			newGameRound(true);
 		}
+		newGameRound();
 	}
 
 	private void initBoxes() {
@@ -183,6 +187,7 @@ public class StatisticTestingActivity extends FragmentActivity {
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			CLICKS_FAIL++;
+			newGameRound();
 		}
 		return super.onTouchEvent(event);
 	}

@@ -33,7 +33,7 @@
         
     <string name="statistic_name">Name:</string>
     <string name="statistic_age">Age:</string>
-    <string name="statistic_training">Training - Mastery Criteria:</string>    
+    <string name="statistic_training">Training (wrong/correct) - Mastery Criteria:</string>    
     <string name="statistic_testing">Testing - Number of tests:</string>
     <string name="statistic_correct">Correct:</string>
     <string name="statistic_wrong">Wrong:</string>

@@ -404,18 +404,6 @@ public class SharedPreferencesUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		JSONObject user = getUser(context, name);
-//		try {
-//			JSONObject stats = user.getJSONObject(STATISTIC);
-//			JSONObject stat = new JSONObject();
-//			stat.put(CORRECT, correct);
-//			stat.put(FAIL, fail);
-//			stats.accumulate(String.valueOf(System.currentTimeMillis()), stat);
-//			user.put(STATISTIC, stats);
-//			return updateUserInfo(context, user);
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
 
 		return false;
 	}

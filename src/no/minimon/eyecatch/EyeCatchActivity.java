@@ -69,11 +69,12 @@ public class EyeCatchActivity extends FragmentActivity {
 						Toast.LENGTH_SHORT).show();
 			}
 		} else if (view.getId() == R.id.eyecatch_statistic_testing) {
-			if (isThereAselectedVideo()) {
-				createAndShowStatisticTestingDialog();
+			if (isThereASelectedUserAndVideo()) {
+				startActivity(new Intent(this, StatisticTestingActivity.class));
+				// createAndShowStatisticTestingDialog();
 			} else {
 				Toast.makeText(getApplicationContext(),
-						getString(R.string.error_missing_video),
+						getString(R.string.error_missing_user_or_video),
 						Toast.LENGTH_SHORT).show();
 			}
 		} else if (mTwoPane) {
@@ -111,6 +112,9 @@ public class EyeCatchActivity extends FragmentActivity {
 				break;
 			case R.id.eyecatch_select_video:
 				intent = new Intent(this, SelectVideoActivity.class);
+				break;
+			case R.id.eyecatch_select_statistic:
+				intent = new Intent(this, SelectStatisticAcitivity.class);
 				break;
 			default:
 				Toast.makeText(getApplicationContext(),
