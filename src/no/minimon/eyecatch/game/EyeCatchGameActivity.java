@@ -67,7 +67,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	private ImageView imageFace, imageNorth, imageNorthEast, imageEast,
 			imageSouthEast, imageSouth, imageSouthWest, imageWest,
 			imageNorthWest;
-	private CountDownTimer countDownLevelDuration, countDownTestingBegin;
+	private CountDownTimer countDownLevelDuration, countDownBeginGameLevel;
 	private TextView watermark, watermarkData;
 
 	private SparseArray<Drawable> faces;
@@ -204,7 +204,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	}
 
 	private void initDurations() {
-		countDownTestingBegin = new CountDownTimer(1000, 500) {
+		countDownBeginGameLevel = new CountDownTimer(1000, 500) {
 
 			@Override
 			public void onTick(long millisUntilFinished) {
@@ -213,10 +213,8 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 
 			@Override
 			public void onFinish() {
-				if (testingLevel) {
-					loadTrainingOrTesting();
-					GAME_MODE = GAME_ON;
-				}
+				loadTrainingOrTesting();
+				GAME_MODE = GAME_ON;
 			}
 		};
 
@@ -247,9 +245,9 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 				if (testingLevel) {
 					setBoxesVisibility(VISIBLE);
 					changeFaceToCenter();
-					countDownTestingBegin.start();
+					countDownBeginGameLevel.start();
 				} else {
-					countDownTestingBegin.cancel();
+					countDownBeginGameLevel.cancel();
 					countDownLevelDuration.cancel();
 					loadTrainingOrTesting();
 					GAME_MODE = GAME_ON;
@@ -377,7 +375,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 			GAME_MODE = GAME_ON;
 		} else {
 			changeFaceToCenter();
-			countDownTestingBegin.start();
+			countDownBeginGameLevel.start();
 		}
 
 		setWatermark();
@@ -506,7 +504,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	public void endGameActivity() {
 		saveStatestic();
 		countDownLevelDuration.cancel();
-		countDownTestingBegin.cancel();
+		countDownBeginGameLevel.cancel();
 		finish();
 	}
 
@@ -586,12 +584,14 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	@Override
 	protected void onDestroy() {
 		countDownLevelDuration.cancel();
-		countDownTestingBegin.cancel();
+		countDownBeginGameLevel.cancel();
 		super.onDestroy();
 	}
 
 	@Override
 	public void onBackPressed() {
+		countDownLevelDuration.cancel();
+		countDownBeginGameLevel.cancel();
 
 		AlertDialog.Builder builder = new Builder(this);
 		builder.setTitle(R.string.game_pause_title);
@@ -622,7 +622,8 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						countDownLevelDuration.start();
+						countDownBeginGameLevel.start();
+						keepFace = true;
 						dialog.cancel();
 					}
 				});
