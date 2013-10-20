@@ -1,18 +1,18 @@
-package no.minimon.eyecatch;
+package no.minimon.eyecatch.game;
 
-import static no.minimon.eyecatch.EyeCatchGameActivity.EAST;
-import static no.minimon.eyecatch.EyeCatchGameActivity.NORTH;
-import static no.minimon.eyecatch.EyeCatchGameActivity.NORTH_EAST;
-import static no.minimon.eyecatch.EyeCatchGameActivity.NORTH_WEST;
-import static no.minimon.eyecatch.EyeCatchGameActivity.SOUTH;
-import static no.minimon.eyecatch.EyeCatchGameActivity.SOUTH_EAST;
-import static no.minimon.eyecatch.EyeCatchGameActivity.SOUTH_WEST;
-import static no.minimon.eyecatch.EyeCatchGameActivity.WEST;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.EAST;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_EAST;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_WEST;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_EAST;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_WEST;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.WEST;
 
 import java.util.Random;
 
+import no.minimon.eyecatch.R;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
-
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -25,7 +25,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 @SuppressLint("InlinedApi")
-public class StatisticTestingActivity extends FragmentActivity {
+public class ExtraTestingActivity extends FragmentActivity {
 
 	private static final int VISIBLE = View.VISIBLE;
 
@@ -178,8 +178,7 @@ public class StatisticTestingActivity extends FragmentActivity {
 	}
 
 	private void saveStatistic() {
-		SharedPreferencesUtil.createAndAddStatisticTestingUser(this, name);
-		SharedPreferencesUtil.addStatisticToStatisticTestingUser(this, name,
+	SharedPreferencesUtil.createAndAddStatisticForExtraTesting(this, name,
 				CLICKS_CORRECT, CLICKS_FAIL);
 	}
 

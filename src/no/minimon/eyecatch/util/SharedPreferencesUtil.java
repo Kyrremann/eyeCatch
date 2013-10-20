@@ -30,6 +30,9 @@ public class SharedPreferencesUtil {
 	public static final String STATISTIC_DATE_END = "eyecatch_statistic_date_end";
 	public static final String STATISTIC_TRAINING = "eyecatch_statistic_training";
 	public static final String STATISTIC_TESTING = "eyecatch_statistic_testing";
+	public static final String STATISTIC_TYPE = "eyecatch_statistic_type";
+	public static final String STATISTIC_NORMAL = "NORMAL";
+	public static final String STATISTIC_EXTRA = "EXTRA";
 	public static final int MODE_PRIVATE = 0;
 	public static final String NAME = "name";
 	public static final String AGE = "age";
@@ -297,6 +300,7 @@ public class SharedPreferencesUtil {
 			statistic.put(STATISTIC_DATE, System.currentTimeMillis());
 			statistic.put(STATISTIC_TESTING, new JSONArray());
 			statistic.put(STATISTIC_TRAINING, new JSONArray());
+			statistic.put(STATISTIC_TYPE, STATISTIC_NORMAL);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -362,61 +366,20 @@ public class SharedPreferencesUtil {
 		return null;
 	}
 
-	public static boolean createAndAddStatisticTestingUser(Context context,
-			String name) {
-		if (hasUser(context, name)) {
-			return true;
-		} else {
-			JSONObject jsonObject = new JSONObject();
-			try {
-				jsonObject.put(NAME, name);
-				jsonObject.put(STATISTIC, new JSONObject());
-				Editor editor = getEditor(context);
-				editor.putString(name, jsonObject.toString());
-				editor.commit();
-				return addToStatisticTestingUserList(context, name);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-		return false;
-	}
-
-	private static boolean addToStatisticTestingUserList(Context context,
-			String name) {
-		SharedPreferences preferences = getSharedPreference(context);
-		String list = preferences.getString(STATISTIC_TESTING_USERS, "");
-		Editor editor = getEditor(context);
-		editor.putString(STATISTIC_TESTING_USERS, list.concat(";".concat(name)));
-		editor.commit();
-		return true;
-	}
-
-	public static boolean addStatisticToStatisticTestingUser(Context context,
-			String name, int correct, int fail) {
-		JSONObject stat = new JSONObject();
+	public static boolean createAndAddStatisticForExtraTesting(
+			Context context, String name,
+			int correct, int fail) {
+		JSONObject statistic = new JSONObject();
 		try {
-			stat.put(STATISTIC_DATE, System.currentTimeMillis());
-			stat.put(CORRECT, correct);
-			stat.put(FAIL, fail);
-			return addOrUpdateStatisticOnUser(context, name, stat);
+			statistic.put(STATISTIC_DATE, System.currentTimeMillis());
+			statistic.put(CORRECT, correct);
+			statistic.put(FAIL, fail);
+			statistic.put(STATISTIC_TYPE, STATISTIC_EXTRA);
+			return addOrUpdateStatisticOnUser(context, name, statistic);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return false;
-	}
-
-	public static List<String> getStatisticTestingUsersAsList(Context context) {
-		SharedPreferences preferences = getSharedPreference(context);
-		String users = preferences.getString(STATISTIC_TESTING_USERS, "");
-		List<String> list = new ArrayList<String>();
-		for (String user : users.split(";")) {
-			if (!user.isEmpty()) {
-				list.add(user);
-			}
-		}
-		return list;
 	}
 }

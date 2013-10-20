@@ -1,7 +1,9 @@
-package no.minimon.eyecatch;
+package no.minimon.eyecatch.game;
 
 import java.util.Random;
 
+import no.minimon.eyecatch.R;
+import no.minimon.eyecatch.VideoViewActivity;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 
 import org.json.JSONArray;
@@ -28,7 +30,6 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class EyeCatchGameActivity extends FragmentActivity implements
@@ -82,66 +83,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		GAME_MODE = GAME_PAUSE;
 
 		if (getIntent().getBooleanExtra(SharedPreferencesUtil.CONTINUE, false)) {
-			JSONObject continueInformation = SharedPreferencesUtil
-					.getContinueJson(this);
-			try {
-				long date = continueInformation
-						.getLong(SharedPreferencesUtil.CONTINUE_DATE);
-				TESTING_LEVEL = continueInformation
-						.getInt(SharedPreferencesUtil.CONTINUE_TESTING);
-				TRAINING_LEVEL = continueInformation
-						.getInt(SharedPreferencesUtil.CONTINUE_TRAINING);
-				testingLevel = continueInformation
-						.getBoolean(SharedPreferencesUtil.CONTINUE_TESTING_OR_TRAINING);
-				SharedPreferencesUtil.setCurrentUser(this, continueInformation
-						.getString(SharedPreferencesUtil.NAME));
-				statistic = SharedPreferencesUtil.getStatesticFromCurrentUser(
-						this, date);
-
-				if (statistic != null) {
-					if (testingLevel) {
-						JSONArray array = statistic
-								.getJSONArray(SharedPreferencesUtil.STATISTIC_TESTING);
-						int length = array.length();
-						if (length > 0) {
-							String testing = array.getString(length - 1);
-							JSONArray shorterArray = new JSONArray();
-							for (int i = 0; i < length - 1; i++) {
-								shorterArray.put(array.get(i));
-							}
-							statistic.put(
-									SharedPreferencesUtil.STATISTIC_TESTING,
-									shorterArray);
-							CURRENT_ITERATION_CORRECT = Integer
-									.valueOf(testing);
-						}
-					} else {
-						JSONArray array = statistic
-								.getJSONArray(SharedPreferencesUtil.STATISTIC_TRAINING);
-						int length = array.length();
-						if (length > 0) {
-							String training = array.getString(length - 1);
-							JSONArray shorterArray = new JSONArray();
-							for (int i = 0; i < length - 1; i++) {
-								shorterArray.put(array.get(i));
-							}
-							statistic.put(
-									SharedPreferencesUtil.STATISTIC_TRAINING,
-									shorterArray);
-							String[] split = training.split("/");
-							CURRENT_ITERATION_FAIL = Integer.valueOf(split[0]);
-							CURRENT_ITERATION_CORRECT = Integer
-									.valueOf(split[1]);
-							CURRENT_ITERATION = 0;
-						}
-					}
-				} else {
-					statistic = SharedPreferencesUtil.createNewStatistic(this);
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
+			getContinueInformation();
 		} else {
 			statistic = SharedPreferencesUtil.createNewStatistic(this);
 		}
@@ -172,6 +114,64 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		setWatermark();
 	}
 
+	private void getContinueInformation() {
+		JSONObject continueInformation = SharedPreferencesUtil
+				.getContinueJson(this);
+		try {
+			long date = continueInformation
+					.getLong(SharedPreferencesUtil.CONTINUE_DATE);
+			TESTING_LEVEL = continueInformation
+					.getInt(SharedPreferencesUtil.CONTINUE_TESTING);
+			TRAINING_LEVEL = continueInformation
+					.getInt(SharedPreferencesUtil.CONTINUE_TRAINING);
+			testingLevel = continueInformation
+					.getBoolean(SharedPreferencesUtil.CONTINUE_TESTING_OR_TRAINING);
+			SharedPreferencesUtil.setCurrentUser(this,
+					continueInformation.getString(SharedPreferencesUtil.NAME));
+			statistic = SharedPreferencesUtil.getStatesticFromCurrentUser(this,
+					date);
+
+			if (statistic != null) {
+				if (testingLevel) {
+					JSONArray array = statistic
+							.getJSONArray(SharedPreferencesUtil.STATISTIC_TESTING);
+					int length = array.length();
+					if (length > 0) {
+						String testing = array.getString(length - 1);
+						JSONArray shorterArray = new JSONArray();
+						for (int i = 0; i < length - 1; i++) {
+							shorterArray.put(array.get(i));
+						}
+						statistic.put(SharedPreferencesUtil.STATISTIC_TESTING,
+								shorterArray);
+						CURRENT_ITERATION_CORRECT = Integer.valueOf(testing);
+					}
+				} else {
+					JSONArray array = statistic
+							.getJSONArray(SharedPreferencesUtil.STATISTIC_TRAINING);
+					int length = array.length();
+					if (length > 0) {
+						String training = array.getString(length - 1);
+						JSONArray shorterArray = new JSONArray();
+						for (int i = 0; i < length - 1; i++) {
+							shorterArray.put(array.get(i));
+						}
+						statistic.put(SharedPreferencesUtil.STATISTIC_TRAINING,
+								shorterArray);
+						String[] split = training.split("/");
+						CURRENT_ITERATION_FAIL = Integer.valueOf(split[0]);
+						CURRENT_ITERATION_CORRECT = Integer.valueOf(split[1]);
+						CURRENT_ITERATION = 0;
+					}
+				}
+			} else {
+				statistic = SharedPreferencesUtil.createNewStatistic(this);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void setWatermark() {
 		String text = "";
 		if (!testingLevel) {
@@ -192,16 +192,14 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		}
 		watermark.setText(text);
 		if (!testingLevel) {
-		watermarkData
-				.setText("MC: " + CURRENT_ITERATION + " C: "
-						+ CURRENT_ITERATION_CORRECT + " F: "
-						+ CURRENT_ITERATION_FAIL);
-		} else {
-			watermarkData
-			.setText("T: " + CURRENT_ITERATION + " C: "
-					+ (CURRENT_ITERATION - CURRENT_ITERATION_FAIL)  + " F: "
+			watermarkData.setText("MC: " + CURRENT_ITERATION + " C: "
+					+ CURRENT_ITERATION_CORRECT + " F: "
 					+ CURRENT_ITERATION_FAIL);
-			
+		} else {
+			watermarkData.setText("T: " + CURRENT_ITERATION + " C: "
+					+ (CURRENT_ITERATION - CURRENT_ITERATION_FAIL) + " F: "
+					+ CURRENT_ITERATION_FAIL);
+
 		}
 	}
 
@@ -594,7 +592,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 
 	@Override
 	public void onBackPressed() {
-		// TODO: Countdowns does not pause
+
 		AlertDialog.Builder builder = new Builder(this);
 		builder.setTitle(R.string.game_pause_title);
 		builder.setMessage(R.string.game_pause_message);
@@ -615,8 +613,6 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				countDownLevelDuration.cancel();
-				countDownTestingBegin.cancel();
 				dialog.cancel();
 				finish();
 			}
@@ -626,6 +622,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						countDownLevelDuration.start();
 						dialog.cancel();
 					}
 				});

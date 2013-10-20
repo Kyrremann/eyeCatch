@@ -1,14 +1,6 @@
 package no.minimon.eyecatch.fragment;
 
-import static no.minimon.eyecatch.util.SharedPreferencesUtil.AGE;
-import static no.minimon.eyecatch.util.SharedPreferencesUtil.CORRECT;
-import static no.minimon.eyecatch.util.SharedPreferencesUtil.FAIL;
-import static no.minimon.eyecatch.util.SharedPreferencesUtil.MASTERY_CRITERIA;
-import static no.minimon.eyecatch.util.SharedPreferencesUtil.NAME;
-import static no.minimon.eyecatch.util.SharedPreferencesUtil.NUMBER_OF_TRIALS;
-import static no.minimon.eyecatch.util.SharedPreferencesUtil.STATISTIC;
-import static no.minimon.eyecatch.util.SharedPreferencesUtil.STATISTIC_TESTING;
-import static no.minimon.eyecatch.util.SharedPreferencesUtil.STATISTIC_TRAINING;
+import static no.minimon.eyecatch.util.SharedPreferencesUtil.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,18 +53,11 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 				false);
 		parent = (LinearLayout) rootView.findViewById(R.id.statistic_parent);
 
-		// TODO: Detect what kind of user it is
 		jsonUser = SharedPreferencesUtil.getUser(getActivity(), name);
 
 		try {
-			if (regularUser()) {
-				populateUserData();
-				populateStatistics();
-			} else {
-				populateUserData();
-				generateStatistics();
-			}
-
+			populateUserData();
+			generateStatistics();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -80,10 +65,16 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 		return rootView;
 	}
 
-	private boolean regularUser() {
-		return jsonUser.has(AGE);
+	public void populateUserData() throws JSONException {
+		TextView textView = (TextView) rootView
+				.findViewById(R.id.statistic_name);
+		textView.setText(jsonUser.getString(NAME));
+
+		textView = (TextView) rootView.findViewById(R.id.statistic_age);
+		textView.setText(jsonUser.getString(AGE));
 	}
 
+	@SuppressWarnings("unchecked")
 	private void generateStatistics() throws JSONException {
 		JSONObject statistics = jsonUser.getJSONObject(STATISTIC);
 		Iterator<String> keys = statistics.keys();
@@ -95,107 +86,62 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 
 		for (String key : sortedKeys) {
 			JSONObject stat = statistics.getJSONObject(key);
+			String type = stat.getString(STATISTIC_TYPE);
 
-			View view = inflater.inflate(R.layout.view_stats_testing,
-					container, false);
-			view.setTag(key);
-			((TextView) view.findViewById(R.id.text_date)).setText(new Date(
-					Long.valueOf(key)).toString());
-			((TextView) view.findViewById(R.id.text_correct)).setText(stat
-					.getString(CORRECT));
-			((TextView) view.findViewById(R.id.text_wrong)).setText(stat
-					.getString(FAIL));
-
-			parent.addView(view);
+			if (type.equals(STATISTIC_NORMAL)) {
+				populateStatistics(key, stat);
+			} else if (type.equals(STATISTIC_EXTRA)) {
+				populateExtraStatistics(key, stat);
+			}
 		}
 	}
 
-	public void populateUserData() throws JSONException {
-		TextView textView = (TextView) rootView
-				.findViewById(R.id.statistic_name);
-		textView.setText(jsonUser.getString(NAME));
+	private void populateExtraStatistics(String key, JSONObject stat)
+			throws JSONException {
+		View view = inflater.inflate(R.layout.view_stats_testing, container,
+				false);
+		view.setTag(key);
 
-		if (regularUser()) {
-			textView = (TextView) rootView.findViewById(R.id.statistic_age);
-			textView.setText(jsonUser.getString(AGE));
-		} else {
-			rootView.findViewById(R.id.statistic_age_text).setVisibility(View.GONE);
-		}
+		((TextView) view.findViewById(R.id.statistic_date)).setText(new Date(
+				Long.valueOf(key)).toString());
+		((TextView) view.findViewById(R.id.statistic_correct)).setText(stat
+				.getString(CORRECT));
+		((TextView) view.findViewById(R.id.statistic_wrong)).setText(stat
+				.getString(FAIL));
+
+		TextView textView = (TextView) view.findViewById(R.id.statistic_delete);
+		textView.setClickable(true);
+		textView.setOnClickListener(this);
+
+		parent.addView(view);
 	}
 
-	private void initTrainingCells(View rootView) {
-		trainingA = (TextView) rootView.findViewById(R.id.statistic_training_A);
-		trainingB = (TextView) rootView.findViewById(R.id.statistic_training_B);
-		trainingC = (TextView) rootView.findViewById(R.id.statistic_training_C);
-		trainingD = (TextView) rootView.findViewById(R.id.statistic_training_D);
-		trainingE = (TextView) rootView.findViewById(R.id.statistic_training_E);
-		trainingF = (TextView) rootView.findViewById(R.id.statistic_training_F);
-		trainingG = (TextView) rootView.findViewById(R.id.statistic_training_G);
-		trainingH = (TextView) rootView.findViewById(R.id.statistic_training_H);
-	}
+	private void populateStatistics(String key, JSONObject stat)
+			throws JSONException {
+		View table = inflater.inflate(R.layout.view_stat_table, container,
+				false);
+		table.setTag(key);
 
-	private void initTestingCells(View rootView) {
-		testingPreA = (TextView) rootView
-				.findViewById(R.id.statistic_testing_A);
-		testingPreB = (TextView) rootView
-				.findViewById(R.id.statistic_testing_B);
-		testingPreC = (TextView) rootView
-				.findViewById(R.id.statistic_testing_C);
-		testingPreD = (TextView) rootView
-				.findViewById(R.id.statistic_testing_D);
-		testingPreE = (TextView) rootView
-				.findViewById(R.id.statistic_testing_E);
-		testingPreF = (TextView) rootView
-				.findViewById(R.id.statistic_testing_F);
-		testingPreG = (TextView) rootView
-				.findViewById(R.id.statistic_testing_G);
-		testingPreH = (TextView) rootView
-				.findViewById(R.id.statistic_testing_H);
-		testingPostH = (TextView) rootView
-				.findViewById(R.id.statistic_testing_post_H);
-	}
+		JSONArray array = stat.getJSONArray(STATISTIC_TRAINING);
+		populateTrainingCellData(table, array);
+		array = stat.getJSONArray(STATISTIC_TESTING);
+		populateTestingCellData(table, array);
 
-	@SuppressWarnings("unchecked")
-	private void populateStatistics() throws JSONException {
-		JSONObject statistics = jsonUser.getJSONObject(STATISTIC);
-		Iterator<String> keys = statistics.keys();
-		ArrayList<String> sortedKeys = new ArrayList<String>();
-		while (keys.hasNext()) {
-			sortedKeys.add(keys.next());
-		}
-		Collections.sort(sortedKeys, Collections.reverseOrder());
+		TextView textView = (TextView) table.findViewById(R.id.statistic_date);
+		textView.setText(new Date(Long.valueOf(key)).toString());
 
-		for (String key : sortedKeys) {
-			JSONObject stat = statistics.getJSONObject(key);
+		textView = (TextView) table.findViewById(R.id.statistic_testing_number);
+		textView.setText(jsonUser.getString(NUMBER_OF_TRIALS));
 
-			View table = inflater.inflate(R.layout.view_stat_table, container,
-					false);
-			table.setTag(key);
+		textView = (TextView) table
+				.findViewById(R.id.statistic_training_number);
+		textView.setText(jsonUser.getString(MASTERY_CRITERIA));
 
-			JSONArray array = stat.getJSONArray(STATISTIC_TRAINING);
-			populateTrainingCellData(table, array);
-			array = stat.getJSONArray(STATISTIC_TESTING);
-			populateTestingCellData(table, array);
+		textView = (TextView) table.findViewById(R.id.statistic_delete);
+		textView.setClickable(true);
+		textView.setOnClickListener(this);
 
-			TextView textView = (TextView) table
-					.findViewById(R.id.statistic_date);
-			textView.setText(new Date(Long.valueOf(key)).toString());
-
-			textView = (TextView) table
-					.findViewById(R.id.statistic_testing_number);
-			textView.setText(jsonUser.getString(NUMBER_OF_TRIALS));
-
-			textView = (TextView) table
-					.findViewById(R.id.statistic_training_number);
-			textView.setText(jsonUser.getString(MASTERY_CRITERIA));
-
-			textView = (TextView) table.findViewById(R.id.statistic_delete);
-			textView.setClickable(true);
-			textView.setOnClickListener(this);
-
-			parent.addView(table);
-		}
-
+		parent.addView(table);
 	}
 
 	private void populateTestingCellData(View root, JSONArray array)
@@ -270,5 +216,37 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 
 	@Override
 	public void onAnimationStart(Animation animation) {
+	}
+
+	private void initTrainingCells(View rootView) {
+		trainingA = (TextView) rootView.findViewById(R.id.statistic_training_A);
+		trainingB = (TextView) rootView.findViewById(R.id.statistic_training_B);
+		trainingC = (TextView) rootView.findViewById(R.id.statistic_training_C);
+		trainingD = (TextView) rootView.findViewById(R.id.statistic_training_D);
+		trainingE = (TextView) rootView.findViewById(R.id.statistic_training_E);
+		trainingF = (TextView) rootView.findViewById(R.id.statistic_training_F);
+		trainingG = (TextView) rootView.findViewById(R.id.statistic_training_G);
+		trainingH = (TextView) rootView.findViewById(R.id.statistic_training_H);
+	}
+
+	private void initTestingCells(View rootView) {
+		testingPreA = (TextView) rootView
+				.findViewById(R.id.statistic_testing_A);
+		testingPreB = (TextView) rootView
+				.findViewById(R.id.statistic_testing_B);
+		testingPreC = (TextView) rootView
+				.findViewById(R.id.statistic_testing_C);
+		testingPreD = (TextView) rootView
+				.findViewById(R.id.statistic_testing_D);
+		testingPreE = (TextView) rootView
+				.findViewById(R.id.statistic_testing_E);
+		testingPreF = (TextView) rootView
+				.findViewById(R.id.statistic_testing_F);
+		testingPreG = (TextView) rootView
+				.findViewById(R.id.statistic_testing_G);
+		testingPreH = (TextView) rootView
+				.findViewById(R.id.statistic_testing_H);
+		testingPostH = (TextView) rootView
+				.findViewById(R.id.statistic_testing_post_H);
 	}
 }

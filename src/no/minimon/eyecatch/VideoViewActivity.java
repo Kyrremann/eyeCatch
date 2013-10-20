@@ -2,6 +2,7 @@ package no.minimon.eyecatch;
 
 import java.util.Random;
 
+import no.minimon.eyecatch.game.EyeCatchGameActivity;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import android.annotation.TargetApi;
 import android.net.Uri;

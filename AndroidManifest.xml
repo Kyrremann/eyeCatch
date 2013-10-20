@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="no.minimon.eyecatch.EyeCatchActivity"
+            android:name="EyeCatchActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,10 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="no.minimon.eyecatch.CreateUserActivity" >
+        <activity android:name="CreateUserActivity" >
         </activity>
         <activity
-            android:name="no.minimon.eyecatch.EyeCatchGameActivity"
+            android:name=".game.EyeCatchGameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName="no.minimon.eyecatch.EyeCatchActivity"
             android:screenOrientation="landscape"
@@ -35,7 +35,7 @@
                 android:value="no.minimon.eyecatch.EyeCatchActivity" />
         </activity>
         <activity
-            android:name="no.minimon.eyecatch.TouchTrainingActivity"
+            android:name=".game.TouchTrainingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName="no.minimon.eyecatch.EyeCatchActivity"
             android:screenOrientation="landscape"
@@ -50,7 +50,7 @@
             android:theme="@style/FullscreenBlackBackground" >
         </activity>
         <activity
-            android:name="StatisticTestingActivity"
+            android:name=".game.ExtraTestingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName="no.minimon.eyecatch.EyeCatchActivity"
             android:screenOrientation="landscape"

@@ -9,8 +9,8 @@ import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +20,7 @@ import android.widget.ListView;
 
 public class SelectStatisticsFragment extends ListFragment {
 
-	private List<String> usersList, statisticTestingUsersList;
+	private List<String> usersList;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,8 +33,6 @@ public class SelectStatisticsFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		usersList = SharedPreferencesUtil.getUsersAsList(getActivity());
-		statisticTestingUsersList = SharedPreferencesUtil.getStatisticTestingUsersAsList(getActivity());
-		usersList.addAll(statisticTestingUsersList);
 		Collections.sort(usersList);
 		setListAdapter(new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,

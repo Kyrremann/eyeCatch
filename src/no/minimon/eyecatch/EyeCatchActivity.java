@@ -5,20 +5,20 @@ import no.minimon.eyecatch.fragment.HomeFragment;
 import no.minimon.eyecatch.fragment.SelectStatisticsFragment;
 import no.minimon.eyecatch.fragment.SelectUserFragment;
 import no.minimon.eyecatch.fragment.SelectVideoFragment;
+import no.minimon.eyecatch.game.EyeCatchGameActivity;
+import no.minimon.eyecatch.game.ExtraTestingActivity;
+import no.minimon.eyecatch.game.TouchTrainingActivity;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 public class EyeCatchActivity extends FragmentActivity {
@@ -70,8 +70,7 @@ public class EyeCatchActivity extends FragmentActivity {
 			}
 		} else if (view.getId() == R.id.eyecatch_statistic_testing) {
 			if (isThereASelectedUserAndVideo()) {
-				startActivity(new Intent(this, StatisticTestingActivity.class));
-				// createAndShowStatisticTestingDialog();
+				startActivity(new Intent(this, ExtraTestingActivity.class));
 			} else {
 				Toast.makeText(getApplicationContext(),
 						getString(R.string.error_missing_user_or_video),
@@ -126,43 +125,12 @@ public class EyeCatchActivity extends FragmentActivity {
 		}
 	}
 
-	private void createAndShowStatisticTestingDialog() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle(R.string.dialog_statistic_testing_title);
-		alert.setMessage(R.string.dialog_statistic_testing_message);
-
-		final EditText input = new EditText(this);
-		alert.setView(input);
-
-		alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				String name = input.getText().toString();
-				if (name.isEmpty())
-					return;
-
-				Intent intent = new Intent(getApplicationContext(),
-						StatisticTestingActivity.class);
-				intent.putExtra(SharedPreferencesUtil.NAME, name);
-				startActivity(intent);
-			}
-		});
-
-		alert.setNegativeButton(android.R.string.cancel,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						dialog.cancel();
-					}
-				});
-
-		alert.show();
-	}
-
 	private boolean isThereASelectedUserAndVideo() {
 		return isThereAselectedVideo()
 				&& !SharedPreferencesUtil.getCurrentUsersName(this).isEmpty();
 	}
 
-	public boolean isThereAselectedVideo() {
+	private boolean isThereAselectedVideo() {
 		return !SharedPreferencesUtil.getCurrentVideoName(this).isEmpty();
 	}
 

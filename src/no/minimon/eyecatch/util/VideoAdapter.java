@@ -1,4 +1,4 @@
-package no.minimon.eyecatch.fragment;
+package no.minimon.eyecatch.util;
 
 import java.util.Locale;
 
@@ -51,7 +51,7 @@ public class VideoAdapter extends CursorAdapter {
 
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		return inflater.inflate(R.layout.select_video_row, null);
+		return inflater.inflate(R.layout.view_row_select_video, null);
 	}
 
 }

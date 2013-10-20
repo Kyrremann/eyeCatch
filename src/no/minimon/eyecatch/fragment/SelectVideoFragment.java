@@ -2,6 +2,7 @@ package no.minimon.eyecatch.fragment;
 
 import no.minimon.eyecatch.R;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
+import no.minimon.eyecatch.util.VideoAdapter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;

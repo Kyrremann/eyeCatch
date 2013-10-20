@@ -1,9 +1,19 @@
-package no.minimon.eyecatch;
+package no.minimon.eyecatch.game;
+
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.EAST;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_EAST;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_WEST;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.RESULT_VIDEOVIEW;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_EAST;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_WEST;
+import static no.minimon.eyecatch.game.EyeCatchGameActivity.WEST;
 
 import java.util.Random;
 
-import static no.minimon.eyecatch.EyeCatchGameActivity.*;
-
+import no.minimon.eyecatch.R;
+import no.minimon.eyecatch.VideoViewActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
@@ -100,11 +110,8 @@ public class TouchTrainingActivity extends FragmentActivity {
 	}
 
 	private void showVideo() {
-		// TODO: Show video with bundle
 		Intent intent = new Intent(this, VideoViewActivity.class);
-		// intent.putExtra(TRAINING, true);
 		startActivityForResult(intent, RESULT_VIDEOVIEW);
-		// onActivityResult(0, RESULT_VIDEOVIEW, new Intent());
 	}
 
 	@Override
