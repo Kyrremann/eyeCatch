@@ -382,4 +382,11 @@ public class SharedPreferencesUtil {
 
 		return false;
 	}
+
+	public static void removeContinueJson(
+			Context context) {
+		Editor editor = getEditor(context);
+		editor.remove(CONTINUE);
+		editor.commit();
+	}
 }

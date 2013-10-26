@@ -72,7 +72,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 
 	private SparseArray<Drawable> faces;
 	private Random random;
-	private boolean testingLevel = true, keepFace;
+	private boolean testingLevel = true, keepFace, deleteContinueWhenDone;
 	private JSONObject statistic;
 
 	@Override
@@ -84,6 +84,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 
 		if (getIntent().getBooleanExtra(SharedPreferencesUtil.CONTINUE, false)) {
 			getContinueInformation();
+			deleteContinueWhenDone = true;
 		} else {
 			statistic = SharedPreferencesUtil.createNewStatistic(this);
 		}
@@ -112,6 +113,10 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		setBoxesVisibility(INVISIBLE);
 		changeFaceToStar();
 		setWatermark();
+	}
+
+	private void removeContinueInformation() {
+		SharedPreferencesUtil.removeContinueJson(this);
 	}
 
 	private void getContinueInformation() {
@@ -505,6 +510,9 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		saveStatestic();
 		countDownLevelDuration.cancel();
 		countDownBeginGameLevel.cancel();
+		if (deleteContinueWhenDone) {
+			removeContinueInformation();
+		}
 		finish();
 	}
 
