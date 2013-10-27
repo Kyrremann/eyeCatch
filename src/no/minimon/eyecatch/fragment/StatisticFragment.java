@@ -53,15 +53,6 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 				false);
 		parent = (LinearLayout) rootView.findViewById(R.id.statistic_parent);
 
-		jsonUser = SharedPreferencesUtil.getUser(getActivity(), name);
-
-		try {
-			populateUserData();
-			generateStatistics();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
 		return rootView;
 	}
 
@@ -182,6 +173,19 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 	}
 
 	@Override
+	public void onResume() {
+		try {
+			jsonUser = SharedPreferencesUtil.getUser(getActivity(), name);
+			parent.removeAllViews();
+			populateUserData();
+			generateStatistics();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		super.onResume();
+	}
+
+	@Override
 	public void onClick(View view) {
 		if (view.getId() == R.id.statistic_delete) {
 			view = (View) view.getParent().getParent();
@@ -203,9 +207,16 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 			@Override
 			public void run() {
 				if (viewToBeDeleted != null) {
-					parent.removeView(viewToBeDeleted);
-					viewToBeDeleted = null;
+					deleteStatistic();
 				}
+			}
+
+			private void deleteStatistic() {
+				// if tag == continue then delete
+				SharedPreferencesUtil.deleteContinueInfoIfSameDate(
+						getActivity(), viewToBeDeleted.getTag().toString());
+				parent.removeView(viewToBeDeleted);
+				viewToBeDeleted = null;
 			}
 		});
 	}

@@ -33,9 +33,7 @@ public class EyeCatchActivity extends FragmentActivity {
 		if (findViewById(R.id.item_detail_container) != null) {
 			mTwoPane = true;
 
-			HomeFragment fragment = new HomeFragment();
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.item_detail_container, fragment).commit();
+			setHomeFragment();
 		}
 
 		SharedPreferencesUtil.updateActioBarTitle(this, getActionBar());
@@ -133,21 +131,40 @@ public class EyeCatchActivity extends FragmentActivity {
 	private boolean isThereAselectedVideo() {
 		return !SharedPreferencesUtil.getCurrentVideoName(this).isEmpty();
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		updateContinueButton();
+		setHomeFragment();
+	}
+
+	private void setHomeFragment() {
+		HomeFragment fragment = new HomeFragment();
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.item_detail_container, fragment).commit();
+	}
 
 	@Override
 	protected void onResume() {
+		updateContinueButton();
+		super.onResume();
+	}
+
+	private void updateContinueButton() {
 		JSONObject jsonObject = SharedPreferencesUtil.getContinueJson(this);
+		Button button = (Button) findViewById(R.id.eyecatch_continue_game);
 		if (jsonObject != null) {
-			Button button = (Button) findViewById(R.id.eyecatch_continue_game);
 			button.setEnabled(true);
 			try {
 				button.setText("Continue with "
 						+ jsonObject.getString(SharedPreferencesUtil.NAME));
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else {
+			button.setEnabled(false);
+			button.setText(R.string.eyecatch_continue_game);
 		}
-		super.onResume();
 	}
 }

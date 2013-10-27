@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+        android:padding="16dp" >
 
     <LinearLayout
-        android:id="@+id/statistic_parent"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp" >
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -35,7 +34,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-            <TextView                
+            <TextView
                 android:id="@+id/statistic_age_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -49,6 +48,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/statistic_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
         </LinearLayout>
     </LinearLayout>
 

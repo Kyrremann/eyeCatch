@@ -389,4 +389,23 @@ public class SharedPreferencesUtil {
 		editor.remove(CONTINUE);
 		editor.commit();
 	}
+
+	public static boolean deleteContinueInfoIfSameDate(Context context, String statDate) {
+		JSONObject jsonObject = SharedPreferencesUtil.getContinueJson(context);
+		try {
+			String continueDate = jsonObject.getString(CONTINUE_DATE);
+			if (continueDate == null) {
+				return false;
+			}
+			
+			if (continueDate.equals(statDate)) {
+				removeContinueJson(context);
+				return true;
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 }
