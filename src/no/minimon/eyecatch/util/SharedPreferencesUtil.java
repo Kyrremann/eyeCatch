@@ -351,7 +351,7 @@ public class SharedPreferencesUtil {
 			}
 		}
 
-		return null;
+		return new JSONObject();
 	}
 
 	public static JSONObject getStatesticFromCurrentUser(Context context,

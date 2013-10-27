@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,6 +29,12 @@ import android.widget.TextView;
 
 public class StatisticFragment extends Fragment implements OnClickListener,
 		AnimationListener {
+
+	public interface OnDeletedContinueInfo {
+		public void notifyAboutDeletedContinueInfo();
+	}
+
+	private OnDeletedContinueInfo onStatisticDeleteListener;
 
 	private String name;
 	private JSONObject jsonUser;
@@ -212,13 +219,26 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 			}
 
 			private void deleteStatistic() {
-				// if tag == continue then delete
-				SharedPreferencesUtil.deleteContinueInfoIfSameDate(
-						getActivity(), viewToBeDeleted.getTag().toString());
+				if (SharedPreferencesUtil.deleteContinueInfoIfSameDate(
+						getActivity(), viewToBeDeleted.getTag().toString())) {
+					System.out.println("true");
+					onStatisticDeleteListener.notifyAboutDeletedContinueInfo();
+				}
 				parent.removeView(viewToBeDeleted);
 				viewToBeDeleted = null;
 			}
 		});
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			onStatisticDeleteListener = (OnDeletedContinueInfo) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnDeletedContinueInfo");
+		}
 	}
 
 	@Override

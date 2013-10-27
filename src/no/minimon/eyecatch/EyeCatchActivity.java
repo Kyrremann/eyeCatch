@@ -5,6 +5,7 @@ import no.minimon.eyecatch.fragment.HomeFragment;
 import no.minimon.eyecatch.fragment.SelectStatisticsFragment;
 import no.minimon.eyecatch.fragment.SelectUserFragment;
 import no.minimon.eyecatch.fragment.SelectVideoFragment;
+import no.minimon.eyecatch.fragment.StatisticFragment.OnDeletedContinueInfo;
 import no.minimon.eyecatch.game.EyeCatchGameActivity;
 import no.minimon.eyecatch.game.ExtraTestingActivity;
 import no.minimon.eyecatch.game.TouchTrainingActivity;
@@ -21,7 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class EyeCatchActivity extends FragmentActivity {
+public class EyeCatchActivity extends FragmentActivity implements OnDeletedContinueInfo {
 
 	private boolean mTwoPane;
 
@@ -154,7 +155,7 @@ public class EyeCatchActivity extends FragmentActivity {
 	private void updateContinueButton() {
 		JSONObject jsonObject = SharedPreferencesUtil.getContinueJson(this);
 		Button button = (Button) findViewById(R.id.eyecatch_continue_game);
-		if (jsonObject != null) {
+		if (jsonObject.length() > 0) {
 			button.setEnabled(true);
 			try {
 				button.setText("Continue with "
@@ -166,5 +167,11 @@ public class EyeCatchActivity extends FragmentActivity {
 			button.setEnabled(false);
 			button.setText(R.string.eyecatch_continue_game);
 		}
+	}
+
+	@Override
+	public void notifyAboutDeletedContinueInfo() {
+		System.out.println("It works!");
+		updateContinueButton();
 	}
 }
