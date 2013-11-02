@@ -67,6 +67,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	private ImageView imageFace, imageNorth, imageNorthEast, imageEast,
 			imageSouthEast, imageSouth, imageSouthWest, imageWest,
 			imageNorthWest;
+	private ImageView imageWestCircle, imageEastCircle;
 	private CountDownTimer countDownLevelDuration, countDownBeginGameLevel;
 	private TextView watermark, watermarkData;
 
@@ -108,9 +109,11 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		watermarkData = (TextView) findViewById(R.id.watermarkData);
 
 		loadImagesIntoFaces();
+		initCircles();
 		initDurations();
 		initBoxes();
 		setBoxesVisibility(INVISIBLE);
+		setCirclesVisbility(INVISIBLE);
 		changeFaceToStar();
 		setWatermark();
 	}
@@ -262,11 +265,11 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		case GAME_ON:
 			switch (id) {
 			case R.id.image_face:
-				if (testingLevel) {
-					// wrongAction(); // Not anymore
-				} else if (TRAINING_LEVEL == 0 || TRAINING_LEVEL == 1) {
-					correctActionVideoOrNext();
-				}
+				// if (testingLevel) {
+				// // wrongAction(); // Not anymore
+				// } else if (TRAINING_LEVEL == 0 || TRAINING_LEVEL == 1) {
+				// correctActionVideoOrNext();
+				// }
 				break;
 			case R.id.image_west:
 				checkForCorrectDirection(WEST);
@@ -312,6 +315,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		Log.d("WRONG", "CI: " + CURRENT_ITERATION + " - CIC: "
 				+ CURRENT_ITERATION_CORRECT + " - CIF: "
 				+ CURRENT_ITERATION_FAIL);
+		
 		if (!testingLevel) {
 			CURRENT_ITERATION = 0;
 			continueOrNext();
@@ -375,6 +379,9 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		GAME_MODE = GAME_PAUSE;
 
 		if (!testingLevel) {
+			if (TRAINING_LEVEL == 0) {
+				setCirclesVisbility(INVISIBLE);
+			}
 			setBoxesVisibility(INVISIBLE);
 			loadTrainingOrTesting();
 			GAME_MODE = GAME_ON;
@@ -388,7 +395,11 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 
 	private void doneWithLastRound() {
 		addStatesticToJson();
+		
 		if (!testingLevel) {
+			if (TRAINING_LEVEL == 0) {
+				setCirclesVisbility(INVISIBLE);
+			}
 			TRAINING_LEVEL++;
 		} else {
 			TESTING_LEVEL++;
@@ -447,12 +458,20 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 			switch (TRAINING_LEVEL) {
 			case 0: // Training level A
 				FACE_RANGE = 0;
-				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_center_brighted));
+				// Old version
+				// imageFace.setImageDrawable(getResources().getDrawable(
+				// R.drawable.mariama_center_brighted));
+				FACE_RANGE = 2;
+				updateFaceWithNewImage();
+				setBoxesVisibility(INVISIBLE);
 				break;
 			case 1: // Training level B
-				FACE_RANGE = 0;
-				changeFaceToCenter();
+				// Old version
+				// FACE_RANGE = 0;
+				// changeFaceToCenter();
+				FACE_RANGE = 2;
+				updateFaceWithNewImage();
+				setBoxesVisibility(INVISIBLE);
 				break;
 			case 2: // Training level C
 				FACE_RANGE = 2;
@@ -542,6 +561,11 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		imageSouthWest = (ImageView) findViewById(R.id.image_south_west);
 		imageSouthEast = (ImageView) findViewById(R.id.image_south_east);
 	}
+	
+	private void initCircles() {
+		imageWestCircle = (ImageView) findViewById(R.id.image_west_circle);
+		imageEastCircle = (ImageView) findViewById(R.id.image_east_circle);
+	}
 
 	private void setBoxesVisibility(int visibility) {
 		imageWest.setVisibility(visibility);
@@ -552,6 +576,11 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		imageNorthEast.setVisibility(visibility);
 		imageSouthWest.setVisibility(visibility);
 		imageSouthEast.setVisibility(visibility);
+	}
+	
+	private void setCirclesVisbility(int visibility) {
+		imageWestCircle.setVisibility(visibility);
+		imageEastCircle.setVisibility(visibility);
 	}
 
 	private void updateFaceWithNewImage() {
@@ -652,12 +681,29 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	@Override
 	public void onAnimationEnd(Animation animation) {
 		switch (TRAINING_LEVEL) {
-		case 2: // Training level C
+		case 0:
 			if (CURRENT_FACE == WEST) {
-				imageWest.setVisibility(VISIBLE);
+				imageWestCircle.setVisibility(VISIBLE);
 			} else if (CURRENT_FACE == EAST) {
-				imageEast.setVisibility(VISIBLE);
+				imageEastCircle.setVisibility(VISIBLE);
 			}
+			
+			imageWest.setVisibility(VISIBLE);
+			imageEast.setVisibility(VISIBLE);
+			break;
+		case 1:
+			imageWest.setVisibility(VISIBLE);
+			imageEast.setVisibility(VISIBLE);
+			break;
+		case 2: // Training level C
+			// Old version
+			// if (CURRENT_FACE == WEST) {
+			// imageWest.setVisibility(VISIBLE);
+			// } else if (CURRENT_FACE == EAST) {
+			// imageEast.setVisibility(VISIBLE);
+			// }
+			imageWest.setVisibility(VISIBLE);
+			imageEast.setVisibility(VISIBLE);
 			break;
 		case 3: // Training level D
 			imageWest.setVisibility(VISIBLE);
