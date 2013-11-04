@@ -137,7 +137,8 @@ public class SharedPreferencesUtil {
 		SharedPreferences preferences = context.getSharedPreferences(
 				context.getPackageName(), Context.MODE_PRIVATE);
 		try {
-			return new JSONObject(preferences.getString(name, new JSONObject().toString()));
+			return new JSONObject(preferences.getString(name,
+					new JSONObject().toString()));
 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -366,9 +367,8 @@ public class SharedPreferencesUtil {
 		return null;
 	}
 
-	public static boolean createAndAddStatisticForExtraTesting(
-			Context context, String name,
-			int correct, int fail) {
+	public static boolean createAndAddStatisticForExtraTesting(Context context,
+			String name, int correct, int fail) {
 		JSONObject statistic = new JSONObject();
 		try {
 			statistic.put(STATISTIC_DATE, System.currentTimeMillis());
@@ -383,21 +383,21 @@ public class SharedPreferencesUtil {
 		return false;
 	}
 
-	public static void removeContinueJson(
-			Context context) {
+	public static void removeContinueJson(Context context) {
 		Editor editor = getEditor(context);
 		editor.remove(CONTINUE);
 		editor.commit();
 	}
 
-	public static boolean deleteContinueInfoIfSameDate(Context context, String statDate) {
+	public static boolean removeContinueInfoIfSameDate(Context context,
+			String statDate) {
 		JSONObject jsonObject = SharedPreferencesUtil.getContinueJson(context);
 		try {
 			String continueDate = jsonObject.getString(CONTINUE_DATE);
 			if (continueDate == null) {
 				return false;
 			}
-			
+
 			if (continueDate.equals(statDate)) {
 				removeContinueJson(context);
 				return true;
@@ -405,7 +405,18 @@ public class SharedPreferencesUtil {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		return false;
+	}
+
+	public static void removeUser(Context context, String name) {
+		SharedPreferences preferences = getSharedPreference(context);
+		String users = preferences.getString(USERS, "");
+		System.out.println(users);
+		users = users.replace(name, "");
+		System.out.println(users);
+		Editor editor = getEditor(context);
+		editor.putString(USERS, users);
+		editor.commit();
 	}
 }

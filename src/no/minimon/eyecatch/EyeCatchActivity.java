@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import no.minimon.eyecatch.fragment.CreateUserFragment;
@@ -23,7 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
 import android.media.MediaScannerConnection.OnScanCompletedListener;
 import android.net.Uri;
@@ -63,6 +61,7 @@ public class EyeCatchActivity extends FragmentActivity implements
 		switch (item.getItemId()) {
 		case R.id.menu_main_dump_local:
 			saveDataToLocal();
+			Toast.makeText(getApplicationContext(), "Data saved to file", Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.menu_main_dump_share:
 			sendDataViaEmail();
