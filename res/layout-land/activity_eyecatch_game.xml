@@ -82,7 +82,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/circle" />
+            android:src="@drawable/circle"
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/image_west"
@@ -104,7 +105,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/circle" />
+            android:src="@drawable/circle"
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/image_east"
@@ -132,23 +134,5 @@
         android:layout_alignParentRight="true"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#33333333" />
-
-    <View
-        android:id="@+id/view1"
-        android:layout_width="300dp"
-        android:layout_height="5dp"
-        android:layout_alignRight="@+id/image_south"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/relativeLayout1"
-        android:background="#000000" />
-
-    <View
-        android:id="@+id/view12"
-        android:layout_width="75dp"
-        android:layout_height="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/view1"
-        android:layout_toRightOf="@+id/relativeLayout1"
-        android:background="#000000" />
 
 </RelativeLayout>

@@ -1,13 +1,21 @@
 package no.minimon.eyecatch;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 import no.minimon.eyecatch.fragment.CreateUserFragment;
 import no.minimon.eyecatch.fragment.HomeFragment;
 import no.minimon.eyecatch.fragment.SelectStatisticsFragment;
 import no.minimon.eyecatch.fragment.SelectUserFragment;
 import no.minimon.eyecatch.fragment.SelectVideoFragment;
 import no.minimon.eyecatch.fragment.StatisticFragment.OnDeletedContinueInfo;
-import no.minimon.eyecatch.game.EyeCatchGameActivity;
 import no.minimon.eyecatch.game.ExtraTestingActivity;
+import no.minimon.eyecatch.game.EyeCatchGameActivity;
 import no.minimon.eyecatch.game.TouchTrainingActivity;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 
@@ -15,14 +23,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.MediaScannerConnection;
+import android.media.MediaScannerConnection.OnScanCompletedListener;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class EyeCatchActivity extends FragmentActivity implements OnDeletedContinueInfo {
+public class EyeCatchActivity extends FragmentActivity implements
+		OnDeletedContinueInfo {
 
 	private boolean mTwoPane;
 
@@ -38,6 +56,95 @@ public class EyeCatchActivity extends FragmentActivity implements OnDeletedConti
 		}
 
 		SharedPreferencesUtil.updateActioBarTitle(this, getActionBar());
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_main_dump_local:
+			saveDataToLocal();
+			return true;
+		case R.id.menu_main_dump_share:
+			sendDataViaEmail();
+			return true;
+		default:
+			break;
+		}
+
+		return super.onMenuItemSelected(featureId, item);
+	}
+
+	private void sendDataViaEmail() {
+		File attachment = saveDataToLocal();
+		if (attachment != null) {
+			Intent share = new Intent(android.content.Intent.ACTION_SEND);
+			share.putExtra(Intent.EXTRA_SUBJECT, "eyeCatch data");
+			share.putExtra(Intent.EXTRA_TEXT,
+					"The data is attached to this e-mail.");
+			Uri uri = Uri.fromFile(attachment);
+			share.putExtra(Intent.EXTRA_STREAM, uri);
+			share.setType("text/message");
+			startActivity(Intent.createChooser(share, "Send data"));
+		}
+	}
+
+	private File saveDataToLocal() {
+		String state = Environment.getExternalStorageState();
+
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			File path = Environment
+					.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+			File file = new File(path, "eyeCatchData.txt");
+
+			try {
+						path.mkdirs();
+
+				OutputStream os = new FileOutputStream(file);
+				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+						os);
+				outputStreamWriter.write(getDataAsString());
+				outputStreamWriter.close();
+				os.close();
+
+				MediaScannerConnection.scanFile(this,
+						new String[] { file.toString() }, null,
+						new OnScanCompletedListener() {
+
+							@Override
+							public void onScanCompleted(String path, Uri uri) {
+								Log.i("ExternalStorage", "Scanned " + path
+										+ ":");
+								Log.i("ExternalStorage", "-> uri=" + uri);
+							}
+						});
+
+				return file;
+			} catch (IOException e) {
+				Log.w("ExternalStorage", "Error writing " + file, e);
+			}
+		} else {
+			Toast.makeText(getApplicationContext(),
+					"Can't save to external storage", Toast.LENGTH_SHORT)
+					.show();
+		}
+
+		return null;
+	}
+
+	private String getDataAsString() {
+		List<String> users = SharedPreferencesUtil.getUsersAsList(this);
+		String data = "";
+		for (String name : users) {
+			JSONObject user = SharedPreferencesUtil.getUser(this, name);
+			try {
+				data += user.toString(4);
+			} catch (JSONException e) {
+				data += "User " + name + " was not added.";
+				e.printStackTrace();
+			}
+			data += "\n";
+		}
+		return data;
 	}
 
 	public void onButtonClick(View view) {
@@ -132,9 +239,10 @@ public class EyeCatchActivity extends FragmentActivity implements OnDeletedConti
 	private boolean isThereAselectedVideo() {
 		return !SharedPreferencesUtil.getCurrentVideoName(this).isEmpty();
 	}
-	
+
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+	protected void onActivityResult(int requestCode, int resultCode,
+			Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		updateContinueButton();
 		setHomeFragment();
@@ -174,4 +282,12 @@ public class EyeCatchActivity extends FragmentActivity implements OnDeletedConti
 		System.out.println("It works!");
 		updateContinueButton();
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return true;
+	}
+
 }

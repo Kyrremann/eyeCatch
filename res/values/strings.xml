@@ -40,6 +40,9 @@
     <string name="statistic_correct">Correct:</string>
     <string name="statistic_wrong">Wrong:</string>
     
+    <string name="menu_dump_local">Save to file</string>
+    <string name="menu_dump_share">Share data</string>
+    
     <string name="A">A</string>
     <string name="B">B</string>
     <string name="C">C</string>

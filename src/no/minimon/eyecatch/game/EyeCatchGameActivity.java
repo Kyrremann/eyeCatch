@@ -680,18 +680,32 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 
 	@Override
 	public void onAnimationEnd(Animation animation) {
+		updateImagesAfterAnimation();
+	}
+
+	private void updateImagesAfterAnimation() {
 		switch (TRAINING_LEVEL) {
 		case 0:
 			if (CURRENT_FACE == WEST) {
 				imageWestCircle.setVisibility(VISIBLE);
+				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_w_arrow));
 			} else if (CURRENT_FACE == EAST) {
 				imageEastCircle.setVisibility(VISIBLE);
+				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_e_arrow));
 			}
 			
 			imageWest.setVisibility(VISIBLE);
 			imageEast.setVisibility(VISIBLE);
 			break;
 		case 1:
+			if (CURRENT_FACE == WEST) {
+				imageWestCircle.setVisibility(INVISIBLE);
+				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_w_short_arrow));
+			} else if (CURRENT_FACE == EAST) {
+				imageEastCircle.setVisibility(INVISIBLE);
+				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_e_short_arrow));
+			}
+			
 			imageWest.setVisibility(VISIBLE);
 			imageEast.setVisibility(VISIBLE);
 			break;
@@ -702,6 +716,11 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 			// } else if (CURRENT_FACE == EAST) {
 			// imageEast.setVisibility(VISIBLE);
 			// }
+			if (CURRENT_FACE == WEST) {
+				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_w));
+			} else if (CURRENT_FACE == EAST) {
+				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_e));
+			}
 			imageWest.setVisibility(VISIBLE);
 			imageEast.setVisibility(VISIBLE);
 			break;
