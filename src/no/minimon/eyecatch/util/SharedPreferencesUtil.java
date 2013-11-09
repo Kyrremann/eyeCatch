@@ -408,6 +408,26 @@ public class SharedPreferencesUtil {
 
 		return false;
 	}
+	
+	public static boolean removeContinueInfoIfSameName(Context context,
+			String name) {
+		JSONObject jsonObject = SharedPreferencesUtil.getContinueJson(context);
+		try {
+			String continueName = jsonObject.getString(NAME);
+			if (continueName == null) {
+				return false;
+			}
+
+			if (continueName.equals(name)) {
+				removeContinueJson(context);
+				return true;
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
 
 	public static void removeUser(Context context, String name) {
 		SharedPreferences preferences = getSharedPreference(context);
@@ -418,5 +438,15 @@ public class SharedPreferencesUtil {
 		Editor editor = getEditor(context);
 		editor.putString(USERS, users);
 		editor.commit();
+	}
+
+	public static void removeSelectedUserIfSameName(Context context,
+			String name) {
+		String selectedUser = getCurrentUsersName(context);
+		if (selectedUser.equals(name)) {
+			Editor editor = getEditor(context);
+			editor.putString(CURRENT_USER, "");
+			editor.commit();
+		}
 	}
 }

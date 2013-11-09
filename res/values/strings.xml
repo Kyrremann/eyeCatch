@@ -25,12 +25,15 @@
     
     <string name="dialog_statistic_testing_title">Name</string>
     <string name="dialog_statistic_testing_message">Please enter the users name</string>
+    <string name="dialog_end_game_title">End of game</string>
+    <string name="dialog_end_game_message">The game is over, do you want to see the rest of the video?</string>
     
     <string name="game_pause_title">Game paused</string>
     <string name="game_pause_message">Are you sure you want to exit the game?</string>
     <string name="save_quit">Save and quit</string>
     <string name="save">Save</string>
     <string name="quit">Quit</string>
+    <string name="exit">Exit</string>
     <string name="select_user">Select user</string>
         
     <string name="statistic_name">Name:</string>

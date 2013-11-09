@@ -21,6 +21,7 @@ public class VideoViewActivity extends FragmentActivity {
 	private static final String LOG_VV = "VIDEOVIEW";
 	private VideoView videoView;
 	private Random random;
+	private boolean endGame;
 
 	@Override
 	protected void onCreate(Bundle savedInstance) {
@@ -28,6 +29,7 @@ public class VideoViewActivity extends FragmentActivity {
 		setContentView(R.layout.activity_videoview);
 
 		random = new Random();
+		endGame = savedInstance.getBoolean(EyeCatchGameActivity.ENDGAME, false);
 		videoView = (VideoView) findViewById(R.id.videoView);
 
 		String uri = SharedPreferencesUtil.getCurrentVideoUri(this);
@@ -35,9 +37,13 @@ public class VideoViewActivity extends FragmentActivity {
 				.getDurationOnCurrentVideo(this);
 		int threshold = SharedPreferencesUtil.getAllowedVideoDuration(this);
 		int lastSeek = SharedPreferencesUtil.getLastSeekOnCurrentVideo(this);
-
+		
 		threshold = lastSeek + threshold;
 		if (threshold > duration_of_video) {
+			if (endGame) {
+				setResult(EyeCatchGameActivity.RESULT_ENDGAME);
+				finish();
+			}
 			threshold = duration_of_video;
 			threshold -= 500; // to avoid bad timing
 		}
