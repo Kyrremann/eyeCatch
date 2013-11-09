@@ -13,6 +13,7 @@ import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -163,8 +164,12 @@ public class UserInfoFragment extends Fragment implements OnClickListener,
 
 	private void deleteUser() {
 		try {
+			String name = user.getString(NAME);
 			SharedPreferencesUtil.removeUser(getActivity(),
-					user.getString(NAME));
+					name);
+			SharedPreferencesUtil.removeContinueInfoIfSameName(getActivity(), name);
+			SharedPreferencesUtil.removeSelectedUserIfSameName(getActivity(), name);
+			SharedPreferencesUtil.updateActioBarTitle(getActivity(), getActivity().getActionBar());
 			finishActivity();
 		} catch (JSONException e) {
 			e.printStackTrace();

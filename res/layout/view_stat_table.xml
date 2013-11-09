@@ -18,7 +18,16 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
 
-        <TextView
+        <ImageView
+            android:id="@+id/statistic_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:clickable="true"
+            android:src="@android:drawable/ic_delete" />
+
+        <!--
+             <TextView
             android:id="@+id/statistic_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,6 +36,7 @@
             android:padding="5dp"
             android:text="@string/statistic_delete"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+        -->
     </LinearLayout>
 
     <LinearLayout
