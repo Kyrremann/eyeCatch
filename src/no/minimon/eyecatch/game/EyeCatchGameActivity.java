@@ -417,6 +417,10 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		changeFaceToStar();
 
 		setWatermark();
+		
+		if (TRAINING_LEVEL == 8) {
+			endGameActivity();
+		}
 	}
 
 	private void addStatesticToJson() {
@@ -505,8 +509,8 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 				break;
 			case 8:
 				// endGameActivity();
-				testingLevel = true;
-				loadTrainingOrTesting();
+				// testingLevel = true;
+				// loadTrainingOrTesting();
 				break;
 			default:
 				break;
@@ -518,7 +522,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 				updateFaceWithNewImage();
 				setBoxesVisibility(VISIBLE);
 			} else if (TESTING_LEVEL == 9) {
-				endGameActivity();
+				// endGameActivity();
 			}
 
 			countDownLevelDuration.start();
