@@ -21,3 +21,6 @@ local.properties
 
 # Android key
 .key
+
+# Meld files
+*orig
