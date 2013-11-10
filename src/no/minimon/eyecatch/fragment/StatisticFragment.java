@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -135,9 +136,9 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 				.findViewById(R.id.statistic_training_number);
 		textView.setText(jsonUser.getString(MASTERY_CRITERIA));
 
-		textView = (TextView) table.findViewById(R.id.statistic_delete);
-		textView.setClickable(true);
-		textView.setOnClickListener(this);
+		ImageView imageView = (ImageView) table.findViewById(R.id.statistic_delete);
+		imageView.setClickable(true);
+		imageView.setOnClickListener(this);
 
 		parent.addView(table);
 	}

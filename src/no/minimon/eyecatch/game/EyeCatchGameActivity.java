@@ -42,6 +42,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	private static final int BEFORE_GAME = 0;
 
 	public static final int RESULT_VIDEOVIEW = 256;
+	public static final int RESULT_ENDGAME = 512;
 	public static final int WEST = 0;
 	public static final int EAST = 1;
 	public static final int NORTH = 2;
@@ -50,6 +51,8 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	public static final int NORTH_EAST = 5;
 	public static final int SOUTH_WEST = 6;
 	public static final int SOUTH_EAST = 7;
+
+	public static final String ENDGAME = "end_game";
 
 	private int CURRENT_FACE = -1;
 	private int GAME_MODE;
@@ -82,6 +85,8 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_eyecatch_game);
 
 		GAME_MODE = GAME_PAUSE;
+		TESTING_LEVEL = 8;
+		TRAINING_LEVEL = 8;
 
 		if (getIntent().getBooleanExtra(SharedPreferencesUtil.CONTINUE, false)) {
 			getContinueInformation();
@@ -315,7 +320,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		Log.d("WRONG", "CI: " + CURRENT_ITERATION + " - CIC: "
 				+ CURRENT_ITERATION_CORRECT + " - CIF: "
 				+ CURRENT_ITERATION_FAIL);
-		
+
 		if (!testingLevel) {
 			CURRENT_ITERATION = 0;
 			continueOrNext();
@@ -359,6 +364,8 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 			Intent intent) {
 		if (resultCode == RESULT_VIDEOVIEW) {
 			continueOrNext();
+		} else if (resultCode == RESULT_ENDGAME) {
+			finish();
 		} else {
 			super.onActivityResult(requestCode, requestCode, intent);
 		}
@@ -395,7 +402,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 
 	private void doneWithLastRound() {
 		addStatesticToJson();
-		
+
 		if (!testingLevel) {
 			if (TRAINING_LEVEL == 0) {
 				setCirclesVisbility(INVISIBLE);
@@ -417,6 +424,10 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		changeFaceToStar();
 
 		setWatermark();
+
+		if (TRAINING_LEVEL == 9 || TESTING_LEVEL == 9) {
+			createAndShowEndGameDialog();
+		}
 	}
 
 	private void addStatesticToJson() {
@@ -518,11 +529,40 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 				updateFaceWithNewImage();
 				setBoxesVisibility(VISIBLE);
 			} else if (TESTING_LEVEL == 9) {
-				createAndShowEndGameDialog();
+				// createAndShowEndGameDialog();
+				return;
 			}
 
 			countDownLevelDuration.start();
 		}
+	}
+
+	private void createAndShowEndGameDialog() {
+		endGameActivity();
+		
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setTitle(R.string.dialog_end_game_title);
+		builder.setMessage(R.string.dialog_end_game_message);
+		builder.setPositiveButton(android.R.string.yes, new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent intent = new Intent(getApplicationContext(),
+						VideoViewActivity.class);
+				intent.putExtra(ENDGAME, true);
+				startActivityForResult(intent, RESULT_ENDGAME);
+			}
+		});
+		builder.setNeutralButton(R.string.exit, new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+				finish();
+			}
+		});
+		AlertDialog alertDialog = builder.create();
+		alertDialog.show();
 	}
 
 	public void endGameActivity() {
@@ -532,7 +572,6 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		if (deleteContinueWhenDone) {
 			removeContinueInformation();
 		}
-		finish();
 	}
 
 	private void saveStatestic() {
@@ -561,7 +600,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		imageSouthWest = (ImageView) findViewById(R.id.image_south_west);
 		imageSouthEast = (ImageView) findViewById(R.id.image_south_east);
 	}
-	
+
 	private void initCircles() {
 		imageWestCircle = (ImageView) findViewById(R.id.image_west_circle);
 		imageEastCircle = (ImageView) findViewById(R.id.image_east_circle);
@@ -577,7 +616,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		imageSouthWest.setVisibility(visibility);
 		imageSouthEast.setVisibility(visibility);
 	}
-	
+
 	private void setCirclesVisbility(int visibility) {
 		imageWestCircle.setVisibility(visibility);
 		imageEastCircle.setVisibility(visibility);
@@ -688,24 +727,28 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		case 0:
 			if (CURRENT_FACE == WEST) {
 				imageWestCircle.setVisibility(VISIBLE);
-				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_w_arrow));
+				imageFace.setImageDrawable(getResources().getDrawable(
+						R.drawable.mariama_w_arrow));
 			} else if (CURRENT_FACE == EAST) {
 				imageEastCircle.setVisibility(VISIBLE);
-				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_e_arrow));
+				imageFace.setImageDrawable(getResources().getDrawable(
+						R.drawable.mariama_e_arrow));
 			}
-			
+
 			imageWest.setVisibility(VISIBLE);
 			imageEast.setVisibility(VISIBLE);
 			break;
 		case 1:
 			if (CURRENT_FACE == WEST) {
 				imageWestCircle.setVisibility(INVISIBLE);
-				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_w_short_arrow));
+				imageFace.setImageDrawable(getResources().getDrawable(
+						R.drawable.mariama_w_short_arrow));
 			} else if (CURRENT_FACE == EAST) {
 				imageEastCircle.setVisibility(INVISIBLE);
-				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_e_short_arrow));
+				imageFace.setImageDrawable(getResources().getDrawable(
+						R.drawable.mariama_e_short_arrow));
 			}
-			
+
 			imageWest.setVisibility(VISIBLE);
 			imageEast.setVisibility(VISIBLE);
 			break;
@@ -717,9 +760,11 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 			// imageEast.setVisibility(VISIBLE);
 			// }
 			if (CURRENT_FACE == WEST) {
-				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_w));
+				imageFace.setImageDrawable(getResources().getDrawable(
+						R.drawable.mariama_w));
 			} else if (CURRENT_FACE == EAST) {
-				imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_e));
+				imageFace.setImageDrawable(getResources().getDrawable(
+						R.drawable.mariama_e));
 			}
 			imageWest.setVisibility(VISIBLE);
 			imageEast.setVisibility(VISIBLE);
