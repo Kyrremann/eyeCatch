@@ -85,8 +85,8 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_eyecatch_game);
 
 		GAME_MODE = GAME_PAUSE;
-		TESTING_LEVEL = 8;
-		TRAINING_LEVEL = 8;
+		// TESTING_LEVEL = 8;
+		// TRAINING_LEVEL = 8;
 
 		if (getIntent().getBooleanExtra(SharedPreferencesUtil.CONTINUE, false)) {
 			getContinueInformation();
@@ -742,11 +742,11 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 			if (CURRENT_FACE == WEST) {
 				imageWestCircle.setVisibility(INVISIBLE);
 				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_w_short_arrow));
+						R.drawable.mariama_w_arrow));
 			} else if (CURRENT_FACE == EAST) {
 				imageEastCircle.setVisibility(INVISIBLE);
 				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_e_short_arrow));
+						R.drawable.mariama_e_arrow));
 			}
 
 			imageWest.setVisibility(VISIBLE);
@@ -761,10 +761,10 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 			// }
 			if (CURRENT_FACE == WEST) {
 				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_w));
+						R.drawable.mariama_w_short_arrow));
 			} else if (CURRENT_FACE == EAST) {
 				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_e));
+						R.drawable.mariama_e_short_arrow));
 			}
 			imageWest.setVisibility(VISIBLE);
 			imageEast.setVisibility(VISIBLE);
