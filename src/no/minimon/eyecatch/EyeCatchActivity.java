@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Date;
 import java.util.List;
 
 import no.minimon.eyecatch.fragment.CreateUserFragment;
@@ -61,7 +62,8 @@ public class EyeCatchActivity extends FragmentActivity implements
 		switch (item.getItemId()) {
 		case R.id.menu_main_dump_local:
 			saveDataToLocal();
-			Toast.makeText(getApplicationContext(), "Data saved to file", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Data saved to file",
+					Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.menu_main_dump_share:
 			sendDataViaEmail();
@@ -93,10 +95,11 @@ public class EyeCatchActivity extends FragmentActivity implements
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 			File path = Environment
 					.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-			File file = new File(path, "eyeCatchData.txt");
+			File file = new File(path, "eyeCatchData-"
+					+ new Date(System.currentTimeMillis()).toString() + ".txt");
 
 			try {
-						path.mkdirs();
+				path.mkdirs();
 
 				OutputStream os = new FileOutputStream(file);
 				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
