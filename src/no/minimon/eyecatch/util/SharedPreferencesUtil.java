@@ -31,8 +31,10 @@ public class SharedPreferencesUtil {
 	public static final String STATISTIC_TRAINING = "eyecatch_statistic_training";
 	public static final String STATISTIC_TESTING = "eyecatch_statistic_testing";
 	public static final String STATISTIC_TYPE = "eyecatch_statistic_type";
+	public static final String STATISTIC_FACE = "eyecatch_statistic_face";
 	public static final String STATISTIC_NORMAL = "NORMAL";
 	public static final String STATISTIC_EXTRA = "EXTRA";
+	public static final String STATISTIC_GENERALIZATION = "GENERALIZATION";
 	public static final int MODE_PRIVATE = 0;
 	public static final String NAME = "name";
 	public static final String AGE = "age";
@@ -366,7 +368,7 @@ public class SharedPreferencesUtil {
 		}
 		return null;
 	}
-
+	
 	public static boolean createAndAddStatisticForExtraTesting(Context context,
 			String name, int correct, int fail) {
 		JSONObject statistic = new JSONObject();
@@ -379,7 +381,6 @@ public class SharedPreferencesUtil {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
 		return false;
 	}
 

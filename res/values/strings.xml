@@ -14,6 +14,7 @@
     <string name="eyecatch_touch_training">Touch training</string>
     <string name="eyecatch_select_statistic">Statistic</string>
     <string name="eyecatch_statistic_testing">Extra testing</string>
+    <string name="eyecatch_generalization_test">Generalization test</string>
     <string name="create_user_name">Username</string>
     <string name="create_user_age">Age in months</string>
     <string name="create_user_times_per_trial">Time per trial</string>

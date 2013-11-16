@@ -184,6 +184,14 @@ public class EyeCatchActivity extends FragmentActivity implements
 						getString(R.string.error_missing_user_or_video),
 						Toast.LENGTH_SHORT).show();
 			}
+		} else if (view.getId() == R.id.eyecatch_generalization_test) {
+			if (isThereASelectedUserAndVideo()) {
+				startActivity(new Intent(this, ExtraTestingActivity.class));
+			} else {
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.error_missing_user_or_video),
+						Toast.LENGTH_SHORT).show();
+			}
 		} else if (mTwoPane) {
 			Fragment fragment = null;
 			switch (view.getId()) {
