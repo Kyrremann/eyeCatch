@@ -16,6 +16,7 @@ import no.minimon.eyecatch.fragment.SelectVideoFragment;
 import no.minimon.eyecatch.fragment.StatisticFragment.OnDeletedContinueInfo;
 import no.minimon.eyecatch.game.ExtraTestingActivity;
 import no.minimon.eyecatch.game.EyeCatchGameActivity;
+import no.minimon.eyecatch.game.GeneralizationTestingActivity;
 import no.minimon.eyecatch.game.TouchTrainingActivity;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 
@@ -186,7 +187,7 @@ public class EyeCatchActivity extends FragmentActivity implements
 			}
 		} else if (view.getId() == R.id.eyecatch_generalization_test) {
 			if (isThereASelectedUserAndVideo()) {
-				startActivity(new Intent(this, ExtraTestingActivity.class));
+				startActivity(new Intent(this, GeneralizationTestingActivity.class));
 			} else {
 				Toast.makeText(getApplicationContext(),
 						getString(R.string.error_missing_user_or_video),

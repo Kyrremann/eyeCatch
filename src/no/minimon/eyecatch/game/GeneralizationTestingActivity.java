@@ -206,7 +206,7 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 		} else if (FACE_TYPE.equals("B")) {
 			loadFacesOfAurelien();
 		} else if (FACE_TYPE.equals("C")) {
-			loadFacesOfMike();
+			loadFacesOfJoelle();
 		}
 	}
 
@@ -219,6 +219,17 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 		faces.put(NORTH_EAST, getResources().getDrawable(R.drawable.mike_ne));
 		faces.put(SOUTH_WEST, getResources().getDrawable(R.drawable.mike_sw));
 		faces.put(SOUTH_EAST, getResources().getDrawable(R.drawable.mike_se));
+	}
+	
+	private void loadFacesOfJoelle() {
+		faces.put(WEST, getResources().getDrawable(R.drawable.joelle_w));
+		faces.put(EAST, getResources().getDrawable(R.drawable.joelle_e));
+		faces.put(NORTH, getResources().getDrawable(R.drawable.joelle_n));
+		faces.put(SOUTH, getResources().getDrawable(R.drawable.joelle_s));
+		faces.put(NORTH_WEST, getResources().getDrawable(R.drawable.joelle_nw));
+		faces.put(NORTH_EAST, getResources().getDrawable(R.drawable.joelle_ne));
+		faces.put(SOUTH_WEST, getResources().getDrawable(R.drawable.joelle_sw));
+		faces.put(SOUTH_EAST, getResources().getDrawable(R.drawable.joelle_se));
 	}
 
 	private void loadFacesOfAurelien() {
