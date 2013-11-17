@@ -201,7 +201,7 @@ public class SharedPreferencesUtil {
 			e.printStackTrace();
 		}
 		Log.d(LOG_SPU, "Didn't not find number of trails. Returning default");
-		return 10;
+		return 5;
 	}
 
 	public static int getDurationPerTrial(Context context) {

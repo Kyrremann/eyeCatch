@@ -37,14 +37,17 @@ import android.widget.ImageView;
 public class GeneralizationTestingActivity extends FragmentActivity {
 
 	private static final int VISIBLE = View.VISIBLE;
+	private static final int PAUSE = 0;
+	private static final int GAME_ON = 1;
 
 	public static final String TRAINING = "training";
 
 	private int CURRENT_FACE_DIRECTION = -1;
-	private int NUMBER_OF_TRIALS = 5;
+	private int NUMBER_OF_TRIALS;
 	private int CURRENT_ITERATION;
 	private int CLICKS_CORRECT = 0, CLICKS_FAIL = 0;
 	private int ROUND_COUNTER = 0;
+	private int GAME_MODE = PAUSE;
 
 	private ImageView imageFace, imageNorth, imageNorthEast, imageEast,
 			imageSouthEast, imageSouth, imageSouthWest, imageWest,
@@ -54,6 +57,7 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 	private SparseArray<Drawable> faces;
 	private String name, FACE_TYPE;
 	private JSONObject statistic;
+	private CountDownTimer startGameCountDown;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +92,7 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 			getActionBar().hide();
 		}
 
-		new CountDownTimer(1000, 500) {
+		startGameCountDown = new CountDownTimer(2000, 500) {
 
 			@Override
 			public void onTick(long millisUntilFinished) {
@@ -98,22 +102,26 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 			public void onFinish() {
 				newGameRound();
 			}
-		}.start();
+		};
+		startGameCountDown.start();
 	}
 
 	private void newGameRound() {
+		GAME_MODE = PAUSE;
 		if (CURRENT_ITERATION >= NUMBER_OF_TRIALS) {
 			newRoundOrEndOfTesting();
 		} else {
 			CURRENT_ITERATION++;
+
+			CURRENT_FACE_DIRECTION = getRandomBox();
+			imageFace.setImageDrawable(faces.get(CURRENT_FACE_DIRECTION));
+			GAME_MODE = GAME_ON;
 		}
 		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-
-		CURRENT_FACE_DIRECTION = getRandomBox();
-		imageFace.setImageDrawable(faces.get(CURRENT_FACE_DIRECTION));
 	}
 
 	private void newRoundOrEndOfTesting() {
+		GAME_MODE = PAUSE;
 		if (ROUND_COUNTER >= 2) {
 			finishTesting();
 		} else {
@@ -129,6 +137,21 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 			CURRENT_ITERATION = 0;
 			CURRENT_FACE_DIRECTION = -1;
 			loadImagesIntoFaces();
+			centerFace();
+			startGameCountDown.start();
+		}
+	}
+
+	private void centerFace() {
+		if (FACE_TYPE.equals("A")) {
+			imageFace.setImageDrawable(getResources().getDrawable(
+					R.drawable.mariama_center));
+		} else if (FACE_TYPE.equals("B")) {
+			imageFace.setImageDrawable(getResources().getDrawable(
+					R.drawable.aurelien_center));
+		} else if (FACE_TYPE.equals("C")) {
+			imageFace.setImageDrawable(getResources().getDrawable(
+					R.drawable.joelle_center));
 		}
 	}
 
@@ -144,35 +167,37 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 	}
 
 	public void onImageClicked(View view) {
-		switch (view.getId()) {
-		case R.id.image_face:
-			break;
-		case R.id.image_west:
-			checkForCorrectDirection(WEST);
-			break;
-		case R.id.image_east:
-			checkForCorrectDirection(EAST);
-			break;
-		case R.id.image_north:
-			checkForCorrectDirection(NORTH);
-			break;
-		case R.id.image_south:
-			checkForCorrectDirection(SOUTH);
-			break;
-		case R.id.image_north_west:
-			checkForCorrectDirection(NORTH_WEST);
-			break;
-		case R.id.image_north_east:
-			checkForCorrectDirection(NORTH_EAST);
-			break;
-		case R.id.image_south_west:
-			checkForCorrectDirection(SOUTH_WEST);
-			break;
-		case R.id.image_south_east:
-			checkForCorrectDirection(SOUTH_EAST);
-			break;
-		default:
-			break;
+		if (GAME_MODE == GAME_ON) {
+			switch (view.getId()) {
+			case R.id.image_face:
+				break;
+			case R.id.image_west:
+				checkForCorrectDirection(WEST);
+				break;
+			case R.id.image_east:
+				checkForCorrectDirection(EAST);
+				break;
+			case R.id.image_north:
+				checkForCorrectDirection(NORTH);
+				break;
+			case R.id.image_south:
+				checkForCorrectDirection(SOUTH);
+				break;
+			case R.id.image_north_west:
+				checkForCorrectDirection(NORTH_WEST);
+				break;
+			case R.id.image_north_east:
+				checkForCorrectDirection(NORTH_EAST);
+				break;
+			case R.id.image_south_west:
+				checkForCorrectDirection(SOUTH_WEST);
+				break;
+			case R.id.image_south_east:
+				checkForCorrectDirection(SOUTH_EAST);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
@@ -220,7 +245,7 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 		faces.put(SOUTH_WEST, getResources().getDrawable(R.drawable.mike_sw));
 		faces.put(SOUTH_EAST, getResources().getDrawable(R.drawable.mike_se));
 	}
-	
+
 	private void loadFacesOfJoelle() {
 		faces.put(WEST, getResources().getDrawable(R.drawable.joelle_w));
 		faces.put(EAST, getResources().getDrawable(R.drawable.joelle_e));
@@ -287,7 +312,9 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN
+				&& GAME_MODE == GAME_ON) {
+			GAME_MODE = PAUSE;
 			CLICKS_FAIL++;
 			newGameRound();
 		}
