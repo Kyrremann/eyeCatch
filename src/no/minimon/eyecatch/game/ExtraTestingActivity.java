@@ -31,7 +31,8 @@ public class ExtraTestingActivity extends FragmentActivity {
 
 	public static final String TRAINING = "training";
 
-	private int CURRENT_FACE = -1;
+	private int CURRENT_FACE_DIRECTION = -1;
+	private int LAST_FACE_DIRECTION = -1;
 	private int NUMBER_OF_TRIALS = 5;
 	private int CURRENT_ITERATION;
 	private int CLICKS_CORRECT = 0, CLICKS_FAIL = 0;
@@ -83,13 +84,18 @@ public class ExtraTestingActivity extends FragmentActivity {
 	private void newGameRound() {
 		if (CURRENT_ITERATION >= NUMBER_OF_TRIALS) {
 			finish();
+			imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_center));
+			return;
 		} else {
 			CURRENT_ITERATION++;
 		}
 		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 
-		CURRENT_FACE = getRandomBox();
-		imageFace.setImageDrawable(faces.get(CURRENT_FACE));
+		while (CURRENT_FACE_DIRECTION == LAST_FACE_DIRECTION) {
+			CURRENT_FACE_DIRECTION = getRandomBox();
+		}
+		LAST_FACE_DIRECTION = CURRENT_FACE_DIRECTION;
+		imageFace.setImageDrawable(faces.get(CURRENT_FACE_DIRECTION));
 		imageFace.setVisibility(VISIBLE);
 		setBoxesVisibility(VISIBLE);
 	}
@@ -128,7 +134,7 @@ public class ExtraTestingActivity extends FragmentActivity {
 	}
 
 	private void checkForCorrectDirection(int direction) {
-		if (CURRENT_FACE == direction) {
+		if (CURRENT_FACE_DIRECTION == direction) {
 			CLICKS_CORRECT++;
 		} else {
 			CLICKS_FAIL++;
@@ -178,7 +184,7 @@ public class ExtraTestingActivity extends FragmentActivity {
 	}
 
 	private void saveStatistic() {
-	SharedPreferencesUtil.createAndAddStatisticForExtraTesting(this, name,
+		SharedPreferencesUtil.createAndAddStatisticForExtraTesting(this, name,
 				CLICKS_CORRECT, CLICKS_FAIL);
 	}
 

@@ -54,7 +54,8 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 
 	public static final String ENDGAME = "end_game";
 
-	private int CURRENT_FACE = -1;
+	private int CURRENT_FACE_DIRECTION = -1;
+	private int LAST_FACE_DIRECTION = -1;
 	private int GAME_MODE;
 	private int NUMBER_OF_TRIALS;
 	private int CURRENT_ITERATION = 0;
@@ -331,7 +332,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 
 	private void checkForCorrectDirection(int direction) {
 		countDownLevelDuration.cancel();
-		if (CURRENT_FACE == direction) {
+		if (CURRENT_FACE_DIRECTION == direction) {
 			correctActionVideoOrNext();
 		} else {
 			wrongAction();
@@ -629,11 +630,18 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	private Drawable getRandomFace() {
 		if (keepFace) {
 			keepFace = false;
-			return faces.get(CURRENT_FACE);
+			return faces.get(CURRENT_FACE_DIRECTION);
 		}
 
-		CURRENT_FACE = random.nextInt(FACE_RANGE);
-		return faces.get(CURRENT_FACE);
+		while (CURRENT_FACE_DIRECTION == LAST_FACE_DIRECTION) {
+			CURRENT_FACE_DIRECTION = getRandomBox();
+		}
+		LAST_FACE_DIRECTION = CURRENT_FACE_DIRECTION;
+		return faces.get(CURRENT_FACE_DIRECTION);
+	}
+
+	private int getRandomBox() {
+		return random.nextInt(FACE_RANGE);
 	}
 
 	private void loadImagesIntoFaces() {
@@ -725,11 +733,11 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	private void updateImagesAfterAnimation() {
 		switch (TRAINING_LEVEL) {
 		case 0:
-			if (CURRENT_FACE == WEST) {
+			if (CURRENT_FACE_DIRECTION == WEST) {
 				imageWestCircle.setVisibility(VISIBLE);
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_w_arrow));
-			} else if (CURRENT_FACE == EAST) {
+			} else if (CURRENT_FACE_DIRECTION == EAST) {
 				imageEastCircle.setVisibility(VISIBLE);
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_e_arrow));
@@ -739,11 +747,11 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 			imageEast.setVisibility(VISIBLE);
 			break;
 		case 1:
-			if (CURRENT_FACE == WEST) {
+			if (CURRENT_FACE_DIRECTION == WEST) {
 				imageWestCircle.setVisibility(INVISIBLE);
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_w_arrow));
-			} else if (CURRENT_FACE == EAST) {
+			} else if (CURRENT_FACE_DIRECTION == EAST) {
 				imageEastCircle.setVisibility(INVISIBLE);
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_e_arrow));
@@ -759,10 +767,10 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 			// } else if (CURRENT_FACE == EAST) {
 			// imageEast.setVisibility(VISIBLE);
 			// }
-			if (CURRENT_FACE == WEST) {
+			if (CURRENT_FACE_DIRECTION == WEST) {
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_w_short_arrow));
-			} else if (CURRENT_FACE == EAST) {
+			} else if (CURRENT_FACE_DIRECTION == EAST) {
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_e_short_arrow));
 			}

@@ -43,6 +43,7 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 	public static final String TRAINING = "training";
 
 	private int CURRENT_FACE_DIRECTION = -1;
+	private int LAST_FACE_DIRECTION = -1;
 	private int NUMBER_OF_TRIALS;
 	private int CURRENT_ITERATION;
 	private int CLICKS_CORRECT = 0, CLICKS_FAIL = 0;
@@ -113,7 +114,11 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 		} else {
 			CURRENT_ITERATION++;
 
-			CURRENT_FACE_DIRECTION = getRandomBox();
+			while (CURRENT_FACE_DIRECTION == LAST_FACE_DIRECTION) {
+				CURRENT_FACE_DIRECTION = getRandomBox();
+			}
+			LAST_FACE_DIRECTION = CURRENT_FACE_DIRECTION;
+			System.out.println(CURRENT_FACE_DIRECTION);
 			imageFace.setImageDrawable(faces.get(CURRENT_FACE_DIRECTION));
 			GAME_MODE = GAME_ON;
 		}
@@ -136,6 +141,7 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 			CLICKS_FAIL = 0;
 			CURRENT_ITERATION = 0;
 			CURRENT_FACE_DIRECTION = -1;
+			LAST_FACE_DIRECTION = -1;
 			loadImagesIntoFaces();
 			centerFace();
 			startGameCountDown.start();

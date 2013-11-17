@@ -31,6 +31,9 @@ public class TouchTrainingActivity extends FragmentActivity {
 
 	public static final String TRAINING = "training";
 
+	private int CURRENT_FACE_DIRECTION = -1;
+	private int LAST_FACE_DIRECTION = -1;
+	
 	private ImageView imageNorth, imageNorthEast, imageEast, imageSouthEast,
 			imageSouth, imageSouthWest, imageWest, imageNorthWest;
 	private View contentView;
@@ -68,7 +71,11 @@ public class TouchTrainingActivity extends FragmentActivity {
 	private void startGame() {
 		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		setBoxesVisibility(INVISIBLE);
-		switch (getRandomBox()) {
+		while (CURRENT_FACE_DIRECTION == LAST_FACE_DIRECTION) {
+			CURRENT_FACE_DIRECTION = getRandomBox();
+		}
+		LAST_FACE_DIRECTION = CURRENT_FACE_DIRECTION;
+		switch (CURRENT_FACE_DIRECTION) {
 		case WEST:
 			imageWest.setVisibility(VISIBLE);
 			break;
