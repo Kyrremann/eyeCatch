@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="16dp" >
 
     <LinearLayout
         android:id="@+id/statistic_date_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" >
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/statistic_date"
@@ -31,40 +30,6 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/statistic_correct_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/statistic_date_layout"
-        android:paddingRight="10dp"
-        android:text="@string/statistic_correct"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
 
-    <TextView
-        android:id="@+id/statistic_correct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/statistic_correct_text"
-        android:layout_toRightOf="@+id/statistic_correct_text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/statistic_wrong_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/statistic_correct_text"
-        android:paddingRight="10dp"
-        android:text="@string/statistic_wrong"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/statistic_wrong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/statistic_wrong_text"
-        android:layout_toRightOf="@+id/statistic_wrong_text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-</RelativeLayout>
+</LinearLayout>

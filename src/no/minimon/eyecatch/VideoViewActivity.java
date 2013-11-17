@@ -49,6 +49,7 @@ public class VideoViewActivity extends FragmentActivity {
 			}
 			threshold = duration_of_video;
 			threshold -= 250; // to avoid bad timing
+			// TODO Check to see if video has been played
 		}
 
 		videoView.setVideoURI(Uri.parse(uri));

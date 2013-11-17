@@ -43,6 +43,7 @@
     <string name="statistic_testing">Testing - Number of tests:</string>
     <string name="statistic_correct">Correct:</string>
     <string name="statistic_wrong">Wrong:</string>
+    <string name="statistic_face_type">Face:</string>
     
     <string name="menu_dump_local">Save to file</string>
     <string name="menu_dump_share">Share data</string>

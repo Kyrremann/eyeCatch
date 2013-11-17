@@ -26,6 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class StatisticFragment extends Fragment implements OnClickListener,
@@ -91,26 +92,69 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 				populateStatistics(key, stat);
 			} else if (type.equals(STATISTIC_EXTRA)) {
 				populateExtraStatistics(key, stat);
+			} else if (type.equals(STATISTIC_GENERALIZATION)) {
+				populateGeneralizationStatistic(key, stat);
 			}
 		}
 	}
 
-	private void populateExtraStatistics(String key, JSONObject stat)
+	private void populateGeneralizationStatistic(String key, JSONObject stat)
 			throws JSONException {
-		View view = inflater.inflate(R.layout.view_stats_testing, container,
-				false);
+		LinearLayout view = (LinearLayout) inflater.inflate(
+				R.layout.view_stats_testing, container, false);
+		
 		view.setTag(key);
 
 		((TextView) view.findViewById(R.id.statistic_date)).setText(new Date(
 				Long.valueOf(key)).toString());
-		((TextView) view.findViewById(R.id.statistic_correct)).setText(stat
-				.getString(CORRECT));
-		((TextView) view.findViewById(R.id.statistic_wrong)).setText(stat
-				.getString(FAIL));
-
 		TextView textView = (TextView) view.findViewById(R.id.statistic_delete);
 		textView.setClickable(true);
 		textView.setOnClickListener(this);
+		
+		view.addView(createGeneralizationInnerLayout(stat.getJSONObject("A")));
+		view.addView(createGeneralizationInnerLayout(stat.getJSONObject("B")));
+		view.addView(createGeneralizationInnerLayout(stat.getJSONObject("C")));
+
+		parent.addView(view);
+
+	}
+
+	private RelativeLayout createGeneralizationInnerLayout(JSONObject stat)
+			throws JSONException {
+		TextView textView;
+		RelativeLayout innerLayout = (RelativeLayout) inflater.inflate(
+				R.layout.stats_inner_layout, container, false);
+		textView = (TextView) innerLayout.findViewById(R.id.statistic_face_text);
+		textView.setVisibility(View.VISIBLE);
+		textView = (TextView) innerLayout.findViewById(R.id.statistic_face);
+		textView.setVisibility(View.VISIBLE);
+		textView.setText(stat.getString(STATISTIC_FACE));
+		((TextView) innerLayout.findViewById(R.id.statistic_correct))
+				.setText(stat.getString(CORRECT));
+		((TextView) innerLayout.findViewById(R.id.statistic_wrong))
+				.setText(stat.getString(FAIL));
+		return innerLayout;
+	}
+
+	private void populateExtraStatistics(String key, JSONObject stat)
+			throws JSONException {
+		LinearLayout view = (LinearLayout) inflater.inflate(
+				R.layout.view_stats_testing, container, false);
+		RelativeLayout innerLayout = (RelativeLayout) inflater.inflate(
+				R.layout.stats_inner_layout, container, false);
+		view.setTag(key);
+
+		((TextView) view.findViewById(R.id.statistic_date)).setText(new Date(
+				Long.valueOf(key)).toString());
+		TextView textView = (TextView) view.findViewById(R.id.statistic_delete);
+		textView.setClickable(true);
+		textView.setOnClickListener(this);
+
+		((TextView) innerLayout.findViewById(R.id.statistic_correct))
+				.setText(stat.getString(CORRECT));
+		((TextView) innerLayout.findViewById(R.id.statistic_wrong))
+				.setText(stat.getString(FAIL));
+		view.addView(innerLayout);
 
 		parent.addView(view);
 	}
@@ -136,7 +180,8 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 				.findViewById(R.id.statistic_training_number);
 		textView.setText(jsonUser.getString(MASTERY_CRITERIA));
 
-		ImageView imageView = (ImageView) table.findViewById(R.id.statistic_delete);
+		ImageView imageView = (ImageView) table
+				.findViewById(R.id.statistic_delete);
 		imageView.setClickable(true);
 		imageView.setOnClickListener(this);
 
