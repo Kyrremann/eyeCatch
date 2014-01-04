@@ -464,7 +464,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		if (!testingLevel) {
 
 			Animation animation = new AlphaAnimation(0f, 1f);
-			animation.setDuration(1200);
+			animation.setDuration(0); // TODO Let duration be set by the user 
 			animation.setAnimationListener(this);
 
 			switch (TRAINING_LEVEL) {
