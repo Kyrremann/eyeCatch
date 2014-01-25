@@ -241,6 +241,7 @@ public class GeneralizationTestingActivity extends FragmentActivity {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void loadFacesOfMike() {
 		faces.put(WEST, getResources().getDrawable(R.drawable.mike_w));
 		faces.put(EAST, getResources().getDrawable(R.drawable.mike_e));

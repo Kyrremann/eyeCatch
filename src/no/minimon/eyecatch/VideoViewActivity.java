@@ -1,7 +1,5 @@
 package no.minimon.eyecatch;
 
-import java.util.Random;
-
 import no.minimon.eyecatch.game.EyeCatchGameActivity;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import android.annotation.TargetApi;
@@ -22,7 +20,6 @@ public class VideoViewActivity extends FragmentActivity {
 	public static final String FILENAME = "filename";
 	private static final String LOG_VV = "VIDEOVIEW";
 	private VideoView videoView;
-	private Random random;
 	private boolean endGame, video_shorter_then_threshold;
 
 	@Override
@@ -30,7 +27,6 @@ public class VideoViewActivity extends FragmentActivity {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_videoview);
 
-		random = new Random();
 		endGame = getIntent().getBooleanExtra(EyeCatchGameActivity.ENDGAME,
 				false);
 		videoView = (VideoView) findViewById(R.id.videoView);
