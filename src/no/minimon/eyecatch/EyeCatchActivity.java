@@ -271,7 +271,7 @@ public class EyeCatchActivity extends FragmentActivity implements
 		super.onResume();
 	}
 
-	private void updateContinueButton() {
+	public void updateContinueButton() {
 		JSONObject jsonObject = SharedPreferencesUtil.getContinueJson(this);
 		Button button = (Button) findViewById(R.id.eyecatch_continue_game);
 		if (jsonObject.length() > 0) {
@@ -290,7 +290,6 @@ public class EyeCatchActivity extends FragmentActivity implements
 
 	@Override
 	public void notifyAboutDeletedContinueInfo() {
-		System.out.println("It works!");
 		updateContinueButton();
 	}
 

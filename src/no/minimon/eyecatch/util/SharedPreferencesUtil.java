@@ -3,6 +3,7 @@ package no.minimon.eyecatch.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.minimon.eyecatch.EyeCatchActivity;
 import no.minimon.eyecatch.R;
 
 import org.json.JSONArray;
@@ -180,6 +181,8 @@ public class SharedPreferencesUtil {
 			title += " - Selected video: " + video;
 		}
 		actionBar.setTitle(title);
+		
+		((EyeCatchActivity) context).updateContinueButton();
 	}
 
 	public static void setCurrentVideoName(Context context, String name) {
@@ -328,24 +331,34 @@ public class SharedPreferencesUtil {
 	public static void saveContinueInformation(Context context, String name,
 			long date, int training_level, int testing_level,
 			boolean testingLevel) {
-		Editor editor = getEditor(context);
+		// Editor editor = getEditor(context);
 		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put(NAME, name);
-			jsonObject.put(CONTINUE_DATE, date);
-			jsonObject.put(CONTINUE_TESTING, testing_level);
-			jsonObject.put(CONTINUE_TRAINING, training_level);
-			jsonObject.put(CONTINUE_TESTING_OR_TRAINING, testingLevel);
-			editor.putString(CONTINUE, jsonObject.toString());
-			editor.commit();
+			JSONObject continueObject = new JSONObject();
+			continueObject.put(NAME, name);
+			continueObject.put(CONTINUE_DATE, date);
+			continueObject.put(CONTINUE_TESTING, testing_level);
+			continueObject.put(CONTINUE_TRAINING, training_level);
+			continueObject.put(CONTINUE_TESTING_OR_TRAINING, testingLevel);
+			JSONObject user = getCurrentUser(context);
+			user.put(CONTINUE, continueObject);
+			updateUserInfo(context, user);
+			// editor.putString(CONTINUE, jsonObject.toString());
+			// editor.commit();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static JSONObject getContinueJson(Context context) {
-		SharedPreferences preferences = getSharedPreference(context);
-		String jsonString = preferences.getString(CONTINUE, "");
+		// SharedPreferences preferences = getSharedPreference(context);
+		JSONObject user = getCurrentUser(context);
+		try {
+			return user.getJSONObject(CONTINUE);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		// String jsonString = preferences.getString(CONTINUE, "");
+		/*String jsonString = 
 		if (!jsonString.isEmpty()) {
 			try {
 				return new JSONObject(jsonString);
@@ -353,7 +366,7 @@ public class SharedPreferencesUtil {
 				e.printStackTrace();
 			}
 		}
-
+*/
 		return new JSONObject();
 	}
 

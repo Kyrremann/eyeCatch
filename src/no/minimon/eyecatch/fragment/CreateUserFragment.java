@@ -56,6 +56,7 @@ public class CreateUserFragment extends Fragment {
 							Integer.valueOf(videoDuration.getText().toString()) * 1000);
 					SharedPreferencesUtil.updateActioBarTitle(getActivity(),
 							getActivity().getActionBar());
+					
 					Toast.makeText(getActivity().getApplicationContext(),
 							getString(R.string.info_user_created),
 							Toast.LENGTH_SHORT).show();
@@ -67,7 +68,6 @@ public class CreateUserFragment extends Fragment {
 								.replace(R.id.item_detail_container, fragment)
 								.commit();
 					}
-
 				}
 			}
 		});
