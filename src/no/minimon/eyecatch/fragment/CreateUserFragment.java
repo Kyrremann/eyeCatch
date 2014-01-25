@@ -10,6 +10,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Gallery;
+import android.widget.HorizontalScrollView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ public class CreateUserFragment extends Fragment {
 			videoDuration;
 	private Button createUser;
 	private EditText editName, editAge;
+	private HorizontalScrollView gallery_buttons;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,6 +74,16 @@ public class CreateUserFragment extends Fragment {
 				}
 			}
 		});
+		
+		gallery_buttons = (HorizontalScrollView) rootView.findViewById(R.id.gallery_buttons);
+		gallery_buttons.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+			System.out.println(v.getId());	
+			}
+		});
+		
 		return rootView;
 	}
 
