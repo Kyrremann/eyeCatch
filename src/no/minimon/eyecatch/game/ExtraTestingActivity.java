@@ -83,8 +83,9 @@ public class ExtraTestingActivity extends FragmentActivity {
 
 	private void newGameRound() {
 		if (CURRENT_ITERATION >= NUMBER_OF_TRIALS) {
-			finish();
 			imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_center));
+			saveStatistic();
+			finish();
 			return;
 		} else {
 			CURRENT_ITERATION++;
@@ -195,12 +196,6 @@ public class ExtraTestingActivity extends FragmentActivity {
 			newGameRound();
 		}
 		return super.onTouchEvent(event);
-	}
-
-	@Override
-	protected void onDestroy() {
-		saveStatistic();
-		super.onDestroy();
 	}
 
 }
