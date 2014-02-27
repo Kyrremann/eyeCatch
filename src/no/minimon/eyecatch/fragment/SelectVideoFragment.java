@@ -1,6 +1,7 @@
 package no.minimon.eyecatch.fragment;
 
 import no.minimon.eyecatch.R;
+import no.minimon.eyecatch.util.NotificationUtil;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import no.minimon.eyecatch.util.VideoAdapter;
 import android.database.Cursor;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import static no.minimon.eyecatch.util.NotificationUtil.alertUser;
 
 public class SelectVideoFragment extends ListFragment {
 
@@ -55,15 +58,11 @@ public class SelectVideoFragment extends ListFragment {
 					getActivity().getActionBar());
 
 			if (getActivity().findViewById(R.id.item_detail_container) != null) {
-
-				HomeFragment fragment = new HomeFragment();
 				getFragmentManager().beginTransaction()
-						.replace(R.id.item_detail_container, fragment).commit();
+						.replace(R.id.item_detail_container, new HomeFragment()).commit();
 			}
 		} else {
-			Toast.makeText(getActivity().getApplicationContext(),
-					getString(R.string.error_short_video_duration),
-					Toast.LENGTH_SHORT).show();
+			alertUser(getActivity(), R.string.error_short_video_duration);
 		}
 	}
 }

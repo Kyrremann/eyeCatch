@@ -1,5 +1,6 @@
 package no.minimon.eyecatch.fragment;
 
+import static no.minimon.eyecatch.util.NotificationUtil.alertUser;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.AGE;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.DURATION_PER_TRIAL;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.MASTERY_CRITERIA;
@@ -8,6 +9,7 @@ import static no.minimon.eyecatch.util.SharedPreferencesUtil.NUMBER_OF_TRIALS;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.VIDEO_DURATION;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.getUser;
 import no.minimon.eyecatch.R;
+import no.minimon.eyecatch.util.NotificationUtil;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 
 import org.json.JSONException;
@@ -145,14 +147,14 @@ public class UserInfoFragment extends Fragment implements OnClickListener,
 		switch (view.getId()) {
 		case R.id.button_save:
 			saveData();
-			toast("Information saved");
+			alertUser(getActivity(), "Information saved");
 			break;
 		case R.id.button_cancel:
 			finishActivity();
 			break;
 		case R.id.button_select_user:
 			selectUser();
-			toast("User selected");
+			alertUser(getActivity(), "User selected");
 			break;
 		case R.id.user_delete:
 			deleteUser();
@@ -174,11 +176,6 @@ public class UserInfoFragment extends Fragment implements OnClickListener,
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private void toast(String message) {
-		Toast.makeText(getActivity().getApplicationContext(), message,
-				Toast.LENGTH_SHORT).show();
 	}
 
 	private void finishActivity() {

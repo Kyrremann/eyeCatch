@@ -15,12 +15,15 @@
     <string name="eyecatch_select_statistic">Statistic</string>
     <string name="eyecatch_statistic_testing">Extra testing</string>
     <string name="eyecatch_generalization_test">Generalization test</string>
+
     <string name="create_user_name">Username</string>
     <string name="create_user_age">Age in months</string>
     <string name="create_user_times_per_trial">Time per trial</string>
     <string name="create_user_number_of_trials">Number of trials in tests</string>
     <string name="create_user_mastery_criteria">Mastery criteria</string>
     <string name="create_user_video_duration">Video duration</string>
+	<string name="create_user_choose_box">Choose the box to be used</string>
+
     <string name="info_user_created">User is created</string>
     <string name="dummy_zero">0</string>
     
@@ -78,12 +81,13 @@
     <string name="by_lars_minimon">by Lars Klintwall and Minimon</string>
 
     <item name="default_time_per_trial" type="integer">05</item>
-    <item name="default_number_of_trials" type="integer">5</item>
+    <item name="default_number_of_trials" type="integer">05</item>
     <item name="default_mastery_criteria" type="integer">10</item>
     <item name="default_video_duration" type="integer">05</item>
 
     <string name="title_activity_eye_catch_game_fragment">EyeCatchGameFragment</string>
 
     <string name="statistic_delete">DELETE</string>
+	<string name="create_user_choose_face">Choose face to be used</string>
 
 </resources>

@@ -18,16 +18,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.app.FragmentActivity;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
 @SuppressLint("InlinedApi")
-public class ExtraTestingActivity extends FragmentActivity {
-
-	private static final int VISIBLE = View.VISIBLE;
+public class ExtraTestingActivity extends AbstractGameActivity {
 
 	public static final String TRAINING = "training";
 

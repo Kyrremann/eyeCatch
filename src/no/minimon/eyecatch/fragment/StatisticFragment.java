@@ -267,7 +267,6 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 			private void deleteStatistic() {
 				if (SharedPreferencesUtil.removeContinueInfoIfSameDate(
 						getActivity(), viewToBeDeleted.getTag().toString())) {
-					System.out.println("true");
 					onStatisticDeleteListener.notifyAboutDeletedContinueInfo();
 				}
 				parent.removeView(viewToBeDeleted);

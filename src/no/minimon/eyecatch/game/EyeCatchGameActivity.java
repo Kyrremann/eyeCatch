@@ -356,8 +356,6 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	public void startVideoViewActivity() {
 		startActivityForResult(new Intent(this, VideoViewActivity.class),
 				RESULT_VIDEOVIEW);
-		// Toast.makeText(this, "Showing video", Toast.LENGTH_SHORT).show();
-		// onActivityResult(0, RESULT_VIDEOVIEW, new Intent());
 	}
 
 	@Override
