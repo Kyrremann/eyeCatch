@@ -1,205 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollView1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="no.minimon.eyecatch.CreateUserActivity" >
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_user_name"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/edit_username"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/scrollView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:context="no.minimon.eyecatch.CreateUserActivity">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_user_age"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+	<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edit_age"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number" />
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/create_user_name"
+				android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_user_times_per_trial"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+		<EditText
+				android:id="@+id/edit_username"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ems="10"
+				android:inputType="textPersonName"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/create_user_age"
+				android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-            <TextView
-                android:id="@+id/textView_times_per_trail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dip"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+		<EditText
+				android:id="@+id/edit_age"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ems="10"
+				android:inputType="number"/>
 
-            <SeekBar
-                android:id="@+id/seekBar_times_per_trail"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:max="30" />
-        </LinearLayout>
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/create_user_times_per_trial"
+				android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_user_number_of_trials"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+			<TextView
+					android:id="@+id/textView_times_per_trail"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginRight="5dip"
+					android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-            <TextView
-                android:id="@+id/textView_number_of_trails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dip"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+			<SeekBar
+					android:id="@+id/seekBar_times_per_trail"
+					android:layout_width="0dip"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:max="30"/>
+		</LinearLayout>
 
-            <SeekBar
-                android:id="@+id/seekBar_number_of_trails"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:max="30" />
-        </LinearLayout>
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/create_user_number_of_trials"
+				android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_user_mastery_criteria"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+			<TextView
+					android:id="@+id/textView_number_of_trails"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginRight="5dip"
+					android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-            <TextView
-                android:id="@+id/textView_mastery_criteria"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dip"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+			<SeekBar
+					android:id="@+id/seekBar_number_of_trails"
+					android:layout_width="0dip"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:max="30"/>
+		</LinearLayout>
 
-            <SeekBar
-                android:id="@+id/seekBar_mastery_criteria"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:max="30" />
-        </LinearLayout>
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/create_user_mastery_criteria"
+				android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_user_video_duration"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+			<TextView
+					android:id="@+id/textView_mastery_criteria"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginRight="5dip"
+					android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-            <TextView
-                android:id="@+id/textView_video_duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dip"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+			<SeekBar
+					android:id="@+id/seekBar_mastery_criteria"
+					android:layout_width="0dip"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:max="30"/>
+		</LinearLayout>
 
-            <SeekBar
-                android:id="@+id/seekBar_video_duration"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:max="30" />
-        </LinearLayout>
-        
-        
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="test test"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/create_user_video_duration"
+				android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="32dp" />
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
 
-        <HorizontalScrollView
-            android:id="@+id/gallery_buttons"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+			<TextView
+					android:id="@+id/textView_video_duration"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginRight="5dip"
+					android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-            <LinearLayout
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" >
+			<SeekBar
+					android:id="@+id/seekBar_video_duration"
+					android:layout_width="0dip"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:max="30"/>
+		</LinearLayout>
 
-                <ImageView
-                    android:id="@+id/image_box"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:src="@drawable/box" />
+		<View
+				android:layout_width="wrap_content"
+				android:layout_height="32dp"/>
 
-                <ImageView
-                    android:id="@+id/image_box_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:padding="16dp"
-                    android:src="@drawable/box_2" />
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/create_user_choose_box"
+				android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-                <ImageView
-                    android:id="@+id/image_bottletop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:src="@drawable/bottletop" />
+		<HorizontalScrollView
+				android:id="@+id/gallery_buttons"
+				android:fillViewport="true"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/image_cup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:src="@drawable/cup" />
-            </LinearLayout>
-        </HorizontalScrollView>
+			<LinearLayout
+					android:layout_width="0dip"
+					android:layout_height="match_parent"
+					android:gravity="center_vertical"
+					android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/create_user_create_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/eyecatch_create_user" />
-    </LinearLayout>
+				<ImageView
+						android:background="@drawable/image_border_selector"
+						android:id="@+id/image_box"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:adjustViewBounds="true"
+						android:padding="16dp"
+						android:src="@drawable/box"/>
+
+				<ImageView
+						android:id="@+id/image_box_2"
+						android:layout_width="wrap_content"
+						android:adjustViewBounds="true"
+						android:layout_height="wrap_content"
+						android:paddingLeft="16dp"
+						android:padding="16dp"
+						android:src="@drawable/box_2"/>
+
+				<ImageView
+						android:id="@+id/image_bottletop"
+						android:layout_width="wrap_content"
+						android:adjustViewBounds="true"
+						android:layout_height="wrap_content"
+						android:padding="16dp"
+						android:src="@drawable/bottletop"/>
+
+				<ImageView
+						android:id="@+id/image_cup"
+						android:layout_width="wrap_content"
+						android:adjustViewBounds="true"
+						android:layout_height="wrap_content"
+						android:padding="16dp"
+						android:src="@drawable/cup"/>
+			</LinearLayout>
+		</HorizontalScrollView>
+
+		<View
+				android:layout_width="wrap_content"
+				android:layout_height="32dp"/>
+
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/create_user_choose_face"
+				android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+		<HorizontalScrollView
+				android:id="@+id/gallery_faces"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+
+			<LinearLayout
+					android:layout_width="0dip"
+					android:layout_height="match_parent"
+					android:gravity="center_vertical"
+					android:orientation="horizontal">
+
+				<ImageView
+						android:id="@+id/image_mariama"
+						android:adjustViewBounds="true"
+						android:layout_width="@dimen/create_image_size"
+						android:layout_height="wrap_content"
+						android:padding="16dp"
+						android:src="@drawable/mariama_center"/>
+
+				<ImageView
+						android:id="@+id/image_mike"
+						android:adjustViewBounds="true"
+						android:layout_width="@dimen/create_image_size"
+						android:layout_height="wrap_content"
+						android:paddingLeft="16dp"
+						android:padding="16dp"
+						android:src="@drawable/mike_center"/>
+
+				<ImageView
+						android:id="@+id/image_joelle"
+						android:adjustViewBounds="true"
+						android:layout_width="@dimen/create_image_size"
+						android:layout_height="wrap_content"
+						android:padding="16dp"
+						android:src="@drawable/joelle_center"/>
+
+				<ImageView
+						android:id="@+id/image_aurelien"
+						android:adjustViewBounds="true"
+						android:layout_width="@dimen/create_image_size"
+						android:layout_height="wrap_content"
+						android:padding="16dp"
+						android:src="@drawable/aurelien_center"/>
+			</LinearLayout>
+		</HorizontalScrollView>
+
+		<Button
+				android:id="@+id/create_user_create_user"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:text="@string/eyecatch_create_user"/>
+	</LinearLayout>
 
 </ScrollView>

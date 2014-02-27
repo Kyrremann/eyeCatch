@@ -54,26 +54,5 @@ public class SelectUserFragment extends ListFragment {
 		bundle.putString(SharedPreferencesUtil.NAME, name);
 		fragment.setArguments(bundle);
 		getFragmentManager().beginTransaction().replace(R.id.item_detail_container, fragment).commit();
-		
-		// try {
-		// JSONObject jsonObject = SharedPreferencesUtil.getUser(
-		// getActivity(), list.get(position));
-		// SharedPreferencesUtil.setCurrentUser(getActivity(),
-		// jsonObject.getString(SharedPreferencesUtil.NAME));
-		// SharedPreferencesUtil.updateActioBarTitle(getActivity(),
-		// getActivity().getActionBar());
-		// } catch (JSONException e) {
-		// e.printStackTrace();
-		// }
-		//
-		// if (getActivity().findViewById(R.id.item_detail_container) != null) {
-		//
-		// HomeFragment fragment = new HomeFragment();
-		// getFragmentManager().beginTransaction()
-		// .replace(R.id.item_detail_container, fragment)
-		// .commit();
-		// }
-		
-		
 	}
 }

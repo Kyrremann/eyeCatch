@@ -181,8 +181,6 @@ public class SharedPreferencesUtil {
 			title += " - Selected video: " + video;
 		}
 		actionBar.setTitle(title);
-		
-		((EyeCatchActivity) context).updateContinueButton();
 	}
 
 	public static void setCurrentVideoName(Context context, String name) {
