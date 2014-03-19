@@ -32,13 +32,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-public class EyeCatchGameActivity extends FragmentActivity implements
+public class EyeCatchGameActivity extends AbstractGameActivity implements
 		AnimationListener {
 
-	private static final int VISIBLE = View.VISIBLE;
-	private static final int INVISIBLE = View.INVISIBLE;
 	private static final int GAME_PAUSE = 2;
-	private static final int GAME_ON = 1;
 	private static final int BEFORE_GAME = 0;
 
 	public static final int RESULT_VIDEOVIEW = 256;
@@ -52,32 +49,24 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 	public static final int SOUTH_WEST = 6;
 	public static final int SOUTH_EAST = 7;
 
-	public static final String ENDGAME = "end_game";
-
-	private int CURRENT_FACE_DIRECTION = -1;
-	private int LAST_FACE_DIRECTION = -1;
 	private int GAME_MODE;
-	private int NUMBER_OF_TRIALS;
 	private int CURRENT_ITERATION = 0;
 	private int CURRENT_ITERATION_CORRECT = 0;
 	private int CURRENT_ITERATION_FAIL = 0;
 	private int MASTERY_CRITERIA;
 	private long LEVEL_DURATION;
+	private long ERROR_DURATION;
 	private int TESTING_LEVEL = 0;
 	private int TRAINING_LEVEL = 0;
 	private int FACE_RANGE = 0;
 
-	private View contentView;
-	private ImageView imageFace, imageNorth, imageNorthEast, imageEast,
-			imageSouthEast, imageSouth, imageSouthWest, imageWest,
-			imageNorthWest;
 	private ImageView imageWestCircle, imageEastCircle;
 	private CountDownTimer countDownLevelDuration, countDownBeginGameLevel;
 	private TextView watermark, watermarkData;
 
-	private SparseArray<Drawable> faces;
-	private Random random;
-	private boolean testingLevel = true, keepFace, deleteContinueWhenDone;
+	private boolean testingLevel = true;
+	private boolean keepFace;
+	private boolean deleteContinueWhenDone;
 	private JSONObject statistic;
 
 	@Override
@@ -99,6 +88,7 @@ public class EyeCatchGameActivity extends FragmentActivity implements
 		NUMBER_OF_TRIALS = SharedPreferencesUtil.getNumberOfTrials(this);
 		LEVEL_DURATION = SharedPreferencesUtil.getDurationPerTrial(this);
 		MASTERY_CRITERIA = SharedPreferencesUtil.getMasteryCriteria(this);
+		ERROR_DURATION = SharedPreferencesUtil.getErrorDuration(this);
 		SharedPreferencesUtil.setLastSeekOnCurrentVideo(this, 0);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

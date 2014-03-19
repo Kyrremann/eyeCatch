@@ -17,7 +17,7 @@ import static no.minimon.eyecatch.util.NotificationUtil.alertUser;
 public class CreateUserFragment extends Fragment implements OnSeekBarChangeListener, OnClickListener {
 
 	private TextView durationPerTrail, numberOfTrials, masteryCriteria,
-			videoDuration;
+			videoDuration, errorDuration;
 	private EditText editName, editAge;
 
 	@Override
@@ -74,6 +74,15 @@ public class CreateUserFragment extends Fragment implements OnSeekBarChangeListe
 				.findViewById(R.id.textView_video_duration);
 		videoDuration.setText(String.format("%02d",
 				getResources().getInteger(R.integer.default_video_duration)));
+
+		seekBar = (SeekBar) root.findViewById(R.id.seekBar_error_duration);
+		seekBar.setOnSeekBarChangeListener(this);
+		seekBar.setProgress(getResources().getInteger(
+				R.integer.default_error_duration));
+		errorDuration = (TextView) root
+				.findViewById(R.id.textView_error_duration);
+		errorDuration.setText(String.format("%02d",
+				getResources().getInteger(R.integer.default_error_duration)));
 	}
 
 	@Override
@@ -93,6 +102,9 @@ public class CreateUserFragment extends Fragment implements OnSeekBarChangeListe
 					break;
 				case R.id.seekBar_video_duration:
 					videoDuration.setText(String.format("%02d", progress));
+					break;
+				case R.id.seekBar_error_duration:
+					errorDuration.setText(String.format("%02d", progress));
 					break;
 				default:
 					break;
@@ -124,7 +136,8 @@ public class CreateUserFragment extends Fragment implements OnSeekBarChangeListe
 					Integer.valueOf(numberOfTrials.getText().toString()),
 					Integer.valueOf(masteryCriteria.getText()
 							.toString()),
-					Integer.valueOf(videoDuration.getText().toString()) * 1000);
+					Integer.valueOf(videoDuration.getText().toString()) * 1000,
+					Integer.valueOf(errorDuration.getText().toString()) * 1000);
 			SharedPreferencesUtil.updateActioBarTitle(getActivity(),
 					getActivity().getActionBar());
 

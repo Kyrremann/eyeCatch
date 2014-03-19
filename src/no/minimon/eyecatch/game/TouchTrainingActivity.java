@@ -24,20 +24,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 @SuppressLint("InlinedApi")
-public class TouchTrainingActivity extends FragmentActivity {
-
-	private static final int VISIBLE = View.VISIBLE;
-	private static final int INVISIBLE = View.INVISIBLE;
-
-	public static final String TRAINING = "training";
-
-	private int CURRENT_FACE_DIRECTION = -1;
-	private int LAST_FACE_DIRECTION = -1;
-	
-	private ImageView imageNorth, imageNorthEast, imageEast, imageSouthEast,
-			imageSouth, imageSouthWest, imageWest, imageNorthWest;
-	private View contentView;
-	private Random random;
+public class TouchTrainingActivity extends AbstractGameActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

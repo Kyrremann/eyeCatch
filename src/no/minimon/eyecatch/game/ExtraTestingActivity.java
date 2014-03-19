@@ -26,20 +26,6 @@ import android.widget.ImageView;
 @SuppressLint("InlinedApi")
 public class ExtraTestingActivity extends AbstractGameActivity {
 
-	public static final String TRAINING = "training";
-
-	private int CURRENT_FACE_DIRECTION = -1;
-	private int LAST_FACE_DIRECTION = -1;
-	private int NUMBER_OF_TRIALS = 5;
-	private int CURRENT_ITERATION;
-	private int CLICKS_CORRECT = 0, CLICKS_FAIL = 0;
-
-	private ImageView imageFace, imageNorth, imageNorthEast, imageEast,
-			imageSouthEast, imageSouth, imageSouthWest, imageWest,
-			imageNorthWest;
-	private View contentView;
-	private Random random;
-	private SparseArray<Drawable> faces;
 	private String name;
 
 	@Override

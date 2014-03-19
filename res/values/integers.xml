@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<integer name="default_error_duration">2</integer>
+	<integer name="default_time_per_trial">5</integer>
+	<integer name="default_number_of_trials">5</integer>
+	<integer name="default_mastery_criteria">10</integer>
+	<integer name="default_video_duration">5</integer>
+</resources>

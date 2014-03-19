@@ -34,28 +34,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 @SuppressLint("InlinedApi")
-public class GeneralizationTestingActivity extends FragmentActivity {
+public class GeneralizationTestingActivity extends AbstractGameActivity {
 
-	private static final int VISIBLE = View.VISIBLE;
-	private static final int PAUSE = 0;
-	private static final int GAME_ON = 1;
-
-	public static final String TRAINING = "training";
-
-	private int CURRENT_FACE_DIRECTION = -1;
-	private int LAST_FACE_DIRECTION = -1;
-	private int NUMBER_OF_TRIALS;
-	private int CURRENT_ITERATION;
-	private int CLICKS_CORRECT = 0, CLICKS_FAIL = 0;
-	private int ROUND_COUNTER = 0;
-	private int GAME_MODE = PAUSE;
-
-	private ImageView imageFace, imageNorth, imageNorthEast, imageEast,
-			imageSouthEast, imageSouth, imageSouthWest, imageWest,
-			imageNorthWest;
-	private View contentView;
-	private Random random;
-	private SparseArray<Drawable> faces;
 	private String name, FACE_TYPE;
 	private JSONObject statistic;
 	private CountDownTimer startGameCountDown;

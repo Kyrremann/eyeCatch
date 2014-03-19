@@ -80,14 +80,10 @@
     
     <string name="by_lars_minimon">by Lars Klintwall and Minimon</string>
 
-    <item name="default_time_per_trial" type="integer">05</item>
-    <item name="default_number_of_trials" type="integer">05</item>
-    <item name="default_mastery_criteria" type="integer">10</item>
-    <item name="default_video_duration" type="integer">05</item>
-
     <string name="title_activity_eye_catch_game_fragment">EyeCatchGameFragment</string>
 
     <string name="statistic_delete">DELETE</string>
 	<string name="create_user_choose_face">Choose face to be used</string>
+	<string name="create_user_error_delay">Error duration</string>
 
 </resources>

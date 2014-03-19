@@ -43,6 +43,7 @@ public class SharedPreferencesUtil {
 	public static final String NUMBER_OF_TRIALS = "number_of_trials";
 	public static final String MASTERY_CRITERIA = "mastery_criteria";
 	public static final String VIDEO_DURATION = "video_duration";
+	private static final String ERROR_DURATION = "error_duration";
 	public static final String CONTINUE = "eyecatch_continue";
 	public static final String CONTINUE_DATE = "eyecatch_continue_date";
 	public static final String CONTINUE_TRAINING = "eye_catch_training";
@@ -55,8 +56,8 @@ public class SharedPreferencesUtil {
 	private static final String LOG_SPU = "SPU";
 
 	public static JSONObject createAndAddUser(Context context, String name,
-			String age, int timesPerTrial, int numberOfTrials,
-			int masteryCriteria, int videoDuration) {
+	                                          String age, int timesPerTrial, int numberOfTrials,
+	                                          int masteryCriteria, int videoDuration, int errorDuration) {
 		try {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put(NAME, name);
@@ -65,6 +66,7 @@ public class SharedPreferencesUtil {
 			jsonObject.put(NUMBER_OF_TRIALS, numberOfTrials);
 			jsonObject.put(MASTERY_CRITERIA, masteryCriteria);
 			jsonObject.put(VIDEO_DURATION, videoDuration);
+			jsonObject.put(ERROR_DURATION, errorDuration);
 			addUser(context, jsonObject);
 			return jsonObject;
 		} catch (JSONException e) {
@@ -203,6 +205,17 @@ public class SharedPreferencesUtil {
 		}
 		Log.d(LOG_SPU, "Didn't not find number of trails. Returning default");
 		return 5;
+	}
+
+	public static int getErrorDuration(Context context) {
+		JSONObject jsonObject = getCurrentUser(context);
+		try {
+			return jsonObject.getInt(ERROR_DURATION);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		Log.d(LOG_SPU, "Didn't not find error duration. Returning default");
+		return 2;
 	}
 
 	public static int getDurationPerTrial(Context context) {
