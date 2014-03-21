@@ -20,12 +20,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
@@ -61,7 +59,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 	private int FACE_RANGE = 0;
 
 	private ImageView imageWestCircle, imageEastCircle;
-	private CountDownTimer countDownLevelDuration, countDownBeginGameLevel;
+	private CountDownTimer countDownLevelDuration, countDownBeginGameLevel, countDownBlanScreen;
 	private TextView watermark, watermarkData;
 
 	private boolean testingLevel = true;
@@ -178,7 +176,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 
 	private void setWatermark() {
 		String text = "";
-		if (!testingLevel) {
+		if (isTraining()) {
 			if (TRAINING_LEVEL >= 8) {
 				text = "Done";
 			} else {
@@ -195,7 +193,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 
 		}
 		watermark.setText(text);
-		if (!testingLevel) {
+		if (isTraining()) {
 			watermarkData.setText("MC: " + CURRENT_ITERATION + " C: "
 					+ CURRENT_ITERATION_CORRECT + " F: "
 					+ CURRENT_ITERATION_FAIL);
@@ -234,6 +232,19 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 				wrongAction();
 			}
 		};
+		countDownBlanScreen = new CountDownTimer(ERROR_DURATION, 1000) {
+			
+			@Override
+			public void onTick(long millisUntilFinished) {
+			}
+			
+			@Override
+			public void onFinish() {
+				showFace();
+				// updateImagesAfterAnimation();
+				continueOrNext();
+			}
+		};
 	}
 
 	public void onImageClicked(View view) {
@@ -261,11 +272,6 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		case GAME_ON:
 			switch (id) {
 			case R.id.image_face:
-				// if (testingLevel) {
-				// // wrongAction(); // Not anymore
-				// } else if (TRAINING_LEVEL == 0 || TRAINING_LEVEL == 1) {
-				// correctActionVideoOrNext();
-				// }
 				break;
 			case R.id.image_west:
 				checkForCorrectDirection(WEST);
@@ -302,19 +308,21 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 	}
 
 	private void wrongAction() {
-		if (!testingLevel) {
+		if (isTraining()) {
 			keepFace = true;
 		}
 
 		CURRENT_ITERATION++;
 		CURRENT_ITERATION_FAIL++;
-		Log.d("WRONG", "CI: " + CURRENT_ITERATION + " - CIC: "
-				+ CURRENT_ITERATION_CORRECT + " - CIF: "
-				+ CURRENT_ITERATION_FAIL);
-
-		if (!testingLevel) {
+		logIteration("WRONG");
+		if (isTraining()) {
 			CURRENT_ITERATION = 0;
-			continueOrNext();
+			hideFace();
+			setBoxesVisibility(INVISIBLE);
+			if (TRAINING_LEVEL == 0) {
+				setCirclesVisbility(INVISIBLE);
+			}
+			countDownBlanScreen.start();
 		} else {
 			continueOrNext();
 		}
@@ -333,14 +341,18 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		countDownLevelDuration.cancel();
 		CURRENT_ITERATION++;
 		CURRENT_ITERATION_CORRECT++;
-		Log.d("RIGHT", "CI: " + CURRENT_ITERATION + " - CIC: "
-				+ CURRENT_ITERATION_CORRECT + " - CIF: "
-				+ CURRENT_ITERATION_FAIL);
-		if (!testingLevel) {
+		logIteration("RIGHT");
+		if (isTraining()) {
 			startVideoViewActivity();
 		} else {
 			continueOrNext();
 		}
+	}
+
+	private void logIteration(String tag) {
+		Log.d(tag, "CI: " + CURRENT_ITERATION + " - CIC: "
+				+ CURRENT_ITERATION_CORRECT + " - CIF: "
+				+ CURRENT_ITERATION_FAIL);
 	}
 
 	public void startVideoViewActivity() {
@@ -364,7 +376,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 	private void continueOrNext() {
 		if (testingLevel && CURRENT_ITERATION >= NUMBER_OF_TRIALS) {
 			doneWithLastRound();
-		} else if (!testingLevel && CURRENT_ITERATION >= MASTERY_CRITERIA) {
+		} else if (isTraining() && CURRENT_ITERATION >= MASTERY_CRITERIA) {
 			doneWithLastRound();
 		} else {
 			continueWithCurrent();
@@ -374,7 +386,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 	private void continueWithCurrent() {
 		GAME_MODE = GAME_PAUSE;
 
-		if (!testingLevel) {
+		if (isTraining()) {
 			if (TRAINING_LEVEL == 0) {
 				setCirclesVisbility(INVISIBLE);
 			}
@@ -392,7 +404,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 	private void doneWithLastRound() {
 		addStatesticToJson();
 
-		if (!testingLevel) {
+		if (isTraining()) {
 			if (TRAINING_LEVEL == 0) {
 				setCirclesVisbility(INVISIBLE);
 			}
@@ -405,11 +417,10 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		CURRENT_ITERATION_CORRECT = 0;
 		CURRENT_ITERATION_FAIL = 0;
 		GAME_MODE = GAME_PAUSE;
-		testingLevel = !testingLevel;
+		testingLevel = isTraining();
 		keepFace = false;
 
 		setBoxesVisibility(INVISIBLE);
-		// changeFaceToCenter();
 		changeFaceToStar();
 
 		setWatermark();
@@ -449,26 +460,19 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 	}
 
 	private void loadTrainingOrTesting() {
-		if (!testingLevel) {
-
-			Animation animation = new AlphaAnimation(0f, 1f);
-			animation.setDuration(0); // TODO Let duration be set by the user 
-			animation.setAnimationListener(this);
+		if (isTraining()) {
+			// Animation animation = new AlphaAnimation(0f, 1f);
+			// animation.setDuration(0); // TODO Let duration be set by the user
+			// animation.setAnimationListener(this);
 
 			switch (TRAINING_LEVEL) {
 			case 0: // Training level A
 				FACE_RANGE = 0;
-				// Old version
-				// imageFace.setImageDrawable(getResources().getDrawable(
-				// R.drawable.mariama_center_brighted));
 				FACE_RANGE = 2;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
 				break;
 			case 1: // Training level B
-				// Old version
-				// FACE_RANGE = 0;
-				// changeFaceToCenter();
 				FACE_RANGE = 2;
 				updateFaceWithNewImage();
 				setBoxesVisibility(INVISIBLE);
@@ -504,21 +508,19 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 				setBoxesVisibility(INVISIBLE);
 				break;
 			case 8:
-				// endGameActivity();
 				testingLevel = true;
 				loadTrainingOrTesting();
 				break;
 			default:
 				break;
 			}
-			imageFace.startAnimation(animation);
+			updateImagesAfterAnimation();
 		} else {
 			if (TESTING_LEVEL < 9) {
 				FACE_RANGE = 8;
 				updateFaceWithNewImage();
 				setBoxesVisibility(VISIBLE);
 			} else if (TESTING_LEVEL == 9) {
-				// createAndShowEndGameDialog();
 				return;
 			}
 
@@ -526,9 +528,21 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		}
 	}
 
+	private void hideFace() {
+		imageFace.setVisibility(INVISIBLE);
+	}
+	
+	private void showFace() {
+		imageFace.setVisibility(VISIBLE);
+	}
+
+	private boolean isTraining() {
+		return !testingLevel;
+	}
+
 	private void createAndShowEndGameDialog() {
 		endGameActivity();
-		
+
 		AlertDialog.Builder builder = new Builder(this);
 		builder.setTitle(R.string.dialog_end_game_title);
 		builder.setMessage(R.string.dialog_end_game_message);
@@ -749,12 +763,6 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 			imageEast.setVisibility(VISIBLE);
 			break;
 		case 2: // Training level C
-			// Old version
-			// if (CURRENT_FACE == WEST) {
-			// imageWest.setVisibility(VISIBLE);
-			// } else if (CURRENT_FACE == EAST) {
-			// imageEast.setVisibility(VISIBLE);
-			// }
 			if (CURRENT_FACE_DIRECTION == WEST) {
 				imageFace.setImageDrawable(getResources().getDrawable(
 						R.drawable.mariama_w_short_arrow));

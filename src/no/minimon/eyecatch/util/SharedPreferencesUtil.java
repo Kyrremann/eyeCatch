@@ -3,7 +3,6 @@ package no.minimon.eyecatch.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import no.minimon.eyecatch.EyeCatchActivity;
 import no.minimon.eyecatch.R;
 
 import org.json.JSONArray;
@@ -215,7 +214,7 @@ public class SharedPreferencesUtil {
 			e.printStackTrace();
 		}
 		Log.d(LOG_SPU, "Didn't not find error duration. Returning default");
-		return 2;
+		return 2000;
 	}
 
 	public static int getDurationPerTrial(Context context) {
