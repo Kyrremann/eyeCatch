@@ -59,7 +59,8 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 	private int FACE_RANGE = 0;
 
 	private ImageView imageWestCircle, imageEastCircle;
-	private CountDownTimer countDownLevelDuration, countDownBeginGameLevel, countDownBlanScreen;
+	private CountDownTimer countDownLevelDuration, countDownBeginGameLevel,
+			countDownBlanScreen;
 	private TextView watermark, watermarkData;
 
 	private boolean testingLevel = true;
@@ -87,6 +88,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		LEVEL_DURATION = SharedPreferencesUtil.getDurationPerTrial(this);
 		MASTERY_CRITERIA = SharedPreferencesUtil.getMasteryCriteria(this);
 		ERROR_DURATION = SharedPreferencesUtil.getErrorDuration(this);
+		FACE_TYPE = SharedPreferencesUtil.getFace(this);
 		SharedPreferencesUtil.setLastSeekOnCurrentVideo(this, 0);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -233,11 +235,11 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 			}
 		};
 		countDownBlanScreen = new CountDownTimer(ERROR_DURATION, 1000) {
-			
+
 			@Override
 			public void onTick(long millisUntilFinished) {
 			}
-			
+
 			@Override
 			public void onFinish() {
 				showFace();
@@ -445,11 +447,6 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		}
 	}
 
-	public void changeFaceToCenter() {
-		imageFace.setImageDrawable(getResources().getDrawable(
-				R.drawable.mariama_center));
-	}
-
 	public void changeFaceToStar() {
 		imageFace.setImageDrawable(getResources().getDrawable(R.drawable.star));
 	}
@@ -531,7 +528,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 	private void hideFace() {
 		imageFace.setVisibility(INVISIBLE);
 	}
-	
+
 	private void showFace() {
 		imageFace.setVisibility(VISIBLE);
 	}
@@ -593,31 +590,9 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 								statistic));
 	}
 
-	private void initBoxes() {
-		imageWest = (ImageView) findViewById(R.id.image_west);
-		imageEast = (ImageView) findViewById(R.id.image_east);
-		imageNorth = (ImageView) findViewById(R.id.image_north);
-		imageSouth = (ImageView) findViewById(R.id.image_south);
-		imageNorthWest = (ImageView) findViewById(R.id.image_north_west);
-		imageNorthEast = (ImageView) findViewById(R.id.image_north_east);
-		imageSouthWest = (ImageView) findViewById(R.id.image_south_west);
-		imageSouthEast = (ImageView) findViewById(R.id.image_south_east);
-	}
-
 	private void initCircles() {
 		imageWestCircle = (ImageView) findViewById(R.id.image_west_circle);
 		imageEastCircle = (ImageView) findViewById(R.id.image_east_circle);
-	}
-
-	private void setBoxesVisibility(int visibility) {
-		imageWest.setVisibility(visibility);
-		imageEast.setVisibility(visibility);
-		imageNorth.setVisibility(visibility);
-		imageSouth.setVisibility(visibility);
-		imageNorthWest.setVisibility(visibility);
-		imageNorthEast.setVisibility(visibility);
-		imageSouthWest.setVisibility(visibility);
-		imageSouthEast.setVisibility(visibility);
 	}
 
 	private void setCirclesVisbility(int visibility) {
@@ -642,19 +617,9 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		return faces.get(CURRENT_FACE_DIRECTION);
 	}
 
-	private int getRandomBox() {
+	@Override
+	protected int getRandomBox() {
 		return random.nextInt(FACE_RANGE);
-	}
-
-	private void loadImagesIntoFaces() {
-		faces.put(WEST, getResources().getDrawable(R.drawable.mariama_w));
-		faces.put(EAST, getResources().getDrawable(R.drawable.mariama_e));
-		faces.put(NORTH, getResources().getDrawable(R.drawable.mariama_n));
-		faces.put(SOUTH, getResources().getDrawable(R.drawable.mariama_s));
-		faces.put(NORTH_WEST, getResources().getDrawable(R.drawable.mariama_nw));
-		faces.put(NORTH_EAST, getResources().getDrawable(R.drawable.mariama_ne));
-		faces.put(SOUTH_WEST, getResources().getDrawable(R.drawable.mariama_sw));
-		faces.put(SOUTH_EAST, getResources().getDrawable(R.drawable.mariama_se));
 	}
 
 	@Override

@@ -1,35 +1,55 @@
 package no.minimon.eyecatch.fragment;
 
+import static no.minimon.eyecatch.util.NotificationUtil.alertUser;
+import no.minimon.eyecatch.R;
+import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import no.minimon.eyecatch.R;
-import no.minimon.eyecatch.util.NotificationUtil;
-import no.minimon.eyecatch.util.SharedPreferencesUtil;
-
-import static no.minimon.eyecatch.util.NotificationUtil.alertUser;
+import android.widget.TextView;
 
 public class CreateUserFragment extends Fragment implements OnSeekBarChangeListener, OnClickListener {
 
 	private TextView durationPerTrail, numberOfTrials, masteryCriteria,
 			videoDuration, errorDuration;
 	private EditText editName, editAge;
+	private ImageView mariama, mike, joelle, aurelien;
+	private String face;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_create_user, container, false);
 		initSeekbars(rootView);
+		initFaces(rootView);
+		face = "mariama";
 		editName = (EditText) rootView.findViewById(R.id.edit_username);
 		editAge = (EditText) rootView.findViewById(R.id.edit_age);
 		((Button) rootView.findViewById(R.id.create_user_create_user)).setOnClickListener(this);
 
 		return rootView;
+	}
+
+	private void initFaces(View rootView) {
+		mariama = (ImageView) rootView.findViewById(R.id.image_mariama);
+		mariama.setOnClickListener(this);
+		
+		mike = (ImageView) rootView.findViewById(R.id.image_mike);
+		mike.setOnClickListener(this);
+		
+		joelle = (ImageView) rootView.findViewById(R.id.image_joelle);
+		joelle.setOnClickListener(this);
+		
+		aurelien = (ImageView) rootView.findViewById(R.id.image_aurelien);
+		aurelien.setOnClickListener(this);
 	}
 
 	private boolean isNameAndAgeSet() {
@@ -118,7 +138,34 @@ public class CreateUserFragment extends Fragment implements OnSeekBarChangeListe
 			case R.id.create_user_create_user:
 				createUser();
 				break;
+			case R.id.image_aurelien:
+				removeBackgroundFromFaces();
+				aurelien.setBackgroundResource(R.drawable.image_border_selector);
+				face = "aurelien";
+				break;
+			case R.id.image_joelle:
+				removeBackgroundFromFaces();
+				joelle.setBackgroundResource(R.drawable.image_border_selector);
+				face = "joelle";
+				break;
+			case R.id.image_mariama:
+				removeBackgroundFromFaces();
+				mariama.setBackgroundResource(R.drawable.image_border_selector);
+				face = "mariama";
+				break;
+			case R.id.image_mike:
+				removeBackgroundFromFaces();
+				mike.setBackgroundResource(R.drawable.image_border_selector);
+				face = "mike";
+				break;
 		}
+	}
+	
+	private void removeBackgroundFromFaces() {
+		mariama.setBackgroundResource(0);
+		mike.setBackgroundResource(0);
+		joelle.setBackgroundResource(0);
+		aurelien.setBackgroundResource(0);
 	}
 
 	private void createUser() {
@@ -137,7 +184,8 @@ public class CreateUserFragment extends Fragment implements OnSeekBarChangeListe
 					Integer.valueOf(masteryCriteria.getText()
 							.toString()),
 					Integer.valueOf(videoDuration.getText().toString()) * 1000,
-					Integer.valueOf(errorDuration.getText().toString()) * 1000);
+					Integer.valueOf(errorDuration.getText().toString()) * 1000,
+					face);
 			SharedPreferencesUtil.updateActioBarTitle(getActivity(),
 					getActivity().getActionBar());
 

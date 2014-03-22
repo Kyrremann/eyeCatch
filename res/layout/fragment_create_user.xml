@@ -247,6 +247,7 @@
 					android:orientation="horizontal">
 
 				<ImageView
+						android:background="@drawable/image_border_selector"
 						android:id="@+id/image_mariama"
 						android:adjustViewBounds="true"
 						android:layout_width="@dimen/create_image_size"

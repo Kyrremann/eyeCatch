@@ -9,13 +9,11 @@ import static no.minimon.eyecatch.util.SharedPreferencesUtil.NUMBER_OF_TRIALS;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.VIDEO_DURATION;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.getUser;
 import no.minimon.eyecatch.R;
-import no.minimon.eyecatch.util.NotificationUtil;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class UserInfoFragment extends Fragment implements OnClickListener,
 		OnSeekBarChangeListener {

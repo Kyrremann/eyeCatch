@@ -21,7 +21,6 @@ import android.os.CountDownTimer;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 
 @SuppressLint("InlinedApi")
 public class ExtraTestingActivity extends AbstractGameActivity {
@@ -35,6 +34,7 @@ public class ExtraTestingActivity extends AbstractGameActivity {
 
 		name = SharedPreferencesUtil.getCurrentUsersName(this);
 		NUMBER_OF_TRIALS = SharedPreferencesUtil.getNumberOfTrials(this);
+		FACE_TYPE = SharedPreferencesUtil.getFace(this);
 
 		random = new Random();
 		faces = new SparseArray<Drawable>(8);
@@ -46,6 +46,7 @@ public class ExtraTestingActivity extends AbstractGameActivity {
 		initFace();
 		loadImagesIntoFaces();
 		setBoxesVisibility(VISIBLE);
+		imageFace.setImageDrawable(getCorrectCenterImage());
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().hide();
@@ -66,7 +67,7 @@ public class ExtraTestingActivity extends AbstractGameActivity {
 
 	private void newGameRound() {
 		if (CURRENT_ITERATION >= NUMBER_OF_TRIALS) {
-			imageFace.setImageDrawable(getResources().getDrawable(R.drawable.mariama_center));
+			imageFace.setImageDrawable(getCorrectCenterImage());
 			saveStatistic();
 			finish();
 			return;
@@ -124,47 +125,6 @@ public class ExtraTestingActivity extends AbstractGameActivity {
 			CLICKS_FAIL++;
 		}
 		newGameRound();
-	}
-
-	private void initBoxes() {
-		imageWest = (ImageView) findViewById(R.id.image_west);
-		imageEast = (ImageView) findViewById(R.id.image_east);
-		imageNorth = (ImageView) findViewById(R.id.image_north);
-		imageSouth = (ImageView) findViewById(R.id.image_south);
-		imageNorthWest = (ImageView) findViewById(R.id.image_north_west);
-		imageNorthEast = (ImageView) findViewById(R.id.image_north_east);
-		imageSouthWest = (ImageView) findViewById(R.id.image_south_west);
-		imageSouthEast = (ImageView) findViewById(R.id.image_south_east);
-	}
-
-	private void initFace() {
-		imageFace = (ImageView) findViewById(R.id.image_face);
-	}
-
-	private void loadImagesIntoFaces() {
-		faces.put(WEST, getResources().getDrawable(R.drawable.mariama_w));
-		faces.put(EAST, getResources().getDrawable(R.drawable.mariama_e));
-		faces.put(NORTH, getResources().getDrawable(R.drawable.mariama_n));
-		faces.put(SOUTH, getResources().getDrawable(R.drawable.mariama_s));
-		faces.put(NORTH_WEST, getResources().getDrawable(R.drawable.mariama_nw));
-		faces.put(NORTH_EAST, getResources().getDrawable(R.drawable.mariama_ne));
-		faces.put(SOUTH_WEST, getResources().getDrawable(R.drawable.mariama_sw));
-		faces.put(SOUTH_EAST, getResources().getDrawable(R.drawable.mariama_se));
-	}
-
-	private void setBoxesVisibility(int visibility) {
-		imageWest.setVisibility(visibility);
-		imageEast.setVisibility(visibility);
-		imageNorth.setVisibility(visibility);
-		imageSouth.setVisibility(visibility);
-		imageNorthWest.setVisibility(visibility);
-		imageNorthEast.setVisibility(visibility);
-		imageSouthWest.setVisibility(visibility);
-		imageSouthEast.setVisibility(visibility);
-	}
-
-	private int getRandomBox() {
-		return random.nextInt(8);
 	}
 
 	private void saveStatistic() {

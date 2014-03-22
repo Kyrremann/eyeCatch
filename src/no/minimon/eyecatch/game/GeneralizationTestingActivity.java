@@ -27,16 +27,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.app.FragmentActivity;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 
 @SuppressLint("InlinedApi")
 public class GeneralizationTestingActivity extends AbstractGameActivity {
 
-	private String name, FACE_TYPE;
+	private String name;
 	private JSONObject statistic;
 	private CountDownTimer startGameCountDown;
 
@@ -47,7 +45,7 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 
 		name = SharedPreferencesUtil.getCurrentUsersName(this);
 		NUMBER_OF_TRIALS = SharedPreferencesUtil.getNumberOfTrials(this);
-		FACE_TYPE = "A";
+		FACE_TYPE = getString(R.string.face_mariama);
 
 		random = new Random();
 		faces = new SparseArray<Drawable>(8);
@@ -113,9 +111,9 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 			saveRoundStatistic();
 			ROUND_COUNTER++;
 			if (ROUND_COUNTER == 1) {
-				FACE_TYPE = "B";
+				FACE_TYPE = getString(R.string.face_aurelien);
 			} else if (ROUND_COUNTER == 2) {
-				FACE_TYPE = "C";
+				FACE_TYPE = getString(R.string.face_joelle);
 			}
 			CLICKS_CORRECT = 0;
 			CLICKS_FAIL = 0;
@@ -129,16 +127,7 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 	}
 
 	private void centerFace() {
-		if (FACE_TYPE.equals("A")) {
-			imageFace.setImageDrawable(getResources().getDrawable(
-					R.drawable.mariama_center));
-		} else if (FACE_TYPE.equals("B")) {
-			imageFace.setImageDrawable(getResources().getDrawable(
-					R.drawable.aurelien_center));
-		} else if (FACE_TYPE.equals("C")) {
-			imageFace.setImageDrawable(getResources().getDrawable(
-					R.drawable.joelle_center));
-		}
+		imageFace.setImageDrawable(getCorrectCenterImage());
 	}
 
 	private void finishTesting() {
@@ -194,94 +183,6 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 			CLICKS_FAIL++;
 		}
 		newGameRound();
-	}
-
-	private void initBoxes() {
-		imageWest = (ImageView) findViewById(R.id.image_west);
-		imageEast = (ImageView) findViewById(R.id.image_east);
-		imageNorth = (ImageView) findViewById(R.id.image_north);
-		imageSouth = (ImageView) findViewById(R.id.image_south);
-		imageNorthWest = (ImageView) findViewById(R.id.image_north_west);
-		imageNorthEast = (ImageView) findViewById(R.id.image_north_east);
-		imageSouthWest = (ImageView) findViewById(R.id.image_south_west);
-		imageSouthEast = (ImageView) findViewById(R.id.image_south_east);
-	}
-
-	private void initFace() {
-		imageFace = (ImageView) findViewById(R.id.image_face);
-	}
-
-	private void loadImagesIntoFaces() {
-		if (FACE_TYPE.equals("A")) {
-			loadFacesOfMariama();
-		} else if (FACE_TYPE.equals("B")) {
-			loadFacesOfAurelien();
-		} else if (FACE_TYPE.equals("C")) {
-			loadFacesOfJoelle();
-		}
-	}
-
-	private void loadFacesOfMike() {
-		faces.put(WEST, getResources().getDrawable(R.drawable.mike_w));
-		faces.put(EAST, getResources().getDrawable(R.drawable.mike_e));
-		faces.put(NORTH, getResources().getDrawable(R.drawable.mike_n));
-		faces.put(SOUTH, getResources().getDrawable(R.drawable.mike_s));
-		faces.put(NORTH_WEST, getResources().getDrawable(R.drawable.mike_nw));
-		faces.put(NORTH_EAST, getResources().getDrawable(R.drawable.mike_ne));
-		faces.put(SOUTH_WEST, getResources().getDrawable(R.drawable.mike_sw));
-		faces.put(SOUTH_EAST, getResources().getDrawable(R.drawable.mike_se));
-	}
-
-	private void loadFacesOfJoelle() {
-		faces.put(WEST, getResources().getDrawable(R.drawable.joelle_w));
-		faces.put(EAST, getResources().getDrawable(R.drawable.joelle_e));
-		faces.put(NORTH, getResources().getDrawable(R.drawable.joelle_n));
-		faces.put(SOUTH, getResources().getDrawable(R.drawable.joelle_s));
-		faces.put(NORTH_WEST, getResources().getDrawable(R.drawable.joelle_nw));
-		faces.put(NORTH_EAST, getResources().getDrawable(R.drawable.joelle_ne));
-		faces.put(SOUTH_WEST, getResources().getDrawable(R.drawable.joelle_sw));
-		faces.put(SOUTH_EAST, getResources().getDrawable(R.drawable.joelle_se));
-	}
-
-	private void loadFacesOfAurelien() {
-		faces.put(WEST, getResources().getDrawable(R.drawable.aurelien_w));
-		faces.put(EAST, getResources().getDrawable(R.drawable.aurelien_e));
-		faces.put(NORTH, getResources().getDrawable(R.drawable.aurelien_n));
-		faces.put(SOUTH, getResources().getDrawable(R.drawable.aurelien_s));
-		faces.put(NORTH_WEST, getResources()
-				.getDrawable(R.drawable.aurelien_nw));
-		faces.put(NORTH_EAST, getResources()
-				.getDrawable(R.drawable.aurelien_ne));
-		faces.put(SOUTH_WEST, getResources()
-				.getDrawable(R.drawable.aurelien_sw));
-		faces.put(SOUTH_EAST, getResources()
-				.getDrawable(R.drawable.aurelien_se));
-	}
-
-	private void loadFacesOfMariama() {
-		faces.put(WEST, getResources().getDrawable(R.drawable.mariama_w));
-		faces.put(EAST, getResources().getDrawable(R.drawable.mariama_e));
-		faces.put(NORTH, getResources().getDrawable(R.drawable.mariama_n));
-		faces.put(SOUTH, getResources().getDrawable(R.drawable.mariama_s));
-		faces.put(NORTH_WEST, getResources().getDrawable(R.drawable.mariama_nw));
-		faces.put(NORTH_EAST, getResources().getDrawable(R.drawable.mariama_ne));
-		faces.put(SOUTH_WEST, getResources().getDrawable(R.drawable.mariama_sw));
-		faces.put(SOUTH_EAST, getResources().getDrawable(R.drawable.mariama_se));
-	}
-
-	private void setBoxesVisibility(int visibility) {
-		imageWest.setVisibility(visibility);
-		imageEast.setVisibility(visibility);
-		imageNorth.setVisibility(visibility);
-		imageSouth.setVisibility(visibility);
-		imageNorthWest.setVisibility(visibility);
-		imageNorthEast.setVisibility(visibility);
-		imageSouthWest.setVisibility(visibility);
-		imageSouthEast.setVisibility(visibility);
-	}
-
-	private int getRandomBox() {
-		return random.nextInt(8);
 	}
 
 	private void saveRoundStatistic() {

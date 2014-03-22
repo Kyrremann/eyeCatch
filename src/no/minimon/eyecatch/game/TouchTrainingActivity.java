@@ -14,14 +14,13 @@ import java.util.Random;
 
 import no.minimon.eyecatch.R;
 import no.minimon.eyecatch.VideoViewActivity;
+import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.ImageView;
 
 @SuppressLint("InlinedApi")
 public class TouchTrainingActivity extends AbstractGameActivity {
@@ -30,11 +29,16 @@ public class TouchTrainingActivity extends AbstractGameActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_eyecatch_game);
+		
+		FACE_TYPE = SharedPreferencesUtil.getFace(this);
 
 		random = new Random();
 		contentView = findViewById(R.id.fullscreen_content);
 		contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 
+		initFace();
+		imageFace.setImageDrawable(getCorrectCenterImage());
+		
 		initBoxes();
 		setBoxesVisibility(INVISIBLE);
 
@@ -115,32 +119,6 @@ public class TouchTrainingActivity extends AbstractGameActivity {
 		}
 
 		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	private void initBoxes() {
-		imageWest = (ImageView) findViewById(R.id.image_west);
-		imageEast = (ImageView) findViewById(R.id.image_east);
-		imageNorth = (ImageView) findViewById(R.id.image_north);
-		imageSouth = (ImageView) findViewById(R.id.image_south);
-		imageNorthWest = (ImageView) findViewById(R.id.image_north_west);
-		imageNorthEast = (ImageView) findViewById(R.id.image_north_east);
-		imageSouthWest = (ImageView) findViewById(R.id.image_south_west);
-		imageSouthEast = (ImageView) findViewById(R.id.image_south_east);
-	}
-
-	private void setBoxesVisibility(int visibility) {
-		imageWest.setVisibility(visibility);
-		imageEast.setVisibility(visibility);
-		imageNorth.setVisibility(visibility);
-		imageSouth.setVisibility(visibility);
-		imageNorthWest.setVisibility(visibility);
-		imageNorthEast.setVisibility(visibility);
-		imageSouthWest.setVisibility(visibility);
-		imageSouthEast.setVisibility(visibility);
-	}
-
-	private int getRandomBox() {
-		return random.nextInt(8);
 	}
 
 }

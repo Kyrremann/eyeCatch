@@ -38,11 +38,12 @@ public class SharedPreferencesUtil {
 	public static final int MODE_PRIVATE = 0;
 	public static final String NAME = "name";
 	public static final String AGE = "age";
+	public static final String FACE = "face";
 	public static final String DURATION_PER_TRIAL = "times_per_trial";
 	public static final String NUMBER_OF_TRIALS = "number_of_trials";
 	public static final String MASTERY_CRITERIA = "mastery_criteria";
 	public static final String VIDEO_DURATION = "video_duration";
-	private static final String ERROR_DURATION = "error_duration";
+	public static final String ERROR_DURATION = "error_duration";
 	public static final String CONTINUE = "eyecatch_continue";
 	public static final String CONTINUE_DATE = "eyecatch_continue_date";
 	public static final String CONTINUE_TRAINING = "eye_catch_training";
@@ -56,7 +57,8 @@ public class SharedPreferencesUtil {
 
 	public static JSONObject createAndAddUser(Context context, String name,
 	                                          String age, int timesPerTrial, int numberOfTrials,
-	                                          int masteryCriteria, int videoDuration, int errorDuration) {
+			int masteryCriteria, int videoDuration, int errorDuration,
+			String face) {
 		try {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put(NAME, name);
@@ -66,6 +68,7 @@ public class SharedPreferencesUtil {
 			jsonObject.put(MASTERY_CRITERIA, masteryCriteria);
 			jsonObject.put(VIDEO_DURATION, videoDuration);
 			jsonObject.put(ERROR_DURATION, errorDuration);
+			jsonObject.put(FACE, face);
 			addUser(context, jsonObject);
 			return jsonObject;
 		} catch (JSONException e) {
@@ -193,6 +196,17 @@ public class SharedPreferencesUtil {
 	public static String getCurrentVideoName(Context context) {
 		SharedPreferences preferences = getSharedPreference(context);
 		return preferences.getString(CURRENT_VIDEO_NAME, "");
+	}
+	
+	public static String getFace(Context context) {
+		JSONObject jsonObject = getCurrentUser(context);
+		try {
+			return jsonObject.getString(FACE);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		Log.d(LOG_SPU, "Didn't not find a face. Returning default");
+		return context.getString(R.string.face_mariama);
 	}
 
 	public static int getNumberOfTrials(Context context) {
