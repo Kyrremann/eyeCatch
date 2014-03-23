@@ -13,6 +13,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_bar"
         android:layout_centerInParent="true" >
 
         <LinearLayout
@@ -59,8 +60,13 @@
 
                     <requestFocus />
                 </EditText>
-
             </LinearLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="32dp" />
+
+            <include layout="@layout/seekbar_view" />
 
             <View
                 android:layout_width="wrap_content"
@@ -69,106 +75,27 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/create_user_times_per_trial"
+                android:text="@string/create_user_choose_box"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+            <include layout="@layout/horizontal_boxview" />
 
-                <TextView
-                    android:id="@+id/textView_times_per_trail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dip"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <SeekBar
-                    android:id="@+id/seekBar_times_per_trail"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:max="30" />
-            </LinearLayout>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="32dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/create_user_number_of_trials"
+                android:text="@string/create_user_choose_face"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/textView_number_of_trails"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dip"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <SeekBar
-                    android:id="@+id/seekBar_number_of_trails"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:max="30" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/create_user_mastery_criteria"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/textView_mastery_criteria"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dip"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <SeekBar
-                    android:id="@+id/seekBar_mastery_criteria"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:max="30" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/create_user_video_duration"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/textView_video_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dip"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <SeekBar
-                    android:id="@+id/seekBar_video_duration"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:max="30" />
-            </LinearLayout>
+            <include layout="@layout/horizontal_faceview" />
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/bottom_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

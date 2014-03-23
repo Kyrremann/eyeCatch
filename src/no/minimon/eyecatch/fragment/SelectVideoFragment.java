@@ -1,7 +1,7 @@
 package no.minimon.eyecatch.fragment;
 
+import static no.minimon.eyecatch.util.NotificationUtil.alertUser;
 import no.minimon.eyecatch.R;
-import no.minimon.eyecatch.util.NotificationUtil;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import no.minimon.eyecatch.util.VideoAdapter;
 import android.database.Cursor;
@@ -13,9 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import static no.minimon.eyecatch.util.NotificationUtil.alertUser;
 
 public class SelectVideoFragment extends ListFragment {
 

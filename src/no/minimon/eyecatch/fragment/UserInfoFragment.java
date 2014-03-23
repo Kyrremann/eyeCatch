@@ -3,6 +3,9 @@ package no.minimon.eyecatch.fragment;
 import static no.minimon.eyecatch.util.NotificationUtil.alertUser;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.AGE;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.DURATION_PER_TRIAL;
+import static no.minimon.eyecatch.util.SharedPreferencesUtil.ERROR_DURATION;
+import static no.minimon.eyecatch.util.SharedPreferencesUtil.FACE;
+import static no.minimon.eyecatch.util.SharedPreferencesUtil.BOX;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.MASTERY_CRITERIA;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.NAME;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.NUMBER_OF_TRIALS;
@@ -15,128 +18,112 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class UserInfoFragment extends Fragment implements OnClickListener,
-		OnSeekBarChangeListener {
+public class UserInfoFragment extends AbstractUserInfoFragment {
 
 	private JSONObject user;
-	private View root;
-	private TextView durationPerTrail, numberOfTrials, masteryCriteria,
-			videoDuration;
-	private EditText age;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		String name = getArguments().getString(NAME);
 		user = getUser(getActivity(), name);
-		root = inflater.inflate(R.layout.fragment_user_info, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_user_info,
+				container, false);
+
+		initSeekbars(rootView);
+		initTextViews(rootView);
+		initFaces(rootView);
+		initBoxes(rootView);
+		initButtons(rootView);
 
 		try {
-			initInformation();
-			initSeekbars(root);
-			initButtons();
+			initAndSetNameAndAge(user, rootView);
+			setUserValues(user);
+			setUsersFace(user, rootView);
+			setUsersBox(user, rootView);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
-		return root;
+		return rootView;
 	}
 
-	private void initButtons() {
-		((ImageView) root.findViewById(R.id.user_delete))
+	private void setUsersBox(JSONObject user, View rootView) throws JSONException {
+		removeBackgroundFromFaces();
+		String box = user.getString(BOX);
+		ImageView imageView = null;
+		if (box.equals(getString(R.string.box_box))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_box);
+		} else if (box.equals(getString(R.string.box_icon))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_box_icon);
+		} else if (box.equals(getString(R.string.box_gift_icon))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_gift_box_icon);
+		}
+		imageView.setBackgroundResource(R.drawable.image_border_selector);
+	}
+
+	private void setUsersFace(JSONObject user, View rootView)
+			throws JSONException {
+		removeBackgroundFromFaces();
+		String face = user.getString(FACE);
+		ImageView imageView = null;
+		if (face.equals(getString(R.string.face_mariama))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_mariama);
+		} else if (face.equals(getString(R.string.face_aurelien))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_aurelien);
+		} else if (face.equals(getString(R.string.face_joelle))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_joelle);
+		} else if (face.equals(getString(R.string.face_mike))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_mike);
+		}
+		imageView.setBackgroundResource(R.drawable.image_border_selector);
+	}
+
+	private void initButtons(View rootView) {
+		((ImageView) rootView.findViewById(R.id.user_delete))
 				.setOnClickListener(this);
-		((Button) root.findViewById(R.id.button_cancel))
+		((Button) rootView.findViewById(R.id.button_cancel))
 				.setOnClickListener(this);
-		((Button) root.findViewById(R.id.button_save)).setOnClickListener(this);
-		((Button) root.findViewById(R.id.button_select_user))
+		((Button) rootView.findViewById(R.id.button_save))
+				.setOnClickListener(this);
+		((Button) rootView.findViewById(R.id.button_select_user))
 				.setOnClickListener(this);
 	}
 
-	private void initInformation() throws JSONException {
-		TextView textView = (TextView) root.findViewById(R.id.username);
+	private void initAndSetNameAndAge(JSONObject user, View rootView)
+			throws JSONException {
+		TextView textView = (TextView) rootView.findViewById(R.id.username);
 		textView.setText(user.getString(NAME));
 
-		age = (EditText) root.findViewById(R.id.age_edit);
-		age.setText(user.getString(AGE));
+		editAge = (EditText) rootView.findViewById(R.id.age_edit);
+		editAge.setText(user.getString(AGE));
 
 	}
 
-	private void initSeekbars(View root) throws JSONException {
-		SeekBar seekBar = (SeekBar) root
-				.findViewById(R.id.seekBar_times_per_trail);
-		seekBar.setOnSeekBarChangeListener(this);
-		seekBar.setProgress(user.getInt(DURATION_PER_TRIAL) / 1000);
-		durationPerTrail = (TextView) root
-				.findViewById(R.id.textView_times_per_trail);
-		durationPerTrail.setText(String.format("%02d",
+	private void setUserValues(JSONObject user) throws JSONException {
+		barDurationPerTrail.setProgress(user.getInt(DURATION_PER_TRIAL) / 1000);
+		textDurationPerTrail.setText(String.format("%02d",
 				user.getInt(DURATION_PER_TRIAL) / 1000));
-
-		seekBar = (SeekBar) root.findViewById(R.id.seekBar_number_of_trails);
-		seekBar.setOnSeekBarChangeListener(this);
-		seekBar.setProgress(user.getInt(NUMBER_OF_TRIALS));
-		numberOfTrials = (TextView) root
-				.findViewById(R.id.textView_number_of_trails);
-		numberOfTrials.setText(String.format("%02d",
+		barNumberOfTrials.setProgress(user.getInt(NUMBER_OF_TRIALS));
+		textNumberOfTrials.setText(String.format("%02d",
 				user.getInt(NUMBER_OF_TRIALS)));
-
-		seekBar = (SeekBar) root.findViewById(R.id.seekBar_mastery_criteria);
-		seekBar.setOnSeekBarChangeListener(this);
-		seekBar.setProgress(user.getInt(MASTERY_CRITERIA));
-		masteryCriteria = (TextView) root
-				.findViewById(R.id.textView_mastery_criteria);
-		masteryCriteria.setText(String.format("%02d",
+		barMasteryCriteria.setProgress(user.getInt(MASTERY_CRITERIA));
+		textMasteryCriteria.setText(String.format("%02d",
 				user.getInt(MASTERY_CRITERIA)));
-
-		seekBar = (SeekBar) root.findViewById(R.id.seekBar_video_duration);
-		seekBar.setOnSeekBarChangeListener(this);
-		seekBar.setProgress(user.getInt(VIDEO_DURATION) / 1000);
-		videoDuration = (TextView) root
-				.findViewById(R.id.textView_video_duration);
-		videoDuration.setText(String.format("%02d",
+		barVideoDuration.setProgress(user.getInt(VIDEO_DURATION) / 1000);
+		textVideoDuration.setText(String.format("%02d",
 				user.getInt(VIDEO_DURATION) / 1000));
-	}
-
-	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress,
-			boolean fromUser) {
-		if (fromUser) {
-			switch (seekBar.getId()) {
-			case R.id.seekBar_times_per_trail:
-				durationPerTrail.setText(String.format("%02d", progress));
-				break;
-			case R.id.seekBar_number_of_trails:
-				numberOfTrials.setText(String.format("%02d", progress));
-				break;
-			case R.id.seekBar_mastery_criteria:
-				masteryCriteria.setText(String.format("%02d", progress));
-				break;
-			case R.id.seekBar_video_duration:
-				videoDuration.setText(String.format("%02d", progress));
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {
-	}
-
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {
+		barErrorDuration.setProgress(user.getInt(ERROR_DURATION) / 1000);
+		textErrorDuration.setText(String.format("%02d",
+				user.getInt(ERROR_DURATION) / 1000));
 	}
 
 	@Override
@@ -157,6 +144,7 @@ public class UserInfoFragment extends Fragment implements OnClickListener,
 			deleteUser();
 			break;
 		default:
+			super.onClick(view);
 			break;
 		}
 	}
@@ -164,11 +152,13 @@ public class UserInfoFragment extends Fragment implements OnClickListener,
 	private void deleteUser() {
 		try {
 			String name = user.getString(NAME);
-			SharedPreferencesUtil.removeUser(getActivity(),
+			SharedPreferencesUtil.removeUser(getActivity(), name);
+			SharedPreferencesUtil.removeContinueInfoIfSameName(getActivity(),
 					name);
-			SharedPreferencesUtil.removeContinueInfoIfSameName(getActivity(), name);
-			SharedPreferencesUtil.removeSelectedUserIfSameName(getActivity(), name);
-			SharedPreferencesUtil.updateActioBarTitle(getActivity(), getActivity().getActionBar());
+			SharedPreferencesUtil.removeSelectedUserIfSameName(getActivity(),
+					name);
+			SharedPreferencesUtil.updateActioBarTitle(getActivity(),
+					getActivity().getActionBar());
 			finishActivity();
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -200,16 +190,22 @@ public class UserInfoFragment extends Fragment implements OnClickListener,
 
 	private void saveData() {
 		try {
-			user.put(AGE, age.getText().toString());
+			user.put(AGE, editAge.getText().toString());
 			user.put(
 					DURATION_PER_TRIAL,
-					Integer.valueOf(durationPerTrail.getText().toString()) * 1000);
+					Integer.valueOf(textDurationPerTrail.getText().toString()) * 1000);
 			user.put(NUMBER_OF_TRIALS,
-					Integer.valueOf(numberOfTrials.getText().toString()));
+					Integer.valueOf(textNumberOfTrials.getText().toString()));
 			user.put(MASTERY_CRITERIA,
-					Integer.valueOf(masteryCriteria.getText().toString()));
-			user.put(VIDEO_DURATION,
-					Integer.valueOf(videoDuration.getText().toString()) * 1000);
+					Integer.valueOf(textMasteryCriteria.getText().toString()));
+			user.put(
+					VIDEO_DURATION,
+					Integer.valueOf(textVideoDuration.getText().toString()) * 1000);
+			user.put(
+					ERROR_DURATION,
+					Integer.valueOf(textVideoDuration.getText().toString()) * 1000);
+			user.put(FACE, face);
+			user.put(BOX, box);
 			SharedPreferencesUtil.updateUserInfo(getActivity(), user);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();

@@ -36,17 +36,6 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 	private static final int GAME_PAUSE = 2;
 	private static final int BEFORE_GAME = 0;
 
-	public static final int RESULT_VIDEOVIEW = 256;
-	public static final int RESULT_ENDGAME = 512;
-	public static final int WEST = 0;
-	public static final int EAST = 1;
-	public static final int NORTH = 2;
-	public static final int SOUTH = 3;
-	public static final int NORTH_WEST = 4;
-	public static final int NORTH_EAST = 5;
-	public static final int SOUTH_WEST = 6;
-	public static final int SOUTH_EAST = 7;
-
 	private int GAME_MODE;
 	private int CURRENT_ITERATION = 0;
 	private int CURRENT_ITERATION_CORRECT = 0;
@@ -243,7 +232,6 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 			@Override
 			public void onFinish() {
 				showFace();
-				// updateImagesAfterAnimation();
 				continueOrNext();
 			}
 		};
@@ -702,12 +690,10 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		case 0:
 			if (CURRENT_FACE_DIRECTION == WEST) {
 				imageWestCircle.setVisibility(VISIBLE);
-				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_w_arrow));
+				imageFace.setImageDrawable(getCorrectArrowFace(WEST, NORMAL));
 			} else if (CURRENT_FACE_DIRECTION == EAST) {
 				imageEastCircle.setVisibility(VISIBLE);
-				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_e_arrow));
+				imageFace.setImageDrawable(getCorrectArrowFace(EAST, NORMAL));
 			}
 
 			imageWest.setVisibility(VISIBLE);
@@ -716,12 +702,10 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		case 1:
 			if (CURRENT_FACE_DIRECTION == WEST) {
 				imageWestCircle.setVisibility(INVISIBLE);
-				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_w_arrow));
+				imageFace.setImageDrawable(getCorrectArrowFace(WEST, NORMAL));
 			} else if (CURRENT_FACE_DIRECTION == EAST) {
 				imageEastCircle.setVisibility(INVISIBLE);
-				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_e_arrow));
+				imageFace.setImageDrawable(getCorrectArrowFace(EAST, NORMAL));
 			}
 
 			imageWest.setVisibility(VISIBLE);
@@ -729,11 +713,9 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 			break;
 		case 2: // Training level C
 			if (CURRENT_FACE_DIRECTION == WEST) {
-				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_w_short_arrow));
+				imageFace.setImageDrawable(getCorrectArrowFace(WEST, SHORT));
 			} else if (CURRENT_FACE_DIRECTION == EAST) {
-				imageFace.setImageDrawable(getResources().getDrawable(
-						R.drawable.mariama_e_short_arrow));
+				imageFace.setImageDrawable(getCorrectArrowFace(EAST, SHORT));
 			}
 			imageWest.setVisibility(VISIBLE);
 			imageEast.setVisibility(VISIBLE);

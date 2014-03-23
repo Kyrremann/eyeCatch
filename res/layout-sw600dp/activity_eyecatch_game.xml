@@ -63,8 +63,8 @@
 
     <ImageView
         android:id="@+id/image_face"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:onClick="onImageClicked"

@@ -39,6 +39,7 @@ public class SharedPreferencesUtil {
 	public static final String NAME = "name";
 	public static final String AGE = "age";
 	public static final String FACE = "face";
+	public static final String BOX = "box";
 	public static final String DURATION_PER_TRIAL = "times_per_trial";
 	public static final String NUMBER_OF_TRIALS = "number_of_trials";
 	public static final String MASTERY_CRITERIA = "mastery_criteria";
@@ -58,7 +59,7 @@ public class SharedPreferencesUtil {
 	public static JSONObject createAndAddUser(Context context, String name,
 	                                          String age, int timesPerTrial, int numberOfTrials,
 			int masteryCriteria, int videoDuration, int errorDuration,
-			String face) {
+			String face, String box) {
 		try {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put(NAME, name);
@@ -69,6 +70,7 @@ public class SharedPreferencesUtil {
 			jsonObject.put(VIDEO_DURATION, videoDuration);
 			jsonObject.put(ERROR_DURATION, errorDuration);
 			jsonObject.put(FACE, face);
+			jsonObject.put(BOX, box);
 			addUser(context, jsonObject);
 			return jsonObject;
 		} catch (JSONException e) {

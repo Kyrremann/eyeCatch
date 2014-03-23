@@ -75,6 +75,10 @@
     <string name="face_mariama">mariama</string>
     <string name="face_mike">mike</string>
     
+    <string name="box_box">box</string>
+    <string name="box_icon">box_icon</string>
+    <string name="box_gift_icon">gift_icon</string>
+    
     <string name="error_missing_name_or_age">Name or age is not filled</string>
     <string name="error_short_video_duration">Sorry, but the video you selexted is to short to be used</string>
     <string name="error_missing_user_or_video">Sorry, but you need to select a user and a video before you can start the game</string>

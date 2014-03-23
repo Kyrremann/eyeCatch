@@ -1,13 +1,5 @@
 package no.minimon.eyecatch.game;
 
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_WEST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_WEST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.WEST;
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -22,12 +14,26 @@ import no.minimon.eyecatch.R;
 
 public abstract class AbstractGameActivity extends FragmentActivity {
 
+	protected static final String TRAINING = "training";
+	public static final String ENDGAME = "end_game";
+
 	protected static final int VISIBLE = View.VISIBLE;
 	protected static final int INVISIBLE = View.INVISIBLE;
 	protected static final int PAUSE = 0;
 	protected static final int GAME_ON = 1;
-	protected static final String TRAINING = "training";
-	public static final String ENDGAME = "end_game";
+
+	public static final int RESULT_VIDEOVIEW = 256;
+	public static final int RESULT_ENDGAME = 512;
+	public static final int WEST = 0;
+	public static final int EAST = 1;
+	public static final int NORTH = 2;
+	public static final int SOUTH = 3;
+	public static final int NORTH_WEST = 4;
+	public static final int NORTH_EAST = 5;
+	public static final int SOUTH_WEST = 6;
+	public static final int SOUTH_EAST = 7;
+	public static final int SHORT = 32;
+	public static final int NORMAL = 33;
 
 	protected int CURRENT_FACE_DIRECTION = -1;
 	protected int LAST_FACE_DIRECTION = -1;
@@ -46,10 +52,10 @@ public abstract class AbstractGameActivity extends FragmentActivity {
 
 	protected View contentView;
 	protected Random random;
-	
+
 	protected Drawable getCorrectCenterImage() {
 		if (FACE_TYPE.equals(getString(R.string.face_mariama))) {
-			return getResources().getDrawable(R.drawable.mariama_center); 
+			return getResources().getDrawable(R.drawable.mariama_center);
 		} else if (FACE_TYPE.equals(getString(R.string.face_aurelien))) {
 			return getResources().getDrawable(R.drawable.aurelien_center);
 		} else if (FACE_TYPE.equals(getString(R.string.face_joelle))) {
@@ -59,6 +65,85 @@ public abstract class AbstractGameActivity extends FragmentActivity {
 		} else {
 			return getResources().getDrawable(R.drawable.mariama_center);
 		}
+	}
+
+	protected Drawable getCorrectArrowFace(int direction, int type) {
+		if (FACE_TYPE.equals(getString(R.string.face_mariama))) {
+			if (direction == WEST) {
+				if (type == SHORT) {
+					return getResources().getDrawable(
+							R.drawable.mariama_w_short_arrow);
+				} else if (type == NORMAL) {
+					return getResources().getDrawable(
+							R.drawable.mariama_w_arrow);
+				}
+			} else if (direction == EAST) {
+				if (type == SHORT) {
+					return getResources().getDrawable(
+							R.drawable.mariama_e_short_arrow);
+				} else if (type == NORMAL) {
+					return getResources().getDrawable(
+							R.drawable.mariama_e_arrow);
+				}
+			}
+		} else if (FACE_TYPE.equals(getString(R.string.face_aurelien))) {
+			if (direction == WEST) {
+				if (type == SHORT) {
+					return getResources().getDrawable(
+							R.drawable.aurelien_w_short_arrow);
+				} else if (type == NORMAL) {
+					return getResources().getDrawable(
+							R.drawable.aurelien_w_arrow);
+				}
+			} else if (direction == EAST) {
+				if (type == SHORT) {
+					return getResources().getDrawable(
+							R.drawable.aurelien_e_short_arrow);
+				} else if (type == NORMAL) {
+					return getResources().getDrawable(
+							R.drawable.aurelien_e_arrow);
+				}
+			}
+		}
+//		} else if (FACE_TYPE.equals(getString(R.string.face_joelle))) {
+//			if (direction == WEST) {
+//				if (type == SHORT) {
+//					return getResources().getDrawable(
+//							R.drawable.joelle_w_short_arrow);
+//				} else if (type == NORMAL) {
+//					return getResources().getDrawable(
+//							R.drawable.joelle_w_arrow);
+//				}
+//			} else if (direction == EAST) {
+//				if (type == SHORT) {
+//					return getResources().getDrawable(
+//							R.drawable.joelle_e_short_arrow);
+//				} else if (type == NORMAL) {
+//					return getResources().getDrawable(
+//							R.drawable.joelle_e_arrow);
+//				}
+//			}
+//		} else if (FACE_TYPE.equals(getString(R.string.face_mike))) {
+//			if (direction == WEST) {
+//				if (type == SHORT) {
+//					return getResources().getDrawable(
+//							R.drawable.mike_w_short_arrow);
+//				} else if (type == NORMAL) {
+//					return getResources().getDrawable(
+//							R.drawable.mike_w_arrow);
+//				}
+//			} else if (direction == EAST) {
+//				if (type == SHORT) {
+//					return getResources().getDrawable(
+//							R.drawable.mike_e_short_arrow);
+//				} else if (type == NORMAL) {
+//					return getResources().getDrawable(
+//							R.drawable.mike_e_arrow);
+//				}
+//			}
+//		}
+
+		return null;
 	}
 
 	protected void initFace() {
