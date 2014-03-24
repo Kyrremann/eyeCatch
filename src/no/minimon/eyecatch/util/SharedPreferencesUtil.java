@@ -210,6 +210,17 @@ public class SharedPreferencesUtil {
 		Log.d(LOG_SPU, "Didn't not find a face. Returning default");
 		return context.getString(R.string.face_mariama);
 	}
+	
+	public static String getBox(Context context) {
+		JSONObject jsonObject = getCurrentUser(context);
+		try {
+			return jsonObject.getString(BOX);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		Log.d(LOG_SPU, "Didn't not find a box. Returning default");
+		return context.getString(R.string.box);
+	}
 
 	public static int getNumberOfTrials(Context context) {
 		JSONObject jsonObject = getCurrentUser(context);

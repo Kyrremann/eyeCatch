@@ -27,7 +27,8 @@
             android:adjustViewBounds="true"
             android:padding="16dp"
             android:paddingLeft="16dp"
-            android:src="@drawable/box_icon" />
+            android:src="@drawable/box_box"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/image_gift_box_icon"
@@ -35,7 +36,57 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:padding="16dp"
-            android:src="@drawable/gift_box_icon" />
+            android:src="@drawable/box_gift"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/image_box_cat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:padding="16dp"
+            android:src="@drawable/box_cat" />
+
+        <ImageView
+            android:id="@+id/image_box_dino_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:padding="16dp"
+            android:src="@drawable/box_dino_1" />
+
+        <ImageView
+            android:id="@+id/image_box_dino_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:padding="16dp"
+            android:src="@drawable/box_dino_2" />
+
+        <ImageView
+            android:id="@+id/image_box_elephant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:padding="16dp"
+            android:src="@drawable/box_elephant" />
+
+        <ImageView
+            android:id="@+id/image_box_gorilla"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:padding="16dp"
+            android:src="@drawable/box_gorilla" />
+
+        <ImageView
+            android:id="@+id/image_box_monster"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:padding="16dp"
+            android:src="@drawable/box_monster" />
+        
     </LinearLayout>
 
 </HorizontalScrollView>

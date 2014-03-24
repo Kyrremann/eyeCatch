@@ -75,9 +75,15 @@
     <string name="face_mariama">mariama</string>
     <string name="face_mike">mike</string>
     
-    <string name="box_box">box</string>
-    <string name="box_icon">box_icon</string>
-    <string name="box_gift_icon">gift_icon</string>
+    <string name="box">box</string>
+    <string name="box_icon">box_box</string>
+    <string name="box_gift">box_gift</string>
+    <string name="box_monster">box_monster</string>
+    <string name="box_gorilla">box_gorilla</string>
+    <string name="box_cat">box_cat</string>
+    <string name="box_elephant">box_elephant</string>
+    <string name="box_dino_1">box_dino_1</string>
+    <string name="box_dino_2">box_dino_2</string>
     
     <string name="error_missing_name_or_age">Name or age is not filled</string>
     <string name="error_short_video_duration">Sorry, but the video you selexted is to short to be used</string>

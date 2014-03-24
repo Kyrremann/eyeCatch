@@ -1,5 +1,8 @@
 package no.minimon.eyecatch.game;
 
+import java.util.Random;
+
+import no.minimon.eyecatch.R;
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -7,10 +10,6 @@ import android.support.v4.app.FragmentActivity;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
-
-import java.util.Random;
-
-import no.minimon.eyecatch.R;
 
 public abstract class AbstractGameActivity extends FragmentActivity {
 
@@ -42,7 +41,7 @@ public abstract class AbstractGameActivity extends FragmentActivity {
 	protected int CLICKS_CORRECT = 0, CLICKS_FAIL = 0;
 	protected int ROUND_COUNTER = 0;
 	protected int GAME_MODE = PAUSE;
-	protected String FACE_TYPE;
+	protected String FACE_TYPE, BOX_TYPE;
 
 	protected ImageView imageFace, imageNorth, imageNorthEast, imageEast,
 			imageSouthEast, imageSouth, imageSouthWest, imageWest,
@@ -236,7 +235,102 @@ public abstract class AbstractGameActivity extends FragmentActivity {
 		imageSouthWest = (ImageView) findViewById(R.id.image_south_west);
 		imageSouthEast = (ImageView) findViewById(R.id.image_south_east);
 	}
+	
+	protected void loadBoxImages() {
+		if (BOX_TYPE.equals(getString(R.string.box))) {
+			loadBox();
+		} else if (BOX_TYPE.equals(getString(R.string.box_cat))) {
+			loadBoxCat();
+		} else if (BOX_TYPE.equals(getString(R.string.box_elephant))) {
+			loadBoxElephant();
+		} else if (BOX_TYPE.equals(getString(R.string.box_monster))) {
+			loadBoxMonster();
+		} else if (BOX_TYPE.equals(getString(R.string.box_gorilla))) {
+			loadBoxGorilla();
+		} else if (BOX_TYPE.equals(getString(R.string.box_dino_1))) {
+			loadBoxDino_1();
+		} else if (BOX_TYPE.equals(getString(R.string.box_dino_2))) {
+			loadBoxDino_2();
+		}
+	}
 
+	private void loadBox() {
+		imageWest.setImageDrawable(getResources().getDrawable(R.drawable.box));
+		imageEast.setImageDrawable(getResources().getDrawable(R.drawable.box));
+		imageNorth.setImageDrawable(getResources().getDrawable(R.drawable.box));
+		imageSouth.setImageDrawable(getResources().getDrawable(R.drawable.box));
+		imageNorthWest.setImageDrawable(getResources().getDrawable(R.drawable.box));
+		imageNorthEast.setImageDrawable(getResources().getDrawable(R.drawable.box));
+		imageSouthWest.setImageDrawable(getResources().getDrawable(R.drawable.box));
+		imageSouthEast.setImageDrawable(getResources().getDrawable(R.drawable.box));
+	}
+
+	private void loadBoxCat() {
+		imageWest.setImageDrawable(getResources().getDrawable(R.drawable.box_cat));
+		imageEast.setImageDrawable(getResources().getDrawable(R.drawable.box_cat));
+		imageNorth.setImageDrawable(getResources().getDrawable(R.drawable.box_cat));
+		imageSouth.setImageDrawable(getResources().getDrawable(R.drawable.box_cat));
+		imageNorthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_cat));
+		imageNorthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_cat));
+		imageSouthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_cat));
+		imageSouthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_cat));
+	}
+	
+	private void loadBoxMonster() {
+		imageWest.setImageDrawable(getResources().getDrawable(R.drawable.box_monster));
+		imageEast.setImageDrawable(getResources().getDrawable(R.drawable.box_monster));
+		imageNorth.setImageDrawable(getResources().getDrawable(R.drawable.box_monster));
+		imageSouth.setImageDrawable(getResources().getDrawable(R.drawable.box_monster));
+		imageNorthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_monster));
+		imageNorthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_monster));
+		imageSouthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_monster));
+		imageSouthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_monster));
+	}
+	
+	private void loadBoxGorilla() {
+		imageWest.setImageDrawable(getResources().getDrawable(R.drawable.box_gorilla));
+		imageEast.setImageDrawable(getResources().getDrawable(R.drawable.box_gorilla));
+		imageNorth.setImageDrawable(getResources().getDrawable(R.drawable.box_gorilla));
+		imageSouth.setImageDrawable(getResources().getDrawable(R.drawable.box_gorilla));
+		imageNorthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_gorilla));
+		imageNorthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_gorilla));
+		imageSouthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_gorilla));
+		imageSouthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_gorilla));
+	}
+
+	private void loadBoxElephant() {
+		imageWest.setImageDrawable(getResources().getDrawable(R.drawable.box_elephant));
+		imageEast.setImageDrawable(getResources().getDrawable(R.drawable.box_elephant));
+		imageNorth.setImageDrawable(getResources().getDrawable(R.drawable.box_elephant));
+		imageSouth.setImageDrawable(getResources().getDrawable(R.drawable.box_elephant));
+		imageNorthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_elephant));
+		imageNorthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_elephant));
+		imageSouthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_elephant));
+		imageSouthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_elephant));
+	}
+	
+	private void loadBoxDino_1() {
+		imageWest.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_1));
+		imageEast.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_1));
+		imageNorth.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_1));
+		imageSouth.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_1));
+		imageNorthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_1));
+		imageNorthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_1));
+		imageSouthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_1));
+		imageSouthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_1));
+	}
+	
+	private void loadBoxDino_2() {
+		imageWest.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_2));
+		imageEast.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_2));
+		imageNorth.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_2));
+		imageSouth.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_2));
+		imageNorthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_2));
+		imageNorthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_2));
+		imageSouthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_2));
+		imageSouthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_dino_2));
+	}
+	
 	protected void setBoxesVisibility(int visibility) {
 		imageWest.setVisibility(visibility);
 		imageEast.setVisibility(visibility);

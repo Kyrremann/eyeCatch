@@ -1,14 +1,5 @@
 package no.minimon.eyecatch.game;
 
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_WEST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_WEST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.WEST;
-
 import java.util.Random;
 
 import no.minimon.eyecatch.R;
@@ -35,6 +26,7 @@ public class ExtraTestingActivity extends AbstractGameActivity {
 		name = SharedPreferencesUtil.getCurrentUsersName(this);
 		NUMBER_OF_TRIALS = SharedPreferencesUtil.getNumberOfTrials(this);
 		FACE_TYPE = SharedPreferencesUtil.getFace(this);
+		BOX_TYPE = SharedPreferencesUtil.getBox(this);
 
 		random = new Random();
 		faces = new SparseArray<Drawable>(8);
@@ -45,6 +37,7 @@ public class ExtraTestingActivity extends AbstractGameActivity {
 		initBoxes();
 		initFace();
 		loadImagesIntoFaces();
+		loadBoxImages();
 		setBoxesVisibility(VISIBLE);
 		imageFace.setImageDrawable(getCorrectCenterImage());
 

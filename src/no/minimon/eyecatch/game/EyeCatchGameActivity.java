@@ -78,6 +78,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		MASTERY_CRITERIA = SharedPreferencesUtil.getMasteryCriteria(this);
 		ERROR_DURATION = SharedPreferencesUtil.getErrorDuration(this);
 		FACE_TYPE = SharedPreferencesUtil.getFace(this);
+		BOX_TYPE = SharedPreferencesUtil.getBox(this);
 		SharedPreferencesUtil.setLastSeekOnCurrentVideo(this, 0);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -93,10 +94,11 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		watermark = (TextView) findViewById(R.id.watermark);
 		watermarkData = (TextView) findViewById(R.id.watermarkData);
 
-		loadImagesIntoFaces();
 		initCircles();
 		initDurations();
 		initBoxes();
+		loadImagesIntoFaces();
+		loadBoxImages();
 		setBoxesVisibility(INVISIBLE);
 		setCirclesVisbility(INVISIBLE);
 		changeFaceToStar();

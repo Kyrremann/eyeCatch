@@ -1,15 +1,5 @@
 package no.minimon.eyecatch.game;
 
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_WEST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.RESULT_VIDEOVIEW;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_WEST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.WEST;
-
 import java.util.Random;
 
 import no.minimon.eyecatch.R;
@@ -31,6 +21,7 @@ public class TouchTrainingActivity extends AbstractGameActivity {
 		setContentView(R.layout.activity_eyecatch_game);
 		
 		FACE_TYPE = SharedPreferencesUtil.getFace(this);
+		BOX_TYPE = SharedPreferencesUtil.getBox(this);
 
 		random = new Random();
 		contentView = findViewById(R.id.fullscreen_content);
@@ -40,6 +31,7 @@ public class TouchTrainingActivity extends AbstractGameActivity {
 		imageFace.setImageDrawable(getCorrectCenterImage());
 		
 		initBoxes();
+		loadBoxImages();
 		setBoxesVisibility(INVISIBLE);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

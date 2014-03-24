@@ -17,8 +17,9 @@ public class AbstractUserInfoFragment extends Fragment implements
 			textMasteryCriteria, textVideoDuration, textErrorDuration;
 	protected SeekBar barDurationPerTrail, barNumberOfTrials,
 			barMasteryCriteria, barVideoDuration, barErrorDuration;
-	protected ImageView mariama, mike, joelle, aurelien, imageBox,
-			imageBoxIcon, imageGiftBoxIcon;
+	protected ImageView mariama, mike, joelle, aurelien, imageBox, imageBoxCat,
+			imageBoxDino1, imageBoxDino2, imageBoxElephant, imageBoxGorilla,
+			imageBoxMonster;
 	protected EditText editAge;
 	protected String face, box;
 
@@ -59,9 +60,30 @@ public class AbstractUserInfoFragment extends Fragment implements
 
 	protected void initBoxes(View rootView) {
 		imageBox = (ImageView) rootView.findViewById(R.id.image_box);
-		imageBoxIcon = (ImageView) rootView.findViewById(R.id.image_box_icon);
-		imageGiftBoxIcon = (ImageView) rootView
-				.findViewById(R.id.image_gift_box_icon);
+		imageBox.setOnClickListener(this);
+		
+		imageBoxCat = (ImageView) rootView.findViewById(R.id.image_box_cat);
+		imageBoxCat.setOnClickListener(this);
+		
+		imageBoxDino1 = (ImageView) rootView
+				.findViewById(R.id.image_box_dino_1);
+		imageBoxDino1.setOnClickListener(this);
+		
+		imageBoxDino2 = (ImageView) rootView
+				.findViewById(R.id.image_box_dino_2);
+		imageBoxDino2.setOnClickListener(this);
+		
+		imageBoxElephant = (ImageView) rootView
+				.findViewById(R.id.image_box_elephant);
+		imageBoxElephant.setOnClickListener(this);
+		
+		imageBoxGorilla = (ImageView) rootView
+				.findViewById(R.id.image_box_gorilla);
+		imageBoxGorilla.setOnClickListener(this);
+		
+		imageBoxMonster = (ImageView) rootView
+				.findViewById(R.id.image_box_monster);
+		imageBoxMonster.setOnClickListener(this);
 	}
 
 	@Override
@@ -95,10 +117,14 @@ public class AbstractUserInfoFragment extends Fragment implements
 		aurelien.setBackgroundResource(0);
 	}
 
-	private void removeBackgroundFromBoxes() {
+	protected void removeBackgroundFromBoxes() {
 		imageBox.setBackgroundResource(0);
-		imageBoxIcon.setBackgroundResource(0);
-		imageGiftBoxIcon.setBackgroundResource(0);
+		imageBoxCat.setBackgroundResource(0);
+		imageBoxDino1.setBackgroundResource(0);
+		imageBoxDino2.setBackgroundResource(0);
+		imageBoxElephant.setBackgroundResource(0);
+		imageBoxGorilla.setBackgroundResource(0);
+		imageBoxMonster.setBackgroundResource(0);
 	}
 
 	protected void initFaces(View rootView) {
@@ -141,19 +167,37 @@ public class AbstractUserInfoFragment extends Fragment implements
 		case R.id.image_box:
 			removeBackgroundFromBoxes();
 			imageBox.setBackgroundResource(R.drawable.image_border_selector);
-			box = "box";
+			box = getString(R.string.box);
 			break;
-		case R.id.image_box_icon:
+		case R.id.image_box_cat:
 			removeBackgroundFromBoxes();
-			imageBoxIcon
-					.setBackgroundResource(R.drawable.image_border_selector);
-			box = "box_icon";
+			imageBoxCat.setBackgroundResource(R.drawable.image_border_selector);
+			box = getString(R.string.box_cat);
 			break;
-		case R.id.image_gift_box_icon:
+		case R.id.image_box_dino_1:
 			removeBackgroundFromBoxes();
-			imageGiftBoxIcon
-					.setBackgroundResource(R.drawable.image_border_selector);
-			box = "gift_box_icon";
+			imageBoxDino1.setBackgroundResource(R.drawable.image_border_selector);
+			box = getString(R.string.box_dino_1);
+			break;
+		case R.id.image_box_dino_2:
+			removeBackgroundFromBoxes();
+			imageBoxDino2.setBackgroundResource(R.drawable.image_border_selector);
+			box = getString(R.string.box_dino_2);
+			break;
+		case R.id.image_box_elephant:
+			removeBackgroundFromBoxes();
+			imageBoxElephant.setBackgroundResource(R.drawable.image_border_selector);
+			box = getString(R.string.box_elephant);
+			break;
+		case R.id.image_box_gorilla:
+			removeBackgroundFromBoxes();
+			imageBoxGorilla.setBackgroundResource(R.drawable.image_border_selector);
+			box = getString(R.string.box_gorilla);
+			break;
+		case R.id.image_box_monster:
+			removeBackgroundFromBoxes();
+			imageBoxMonster.setBackgroundResource(R.drawable.image_border_selector);
+			box = getString(R.string.box_monster);
 			break;
 		}
 	}

@@ -57,15 +57,27 @@ public class UserInfoFragment extends AbstractUserInfoFragment {
 	}
 
 	private void setUsersBox(JSONObject user, View rootView) throws JSONException {
-		removeBackgroundFromFaces();
+		removeBackgroundFromBoxes();
 		String box = user.getString(BOX);
 		ImageView imageView = null;
-		if (box.equals(getString(R.string.box_box))) {
-			imageView = (ImageView) rootView.findViewById(R.id.image_box);
-		} else if (box.equals(getString(R.string.box_icon))) {
+		if (box.equals(getString(R.string.box_icon))) {
 			imageView = (ImageView) rootView.findViewById(R.id.image_box_icon);
-		} else if (box.equals(getString(R.string.box_gift_icon))) {
+		} else if (box.equals(getString(R.string.box_gift))) {
 			imageView = (ImageView) rootView.findViewById(R.id.image_gift_box_icon);
+		} else if (box.equals(getString(R.string.box_cat))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_box_cat);
+		} else if (box.equals(getString(R.string.box_dino_1))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_box_dino_1);
+		} else if (box.equals(getString(R.string.box_dino_2))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_box_dino_2);
+		} else if (box.equals(getString(R.string.box_elephant))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_box_elephant);
+		} else if (box.equals(getString(R.string.box_gorilla))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_box_gorilla);
+		} else if (box.equals(getString(R.string.box_monster))) {
+			imageView = (ImageView) rootView.findViewById(R.id.image_box_monster);
+		} else {
+			imageView = (ImageView) rootView.findViewById(R.id.image_box);
 		}
 		imageView.setBackgroundResource(R.drawable.image_border_selector);
 	}

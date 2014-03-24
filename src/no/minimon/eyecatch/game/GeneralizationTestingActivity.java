@@ -1,13 +1,5 @@
 package no.minimon.eyecatch.game;
 
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.NORTH_WEST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_EAST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.SOUTH_WEST;
-import static no.minimon.eyecatch.game.EyeCatchGameActivity.WEST;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.CORRECT;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.FAIL;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.STATISTIC_DATE;
@@ -46,6 +38,7 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 		name = SharedPreferencesUtil.getCurrentUsersName(this);
 		NUMBER_OF_TRIALS = SharedPreferencesUtil.getNumberOfTrials(this);
 		FACE_TYPE = getString(R.string.face_mariama);
+		BOX_TYPE = SharedPreferencesUtil.getBox(this);
 
 		random = new Random();
 		faces = new SparseArray<Drawable>(8);
@@ -64,6 +57,7 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 		initBoxes();
 		initFace();
 		loadImagesIntoFaces();
+		loadBoxImages();
 		imageFace.setVisibility(VISIBLE);
 		setBoxesVisibility(VISIBLE);
 
