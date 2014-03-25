@@ -4,6 +4,7 @@ import java.util.Random;
 
 import no.minimon.eyecatch.R;
 import no.minimon.eyecatch.VideoViewActivity;
+import no.minimon.eyecatch.util.AndroidVersionUtil;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,6 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+
+import static no.minimon.eyecatch.util.AndroidVersionUtil.isRunningHoneyComb;
 
 @SuppressLint("InlinedApi")
 public class TouchTrainingActivity extends AbstractGameActivity {
@@ -34,7 +37,7 @@ public class TouchTrainingActivity extends AbstractGameActivity {
 		loadBoxImages();
 		setBoxesVisibility(INVISIBLE);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		if (isRunningHoneyComb()) {
 			getActionBar().hide();
 		}
 

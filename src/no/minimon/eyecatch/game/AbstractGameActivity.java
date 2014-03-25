@@ -10,6 +10,9 @@ import android.support.v4.app.FragmentActivity;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
+import no.minimon.eyecatch.util.AndroidVersionUtil;
+
+import static no.minimon.eyecatch.util.AndroidVersionUtil.isRunningJellyBean;
 
 public abstract class AbstractGameActivity extends FragmentActivity {
 
@@ -359,9 +362,5 @@ public abstract class AbstractGameActivity extends FragmentActivity {
 							| View.SYSTEM_UI_FLAG_FULLSCREEN
 							| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 		}
-	}
-
-	private boolean isRunningJellyBean() {
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
 	}
 }

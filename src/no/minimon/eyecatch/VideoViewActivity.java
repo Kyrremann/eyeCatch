@@ -1,6 +1,8 @@
 package no.minimon.eyecatch;
 
+import android.annotation.SuppressLint;
 import no.minimon.eyecatch.game.EyeCatchGameActivity;
+import no.minimon.eyecatch.util.AndroidVersionUtil;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import android.annotation.TargetApi;
 import android.media.MediaPlayer;
@@ -13,6 +15,9 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.VideoView;
+
+import static no.minimon.eyecatch.util.AndroidVersionUtil.isRunningHoneyComb;
+import static no.minimon.eyecatch.util.AndroidVersionUtil.isRunningJellyBean;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class VideoViewActivity extends FragmentActivity {
@@ -85,7 +90,7 @@ public class VideoViewActivity extends FragmentActivity {
 		}
 
 		videoView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		if (isRunningHoneyComb()) {
 			getActionBar().hide();
 		}
 	}
@@ -125,5 +130,20 @@ public class VideoViewActivity extends FragmentActivity {
 	public void onBackPressed() {
 		// Overriding to force child-safe
 		// super.onBackPressed();
+	}
+
+	@SuppressLint("InlinedApi")
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		if (hasFocus && isRunningJellyBean()) {
+			getWindow().getDecorView().setSystemUiVisibility(
+					View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+							| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+							| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+							| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+							| View.SYSTEM_UI_FLAG_FULLSCREEN
+							| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		}
 	}
 }

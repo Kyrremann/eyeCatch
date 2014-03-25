@@ -3,6 +3,7 @@ package no.minimon.eyecatch.game;
 import java.util.Random;
 
 import no.minimon.eyecatch.R;
+import no.minimon.eyecatch.util.AndroidVersionUtil;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
@@ -12,6 +13,8 @@ import android.os.CountDownTimer;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
+
+import static no.minimon.eyecatch.util.AndroidVersionUtil.isRunningHoneyComb;
 
 @SuppressLint("InlinedApi")
 public class ExtraTestingActivity extends AbstractGameActivity {
@@ -41,7 +44,7 @@ public class ExtraTestingActivity extends AbstractGameActivity {
 		setBoxesVisibility(VISIBLE);
 		imageFace.setImageDrawable(getCorrectCenterImage());
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		if (isRunningHoneyComb()) {
 			getActionBar().hide();
 		}
 

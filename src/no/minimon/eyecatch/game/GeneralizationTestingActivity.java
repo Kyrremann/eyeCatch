@@ -1,5 +1,6 @@
 package no.minimon.eyecatch.game;
 
+import static no.minimon.eyecatch.util.AndroidVersionUtil.isRunningHoneyComb;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.CORRECT;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.FAIL;
 import static no.minimon.eyecatch.util.SharedPreferencesUtil.STATISTIC_DATE;
@@ -9,6 +10,7 @@ import static no.minimon.eyecatch.util.SharedPreferencesUtil.STATISTIC_TYPE;
 import java.util.Random;
 
 import no.minimon.eyecatch.R;
+import no.minimon.eyecatch.util.AndroidVersionUtil;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 
 import org.json.JSONException;
@@ -61,7 +63,7 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 		imageFace.setVisibility(VISIBLE);
 		setBoxesVisibility(VISIBLE);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		if (isRunningHoneyComb()) {
 			getActionBar().hide();
 		}
 
