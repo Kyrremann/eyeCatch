@@ -311,7 +311,8 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 			CURRENT_ITERATION = 0;
 			hideFace();
 			setBoxesVisibility(INVISIBLE);
-			if (TRAINING_LEVEL == 0) {
+			if (TRAINING_LEVEL == 0
+					|| TRAINING_LEVEL == 1) {
 				setCirclesVisbility(INVISIBLE);
 			}
 			countDownBlanScreen.start();
@@ -379,7 +380,8 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		GAME_MODE = GAME_PAUSE;
 
 		if (isTraining()) {
-			if (TRAINING_LEVEL == 0) {
+			if (TRAINING_LEVEL == 0
+					|| TRAINING_LEVEL == 1) {
 				setCirclesVisbility(INVISIBLE);
 			}
 			setBoxesVisibility(INVISIBLE);
@@ -397,7 +399,8 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		addStatesticToJson();
 
 		if (isTraining()) {
-			if (TRAINING_LEVEL == 0) {
+			if (TRAINING_LEVEL == 0
+					|| TRAINING_LEVEL == 1) {
 				setCirclesVisbility(INVISIBLE);
 			}
 			TRAINING_LEVEL++;
@@ -703,10 +706,14 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 			break;
 		case 1:
 			if (CURRENT_FACE_DIRECTION == WEST) {
-				imageWestCircle.setVisibility(INVISIBLE);
+				// imageWestCircle.setVisibility(INVISIBLE);
+				imageWestCircle.setVisibility(VISIBLE);
+				imageWestCircle.setImageDrawable(getResources().getDrawable(R.drawable.half_circle_left));
 				imageFace.setImageDrawable(getCorrectArrowFace(WEST, NORMAL));
 			} else if (CURRENT_FACE_DIRECTION == EAST) {
-				imageEastCircle.setVisibility(INVISIBLE);
+				// imageEastCircle.setVisibility(INVISIBLE);
+				imageEastCircle.setVisibility(VISIBLE);
+				imageEastCircle.setImageDrawable(getResources().getDrawable(R.drawable.half_circle_right));
 				imageFace.setImageDrawable(getCorrectArrowFace(EAST, NORMAL));
 			}
 

@@ -9,6 +9,14 @@
         android:width="5dp"
         android:color="#ffcc0000" />
 
+    <gradient
+        android:angle="180"
+        android:centerColor="#FFFFFFFF"
+        android:centerX="83%"
+        android:endColor="#FF05C1FF"
+        android:startColor="#FFFFFFFF"
+        android:type="linear" />
+
     <solid android:color="#00000000" />
 
     <size

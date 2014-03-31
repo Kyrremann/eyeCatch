@@ -14,16 +14,15 @@ public class SemiCircle {
 	private int resolution;
 	private float pointX[], pointY[];
 
-
 	public SemiCircle(int r, int g, int b, int resolution) {
 		this.offset = 0;
-		this.color = new Paint();
 		this.r = r;
 		this.g = g;
 		this.b = b;
+		this.color = new Paint();
 		this.color.setColor(Color.rgb(this.r, this.g, this.b));
-		color.setAntiAlias(true);
-		circle = new Path();
+		this.color.setAntiAlias(true);
+		this.circle = new Path();
 		this.resolution = resolution;
 		this.pointX = new float[this.resolution];
 		this.pointY = new float[this.resolution];
@@ -43,7 +42,8 @@ public class SemiCircle {
 		this.color.setColor(Color.rgb(r, g, b));
 	}
 
-	public void calculatePercentagePoints(float px, float py, float percentage, float radio) {
+	public void calculatePercentagePoints(float px, float py, float percentage,
+			float radio) {
 		this.angleI = 0 + this.offset;
 		this.px = px;
 		this.py = py;
@@ -54,21 +54,22 @@ public class SemiCircle {
 		this.calculatePoints(this.px, this.py, angleI, width, this.radio);
 	}
 
-	public void calculatePoints(float px1, float py1, float angleI, float width, float radio) {
+	public void calculatePoints(float px1, float py1, float angleI,
+			float width, float radio) {
 		this.angleI = angleI + this.offset;
 		this.width = width;
 		this.px = px1;
 		this.py = py1;
 		this.radio = radio;
 
-		float angulo = 360 - this.angleI - this.width;
+		float angle = 360 - this.angleI - this.width;
 
 		for (int i = 0; i < resolution; i++) {
-			this.pointX[i] = this.px - (float) Math.sin(Math.toRadians(angulo))
+			this.pointX[i] = this.px - (float) Math.sin(Math.toRadians(angle))
 					* this.radio;
-			this.pointY[i] = this.py - (float) Math.cos(Math.toRadians(angulo))
+			this.pointY[i] = this.py - (float) Math.cos(Math.toRadians(angle))
 					* this.radio;
-			angulo = (360 - this.angleI - this.width)
+			angle = (360 - this.angleI - this.width)
 					+ ((this.width / (float) (this.resolution)) * (i + 2));
 		}
 
