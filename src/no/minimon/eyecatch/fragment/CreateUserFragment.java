@@ -28,10 +28,10 @@ public class CreateUserFragment extends AbstractUserInfoFragment {
 		setDefaultSeekbarValue();
 		setDefaultTextViewValue();
 		
-		face = "mariama";
+		face = getString(R.string.face_mariama);
 		editName = (EditText) rootView.findViewById(R.id.edit_username);
 		editAge = (EditText) rootView.findViewById(R.id.edit_age);
-		((Button) rootView.findViewById(R.id.create_user_create_user))
+		rootView.findViewById(R.id.create_user_create_user)
 				.setOnClickListener(this);
 
 		return rootView;
@@ -108,11 +108,13 @@ public class CreateUserFragment extends AbstractUserInfoFragment {
 						.beginTransaction()
 						.replace(R.id.item_detail_container, new HomeFragment())
 						.commit();
+			} else {
+				getActivity().finish();
 			}
 		}
 	}
 
 	private boolean isMultipane() {
-		return getActivity().findViewById(R.id.item_detail_container) != null;
+		return getActivity().findViewById(R.id.item_list) != null;
 	}
 }

@@ -244,7 +244,19 @@ public class EyeCatchActivity extends FragmentActivity implements
 		super.onResume();
 	}
 
-	public void updateContinueButton() {
+	@Override
+	public void notifyAboutDeletedContinueInfo() {
+		updateContinueButton();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return true;
+	}
+
+	private void updateContinueButton() {
 		JSONObject jsonObject = SharedPreferencesUtil.getContinueJson(this);
 		Button button = (Button) findViewById(R.id.eyecatch_continue_game);
 		if (jsonObject.length() > 0) {
@@ -259,18 +271,6 @@ public class EyeCatchActivity extends FragmentActivity implements
 			button.setEnabled(false);
 			button.setText(R.string.eyecatch_continue_game);
 		}
-	}
-
-	@Override
-	public void notifyAboutDeletedContinueInfo() {
-		updateContinueButton();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
-		return true;
 	}
 
 }

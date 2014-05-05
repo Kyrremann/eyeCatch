@@ -49,7 +49,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 
 	private ImageView imageWestCircle, imageEastCircle;
 	private CountDownTimer countDownLevelDuration, countDownBeginGameLevel,
-			countDownBlanScreen;
+			countDownBlankScreen;
 	private TextView watermark, watermarkData;
 
 	private boolean testingLevel = true;
@@ -63,8 +63,6 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		setContentView(R.layout.activity_eyecatch_game);
 
 		GAME_MODE = GAME_PAUSE;
-		// TESTING_LEVEL = 8;
-		// TRAINING_LEVEL = 8;
 
 		if (getIntent().getBooleanExtra(SharedPreferencesUtil.CONTINUE, false)) {
 			getContinueInformation();
@@ -225,7 +223,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 				wrongAction();
 			}
 		};
-		countDownBlanScreen = new CountDownTimer(ERROR_DURATION, 1000) {
+		countDownBlankScreen = new CountDownTimer(ERROR_DURATION, 1000) {
 
 			@Override
 			public void onTick(long millisUntilFinished) {
@@ -315,7 +313,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 					|| TRAINING_LEVEL == 1) {
 				setCirclesVisbility(INVISIBLE);
 			}
-			countDownBlanScreen.start();
+			countDownBlankScreen.start();
 		} else {
 			continueOrNext();
 		}

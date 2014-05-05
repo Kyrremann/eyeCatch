@@ -46,9 +46,15 @@ public abstract class AbstractGameActivity extends FragmentActivity {
 	protected int GAME_MODE = PAUSE;
 	protected String FACE_TYPE, BOX_TYPE;
 
-	protected ImageView imageFace, imageNorth, imageNorthEast, imageEast,
-			imageSouthEast, imageSouth, imageSouthWest, imageWest,
-			imageNorthWest;
+	protected ImageView imageFace;
+	protected ImageView imageNorth;
+	protected ImageView imageNorthEast;
+	protected ImageView imageEast;
+	protected ImageView imageSouthEast;
+	protected ImageView imageSouth;
+	protected ImageView imageSouthWest;
+	protected ImageView imageWest;
+	protected ImageView imageNorthWest;
 
 	protected SparseArray<Drawable> faces;
 

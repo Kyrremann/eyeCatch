@@ -101,7 +101,7 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 	private void populateGeneralizationStatistic(String key, JSONObject stat)
 			throws JSONException {
 		LinearLayout view = (LinearLayout) inflater.inflate(
-				R.layout.view_stats_testing, container, false);
+				R.layout.view_stats_testing, container, false).findViewById(R.id.layout);
 		
 		view.setTag(key);
 
@@ -138,15 +138,16 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 
 	private void populateExtraStatistics(String key, JSONObject stat)
 			throws JSONException {
-		LinearLayout view = (LinearLayout) inflater.inflate(
+		View view = inflater.inflate(
 				R.layout.view_stats_testing, container, false);
+		LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout);
 		RelativeLayout innerLayout = (RelativeLayout) inflater.inflate(
 				R.layout.stats_inner_layout, container, false);
-		view.setTag(key);
+		layout.setTag(key);
 
-		((TextView) view.findViewById(R.id.statistic_date)).setText(new Date(
+		((TextView) layout.findViewById(R.id.statistic_date)).setText(new Date(
 				Long.valueOf(key)).toString());
-		TextView textView = (TextView) view.findViewById(R.id.statistic_delete);
+		TextView textView = (TextView) layout.findViewById(R.id.statistic_delete);
 		textView.setClickable(true);
 		textView.setOnClickListener(this);
 
@@ -154,7 +155,7 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 				.setText(stat.getString(CORRECT));
 		((TextView) innerLayout.findViewById(R.id.statistic_wrong))
 				.setText(stat.getString(FAIL));
-		view.addView(innerLayout);
+		layout.addView(innerLayout);
 
 		parent.addView(view);
 	}
@@ -267,7 +268,9 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 			private void deleteStatistic() {
 				if (SharedPreferencesUtil.removeContinueInfoIfSameDate(
 						getActivity(), viewToBeDeleted.getTag().toString())) {
-					onStatisticDeleteListener.notifyAboutDeletedContinueInfo();
+					if (isMultipane()) {
+						onStatisticDeleteListener.notifyAboutDeletedContinueInfo();
+					}
 				}
 				parent.removeView(viewToBeDeleted);
 				viewToBeDeleted = null;
@@ -278,11 +281,13 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		try {
-			onStatisticDeleteListener = (OnDeletedContinueInfo) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnDeletedContinueInfo");
+		if (isMultipane()) {
+			try {
+				onStatisticDeleteListener = (OnDeletedContinueInfo) activity;
+			} catch (ClassCastException e) {
+				throw new ClassCastException(activity.toString()
+						+ " must implement OnDeletedContinueInfo");
+			}
 		}
 	}
 
@@ -324,5 +329,9 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 				.findViewById(R.id.statistic_testing_H);
 		testingPostH = (TextView) rootView
 				.findViewById(R.id.statistic_testing_post_H);
+	}
+
+	private boolean isMultipane() {
+		return getActivity().findViewById(R.id.item_list) != null;
 	}
 }

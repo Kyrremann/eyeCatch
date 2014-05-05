@@ -54,12 +54,18 @@ public class SelectVideoFragment extends ListFragment {
 			SharedPreferencesUtil.updateActioBarTitle(getActivity(),
 					getActivity().getActionBar());
 
-			if (getActivity().findViewById(R.id.item_detail_container) != null) {
+			if (isMultipane()) {
 				getFragmentManager().beginTransaction()
 						.replace(R.id.item_detail_container, new HomeFragment()).commit();
+			} else {
+				getActivity().finish();
 			}
 		} else {
 			alertUser(getActivity(), R.string.error_short_video_duration);
 		}
+	}
+
+	private boolean isMultipane() {
+		return getActivity().findViewById(R.id.item_list) != null;
 	}
 }

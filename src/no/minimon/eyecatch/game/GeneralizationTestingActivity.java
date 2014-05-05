@@ -92,7 +92,6 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 				CURRENT_FACE_DIRECTION = getRandomBox();
 			}
 			LAST_FACE_DIRECTION = CURRENT_FACE_DIRECTION;
-			System.out.println(CURRENT_FACE_DIRECTION);
 			imageFace.setImageDrawable(faces.get(CURRENT_FACE_DIRECTION));
 			GAME_MODE = GAME_ON;
 		}
