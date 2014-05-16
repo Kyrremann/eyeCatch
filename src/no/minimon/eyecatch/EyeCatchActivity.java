@@ -1,11 +1,14 @@
 package no.minimon.eyecatch;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.media.MediaScannerConnection.OnScanCompletedListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -20,11 +23,13 @@ import no.minimon.eyecatch.game.ExtraTestingActivity;
 import no.minimon.eyecatch.game.EyeCatchGameActivity;
 import no.minimon.eyecatch.game.GeneralizationTestingActivity;
 import no.minimon.eyecatch.game.TouchTrainingActivity;
+import no.minimon.eyecatch.util.NotificationUtil;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -140,7 +145,7 @@ public class EyeCatchActivity extends FragmentActivity implements
 
 	public void onButtonClick(View view) {
 		if (view.getId() == R.id.eyecatch_continue_game) {
-			if (isThereAselectedVideo()) {
+			if (isThereASelectedVideo()) {
 				Intent intent = new Intent(this, EyeCatchGameActivity.class);
 				intent.putExtra(SharedPreferencesUtil.CONTINUE, true);
 				startActivity(intent);
@@ -154,7 +159,7 @@ public class EyeCatchActivity extends FragmentActivity implements
 				alertUser(this, R.string.error_missing_user_or_video);
 			}
 		} else if (view.getId() == R.id.eyecatch_touch_training) {
-			if (isThereAselectedVideo()) {
+			if (isThereASelectedVideo()) {
 				startActivity(new Intent(this, TouchTrainingActivity.class));
 			} else {
 				alertUser(this, R.string.error_missing_video);
@@ -217,12 +222,26 @@ public class EyeCatchActivity extends FragmentActivity implements
 	}
 
 	private boolean isThereASelectedUserAndVideo() {
-		return isThereAselectedVideo()
+		return isThereASelectedVideo()
 				&& !SharedPreferencesUtil.getCurrentUsersName(this).isEmpty();
 	}
 
-	private boolean isThereAselectedVideo() {
-		return !SharedPreferencesUtil.getCurrentVideoName(this).isEmpty();
+	private boolean isThereASelectedVideo() {
+		String filename = SharedPreferencesUtil.getCurrentVideoUri(this);
+		if (filename.isEmpty()) {
+			return false;
+		}
+		ContentResolver contentResolver = getContentResolver();
+		String[] projection = {MediaStore.MediaColumns.DATA};
+		Cursor cursor = contentResolver.query(Uri.parse(filename), projection, null, null, null);
+		if(cursor != null
+				&& cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			String filePath = cursor.getString(0);
+			cursor.close();
+			return new File(filePath).exists();
+		}
+		return false;
 	}
 
 	@Override
