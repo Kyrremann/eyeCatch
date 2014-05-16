@@ -203,4 +203,9 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 		return super.onTouchEvent(event);
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		startGameCountDown.cancel();
+	}
 }

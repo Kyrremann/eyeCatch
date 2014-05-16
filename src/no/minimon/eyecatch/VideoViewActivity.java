@@ -37,8 +37,7 @@ public class VideoViewActivity extends FragmentActivity {
 		videoView = (VideoView) findViewById(R.id.videoView);
 
 		String uri = SharedPreferencesUtil.getCurrentVideoUri(this);
-		int duration_of_video = SharedPreferencesUtil
-				.getDurationOnCurrentVideo(this);
+		int duration_of_video = SharedPreferencesUtil.getDurationOnCurrentVideo(this);
 		int threshold = SharedPreferencesUtil.getAllowedVideoDuration(this);
 		int lastSeek = SharedPreferencesUtil.getLastSeekOnCurrentVideo(this);
 		Log.d(LOG_VV, "Lastseek: " + lastSeek);
@@ -46,8 +45,10 @@ public class VideoViewActivity extends FragmentActivity {
 		Log.d(LOG_VV, "Duration of video: " + duration_of_video);
 
 		threshold = lastSeek + threshold;
+		Log.d(LOG_VV, "Difference: " + threshold);
 		if (threshold > duration_of_video) {
 			if (endGame) { // you have already seen the whole video
+				Log.d(LOG_VV, "You have already seen the whole movie");
 				setResult(EyeCatchGameActivity.RESULT_ENDGAME);
 				finish();
 			} else {
@@ -61,6 +62,7 @@ public class VideoViewActivity extends FragmentActivity {
 		videoView.setZOrderOnTop(true);
 
 		if (video_shorter_then_threshold) {
+			Log.d(LOG_VV, "Video is shorter then threshold");
 			videoView.start();
 			videoView.seekTo(lastSeek);
 			videoView.setOnCompletionListener(new OnCompletionListener() {
@@ -69,14 +71,16 @@ public class VideoViewActivity extends FragmentActivity {
 				public void onCompletion(MediaPlayer arg0) {
 					SharedPreferencesUtil.setLastSeekOnCurrentVideo(getApplication(),
 							0);
-					Log.d(LOG_VV, "Seek saved at " + 0);
+					Log.d(LOG_VV, "Seek reset to " + 0);
 					setResult(EyeCatchGameActivity.RESULT_VIDEOVIEW);
 					finish();
 				}
 			});
 		} else if (!endGame) {
+			Log.d(LOG_VV, "This is not the end game, aka last video");
 			new ASync().execute(duration_of_video, lastSeek, threshold);
 		} else {
+			Log.d(LOG_VV, "This is the las video, aka the end game");
 			videoView.start();
 			videoView.seekTo(lastSeek);
 			videoView.setOnCompletionListener(new OnCompletionListener() {
@@ -105,10 +109,9 @@ public class VideoViewActivity extends FragmentActivity {
 
 			videoView.start();
 			videoView.seekTo(lastSeek);
+			Log.d(LOG_VV, "Video seeking to " + lastSeek);
 
-			while (videoView.getCurrentPosition() < threshold) {
-
-			}
+			while (videoView.getCurrentPosition() < threshold) {}
 
 			lastSeek = videoView.getCurrentPosition();
 			Log.d(LOG_VV, "Video stopped at " + lastSeek);

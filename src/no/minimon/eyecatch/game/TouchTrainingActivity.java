@@ -115,5 +115,4 @@ public class TouchTrainingActivity extends AbstractGameActivity {
 
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-
 }

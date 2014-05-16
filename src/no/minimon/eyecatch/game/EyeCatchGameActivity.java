@@ -627,6 +627,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 	protected void onDestroy() {
 		countDownLevelDuration.cancel();
 		countDownBeginGameLevel.cancel();
+		countDownBlankScreen.cancel();
 		super.onDestroy();
 	}
 
