@@ -276,19 +276,21 @@ public class EyeCatchActivity extends FragmentActivity implements
 	}
 
 	private void updateContinueButton() {
-		JSONObject jsonObject = SharedPreferencesUtil.getContinueJson(this);
-		Button button = (Button) findViewById(R.id.eyecatch_continue_game);
-		if (jsonObject.length() > 0) {
-			button.setEnabled(true);
-			try {
-				button.setText("Continue with "
-						+ jsonObject.getString(SharedPreferencesUtil.NAME));
-			} catch (JSONException e) {
-				e.printStackTrace();
+		if (SharedPreferencesUtil.hasContinueJson(this)) {
+			JSONObject jsonObject = SharedPreferencesUtil.getContinueJson(this);
+			Button button = (Button) findViewById(R.id.eyecatch_continue_game);
+			if (jsonObject.length() > 0) {
+				button.setEnabled(true);
+				try {
+					button.setText("Continue with "
+							+ jsonObject.getString(SharedPreferencesUtil.NAME));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else {
+				button.setEnabled(false);
+				button.setText(R.string.eyecatch_continue_game);
 			}
-		} else {
-			button.setEnabled(false);
-			button.setText(R.string.eyecatch_continue_game);
 		}
 	}
 

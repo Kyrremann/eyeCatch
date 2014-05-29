@@ -100,8 +100,9 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 
 	private void populateGeneralizationStatistic(String key, JSONObject stat)
 			throws JSONException {
-		LinearLayout view = (LinearLayout) inflater.inflate(
-				R.layout.view_stats_testing, container, false).findViewById(R.id.layout);
+		View view = inflater.inflate(
+				R.layout.view_stats_testing, container, false);
+		LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.layout);
 		
 		view.setTag(key);
 
@@ -111,9 +112,9 @@ public class StatisticFragment extends Fragment implements OnClickListener,
 		textView.setClickable(true);
 		textView.setOnClickListener(this);
 		
-		view.addView(createGeneralizationInnerLayout(stat.getJSONObject("A")));
-		view.addView(createGeneralizationInnerLayout(stat.getJSONObject("B")));
-		view.addView(createGeneralizationInnerLayout(stat.getJSONObject("C")));
+		linearLayout.addView(createGeneralizationInnerLayout(stat.getJSONObject("A")));
+		linearLayout.addView(createGeneralizationInnerLayout(stat.getJSONObject("B")));
+		linearLayout.addView(createGeneralizationInnerLayout(stat.getJSONObject("C")));
 
 		parent.addView(view);
 

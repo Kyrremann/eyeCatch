@@ -10,7 +10,6 @@ import static no.minimon.eyecatch.util.SharedPreferencesUtil.STATISTIC_TYPE;
 import java.util.Random;
 
 import no.minimon.eyecatch.R;
-import no.minimon.eyecatch.util.AndroidVersionUtil;
 import no.minimon.eyecatch.util.SharedPreferencesUtil;
 
 import org.json.JSONException;
@@ -18,7 +17,6 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.SparseArray;
@@ -31,6 +29,7 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 	private String name;
 	private JSONObject statistic;
 	private CountDownTimer startGameCountDown;
+	private char order;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +41,7 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 		FACE_TYPE = getString(R.string.face_mariama);
 		BOX_TYPE = SharedPreferencesUtil.getBox(this);
 
+		order = 65;
 		random = new Random();
 		faces = new SparseArray<Drawable>(8);
 		statistic = new JSONObject();
@@ -132,7 +132,7 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 	}
 
 	private void saveStatistic() {
-		SharedPreferencesUtil.addOrUpdateStatisticOnUser(
+		 SharedPreferencesUtil.addOrUpdateStatisticOnUser(
 				getApplicationContext(), name, statistic);
 	}
 
@@ -186,7 +186,8 @@ public class GeneralizationTestingActivity extends AbstractGameActivity {
 			roundStats.put(CORRECT, CLICKS_CORRECT);
 			roundStats.put(FAIL, CLICKS_FAIL);
 			roundStats.put(STATISTIC_FACE, FACE_TYPE);
-			statistic.put(FACE_TYPE, roundStats);
+			statistic.put(String.valueOf(order), roundStats);
+			order++;
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

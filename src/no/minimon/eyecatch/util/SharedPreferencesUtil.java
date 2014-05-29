@@ -303,7 +303,6 @@ public class SharedPreferencesUtil {
 	public static boolean addOrUpdateStatisticOnUser(Context context,
 			String userName, JSONObject statistic) {
 		JSONObject user = getUser(context, userName);
-
 		if (user.has(STATISTIC)) {
 			try {
 				((JSONObject) user.get(STATISTIC)).put(
@@ -379,8 +378,6 @@ public class SharedPreferencesUtil {
 			JSONObject user = getCurrentUser(context);
 			user.put(CONTINUE, continueObject);
 			updateUserInfo(context, user);
-			// editor.putString(CONTINUE, jsonObject.toString());
-			// editor.commit();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -394,17 +391,11 @@ public class SharedPreferencesUtil {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		// String jsonString = preferences.getString(CONTINUE, "");
-		/*String jsonString = 
-		if (!jsonString.isEmpty()) {
-			try {
-				return new JSONObject(jsonString);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-*/
 		return new JSONObject();
+	}
+
+	public static boolean hasContinueJson(Context context) {
+		return getCurrentUser(context).has(CONTINUE);
 	}
 
 	public static JSONObject getStatesticFromCurrentUser(Context context,
@@ -483,9 +474,7 @@ public class SharedPreferencesUtil {
 	public static void removeUser(Context context, String name) {
 		SharedPreferences preferences = getSharedPreference(context);
 		String users = preferences.getString(USERS, "");
-		System.out.println(users);
 		users = users.replace(name, "");
-		System.out.println(users);
 		Editor editor = getEditor(context);
 		editor.putString(USERS, users);
 		editor.commit();
