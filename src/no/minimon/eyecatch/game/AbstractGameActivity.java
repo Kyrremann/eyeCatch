@@ -112,44 +112,43 @@ public abstract class AbstractGameActivity extends FragmentActivity {
 							R.drawable.aurelien_e_arrow);
 				}
 			}
+		} else if (FACE_TYPE.equals(getString(R.string.face_joelle))) {
+			if (direction == WEST) {
+				if (type == SHORT) {
+					return getResources().getDrawable(
+							R.drawable.joelle_w_short_arrow);
+				} else if (type == NORMAL) {
+					return getResources().getDrawable(
+							R.drawable.joelle_w_arrow);
+				}
+			} else if (direction == EAST) {
+				if (type == SHORT) {
+					return getResources().getDrawable(
+							R.drawable.joelle_e_short_arrow);
+				} else if (type == NORMAL) {
+					return getResources().getDrawable(
+							R.drawable.joelle_e_arrow);
+				}
+			}
+		} else if (FACE_TYPE.equals(getString(R.string.face_mike))) {
+			if (direction == WEST) {
+				if (type == SHORT) {
+					return getResources().getDrawable(
+							R.drawable.mike_w_short_arrow);
+				} else if (type == NORMAL) {
+					return getResources().getDrawable(
+							R.drawable.mike_w_arrow);
+				}
+			} else if (direction == EAST) {
+				if (type == SHORT) {
+					return getResources().getDrawable(
+							R.drawable.mike_e_short_arrow);
+				} else if (type == NORMAL) {
+					return getResources().getDrawable(
+							R.drawable.mike_e_arrow);
+				}
+			}
 		}
-//		} else if (FACE_TYPE.equals(getString(R.string.face_joelle))) {
-//			if (direction == WEST) {
-//				if (type == SHORT) {
-//					return getResources().getDrawable(
-//							R.drawable.joelle_w_short_arrow);
-//				} else if (type == NORMAL) {
-//					return getResources().getDrawable(
-//							R.drawable.joelle_w_arrow);
-//				}
-//			} else if (direction == EAST) {
-//				if (type == SHORT) {
-//					return getResources().getDrawable(
-//							R.drawable.joelle_e_short_arrow);
-//				} else if (type == NORMAL) {
-//					return getResources().getDrawable(
-//							R.drawable.joelle_e_arrow);
-//				}
-//			}
-//		} else if (FACE_TYPE.equals(getString(R.string.face_mike))) {
-//			if (direction == WEST) {
-//				if (type == SHORT) {
-//					return getResources().getDrawable(
-//							R.drawable.mike_w_short_arrow);
-//				} else if (type == NORMAL) {
-//					return getResources().getDrawable(
-//							R.drawable.mike_w_arrow);
-//				}
-//			} else if (direction == EAST) {
-//				if (type == SHORT) {
-//					return getResources().getDrawable(
-//							R.drawable.mike_e_short_arrow);
-//				} else if (type == NORMAL) {
-//					return getResources().getDrawable(
-//							R.drawable.mike_e_arrow);
-//				}
-//			}
-//		}
 
 		return null;
 	}
@@ -213,14 +212,10 @@ public abstract class AbstractGameActivity extends FragmentActivity {
 		faces.put(EAST, getResources().getDrawable(R.drawable.aurelien_e));
 		faces.put(NORTH, getResources().getDrawable(R.drawable.aurelien_n));
 		faces.put(SOUTH, getResources().getDrawable(R.drawable.aurelien_s));
-		faces.put(NORTH_WEST, getResources()
-				.getDrawable(R.drawable.aurelien_nw));
-		faces.put(NORTH_EAST, getResources()
-				.getDrawable(R.drawable.aurelien_ne));
-		faces.put(SOUTH_WEST, getResources()
-				.getDrawable(R.drawable.aurelien_sw));
-		faces.put(SOUTH_EAST, getResources()
-				.getDrawable(R.drawable.aurelien_se));
+		faces.put(NORTH_WEST, getResources().getDrawable(R.drawable.aurelien_nw));
+		faces.put(NORTH_EAST, getResources().getDrawable(R.drawable.aurelien_ne));
+		faces.put(SOUTH_WEST, getResources().getDrawable(R.drawable.aurelien_sw));
+		faces.put(SOUTH_EAST, getResources().getDrawable(R.drawable.aurelien_se));
 	}
 
 	private void loadFacesOfMariama() {
