@@ -248,6 +248,8 @@ public abstract class AbstractGameActivity extends FragmentActivity {
 	protected void loadBoxImages() {
 		if (BOX_TYPE.equals(getString(R.string.box))) {
 			loadBox();
+		} else if (BOX_TYPE.equals(getString(R.string.box_icon))) {
+			loadBoxIcon();
 		} else if (BOX_TYPE.equals(getString(R.string.box_cat))) {
 			loadBoxCat();
 		} else if (BOX_TYPE.equals(getString(R.string.box_elephant))) {
@@ -272,6 +274,17 @@ public abstract class AbstractGameActivity extends FragmentActivity {
 		imageNorthEast.setImageDrawable(getResources().getDrawable(R.drawable.box));
 		imageSouthWest.setImageDrawable(getResources().getDrawable(R.drawable.box));
 		imageSouthEast.setImageDrawable(getResources().getDrawable(R.drawable.box));
+	}
+
+	private void loadBoxIcon() {
+		imageWest.setImageDrawable(getResources().getDrawable(R.drawable.box_box));
+		imageEast.setImageDrawable(getResources().getDrawable(R.drawable.box_box));
+		imageNorth.setImageDrawable(getResources().getDrawable(R.drawable.box_box));
+		imageSouth.setImageDrawable(getResources().getDrawable(R.drawable.box_box));
+		imageNorthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_box));
+		imageNorthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_box));
+		imageSouthWest.setImageDrawable(getResources().getDrawable(R.drawable.box_box));
+		imageSouthEast.setImageDrawable(getResources().getDrawable(R.drawable.box_box));
 	}
 
 	private void loadBoxCat() {

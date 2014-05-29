@@ -62,8 +62,6 @@ public class UserInfoFragment extends AbstractUserInfoFragment {
 		ImageView imageView = null;
 		if (box.equals(getString(R.string.box_icon))) {
 			imageView = (ImageView) rootView.findViewById(R.id.image_box_icon);
-		} else if (box.equals(getString(R.string.box_gift))) {
-			imageView = (ImageView) rootView.findViewById(R.id.image_gift_box_icon);
 		} else if (box.equals(getString(R.string.box_cat))) {
 			imageView = (ImageView) rootView.findViewById(R.id.image_box_cat);
 		} else if (box.equals(getString(R.string.box_dino_1))) {

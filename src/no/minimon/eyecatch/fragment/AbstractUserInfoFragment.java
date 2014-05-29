@@ -17,9 +17,9 @@ public class AbstractUserInfoFragment extends Fragment implements
 			textMasteryCriteria, textVideoDuration, textErrorDuration;
 	protected SeekBar barDurationPerTrail, barNumberOfTrials,
 			barMasteryCriteria, barVideoDuration, barErrorDuration;
-	protected ImageView mariama, mike, joelle, aurelien, imageBox, imageBoxCat,
-			imageBoxDino1, imageBoxDino2, imageBoxElephant, imageBoxGorilla,
-			imageBoxMonster;
+	protected ImageView mariama, mike, joelle, aurelien, imageBox, imageBoxIcon,
+			imageBoxCat, imageBoxDino1, imageBoxDino2, imageBoxElephant,
+			imageBoxGorilla, imageBoxMonster;
 	protected EditText editAge;
 	protected String face, box;
 
@@ -61,6 +61,9 @@ public class AbstractUserInfoFragment extends Fragment implements
 	protected void initBoxes(View rootView) {
 		imageBox = (ImageView) rootView.findViewById(R.id.image_box);
 		imageBox.setOnClickListener(this);
+
+		imageBoxIcon= (ImageView) rootView.findViewById(R.id.image_box_icon);
+		imageBoxIcon.setOnClickListener(this);
 		
 		imageBoxCat = (ImageView) rootView.findViewById(R.id.image_box_cat);
 		imageBoxCat.setOnClickListener(this);
@@ -169,6 +172,11 @@ public class AbstractUserInfoFragment extends Fragment implements
 			imageBox.setBackgroundResource(R.drawable.image_border_selector);
 			box = getString(R.string.box);
 			break;
+			case R.id.image_box_icon:
+				removeBackgroundFromBoxes();
+				imageBoxIcon.setBackgroundResource(R.drawable.image_border_selector);
+				box = getString(R.string.box_icon);
+				break;
 		case R.id.image_box_cat:
 			removeBackgroundFromBoxes();
 			imageBoxCat.setBackgroundResource(R.drawable.image_border_selector);
