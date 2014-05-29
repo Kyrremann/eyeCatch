@@ -260,6 +260,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 			}
 			break;
 		case GAME_ON:
+			GAME_MODE = GAME_PAUSE;
 			switch (id) {
 			case R.id.image_face:
 				break;
@@ -394,7 +395,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 	}
 
 	private void doneWithLastRound() {
-		addStatesticToJson();
+		addStatisticToJson();
 
 		if (isTraining()) {
 			if (TRAINING_LEVEL == 0
@@ -423,7 +424,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 		}
 	}
 
-	private void addStatesticToJson() {
+	private void addStatisticToJson() {
 		try {
 			if (testingLevel) {
 				statistic.accumulate(SharedPreferencesUtil.STATISTIC_TESTING,
@@ -644,7 +645,7 @@ public class EyeCatchGameActivity extends AbstractGameActivity implements
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				try {
-					addStatesticToJson();
+					addStatisticToJson();
 					saveStatestic();
 					SharedPreferencesUtil.saveContinueInformation(
 							getApplicationContext(),
